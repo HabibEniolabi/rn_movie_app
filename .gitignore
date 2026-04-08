@@ -32,6 +32,8 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env
+.env.*
 
 # typescript
 *.tsbuildinfo
@@ -39,5 +41,22 @@ yarn-error.*
 app-example
 
 # generated native folders
-/ios
-/android
+# Android
+android/.gradle
+android/app/build
+android/build
+
+# iOS
+ios/build
+DerivedData
+
+# React Native
+*.log
+*.lock
+
+# Expo
+.expo-shared/
+
+# Firebase (if using)
+google-services.json
+GoogleService-Info.plist
