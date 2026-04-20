@@ -49,6 +49,9 @@ const MovieDetails = () => {
             <Text className="text-light-200 text-sm">
               {movie?.release_date?.split("-")[0]}
             </Text>
+            <Text className="text-light-200 text-sm mx-2">-</Text>
+            <Text className="text-light-200 text-sm">{movie?.adult ? "Adult" : "Family"}</Text>
+            <Text className="text-light-200 text-sm mx-2">-</Text>
             <Text className="text-light-200 text-sm">{movie?.runtime}m</Text>
           </View>
           <View className="flex-row item-center bg-dark-100 rounded-md px-2 py-1 gap-x-1 mt-2">
