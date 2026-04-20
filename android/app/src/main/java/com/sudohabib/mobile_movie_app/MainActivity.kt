@@ -1,4 +1,4 @@
-package com.sudohabib.mobile_movie_app
+package com.movieflix
 
 import android.os.Build
 import android.os.Bundle
