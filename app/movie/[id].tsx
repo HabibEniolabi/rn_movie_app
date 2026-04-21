@@ -27,6 +27,14 @@ const MovieDetails = () => {
   const { data: movie, loading } = useFetch(() =>
     fetchMovieDetails(id as string)
   );
+
+  const formattedDate =  movie?.release_date
+  ? `${new Date(movie.release_date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })} (Worldwide)`
+  : "N/A";
   return (
     <View className="bg-primary flex-1 ">
       <ScrollView
@@ -64,9 +72,27 @@ const MovieDetails = () => {
             </Text>
           </View>
           <MovieInfo label="Overview" value={movie?.overview} />
+          <View className="flex flex-row gap-[50px] ">
+            <MovieInfo
+              label="Release date"
+              value={formattedDate}
+            />
+            <MovieInfo
+              label="Status"
+              value={movie?.status}
+            />
+          </View>
           <MovieInfo
             label="Genres"
             value={movie?.genres?.map((g) => g.name).join("-") || "N/A"}
+          />
+          <MovieInfo
+            label="Countries"
+            value={movie?.production_countries?.map((c) => c.name).join("-") || "N/A"}
+          />
+          <MovieInfo
+            label="Tagline"
+            value={movie?.tagline ? "Won is child's play" :"N/A"}
           />
           <View className="flex flex-row gap-[50px] ">
             <MovieInfo
