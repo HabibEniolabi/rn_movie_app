@@ -4,18 +4,18 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
 import { icons } from "@/constants/icons";
-import { images } from "@/constants/images";
 import { router } from "expo-router";
+import { getMovieCertification } from "@/utils/helpers";
 
 interface MovieInfoProps {
   label: string;
-  value?: string | number | null;
+  value?: React.ReactNode;
 }
 
 const MovieInfo = ({ label, value }: MovieInfoProps) => (
   <View className="flex-col items-start justify-center mt-5">
     <Text className="text-light-200 font-normal text-sm">{label}</Text>
-    <Text className="text-light-100 font-bold  text-sm mt-2">
+    <Text className="text-light-100 font-bold gap-x-2 text-sm mt-2">
       {value || "N/A"}
     </Text>
   </View>
@@ -28,13 +28,13 @@ const MovieDetails = () => {
     fetchMovieDetails(id as string)
   );
 
-  const formattedDate =  movie?.release_date
-  ? `${new Date(movie.release_date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    })} (Worldwide)`
-  : "N/A";
+  const formattedDate = movie?.release_date
+    ? `${new Date(movie.release_date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })} (Worldwide)`
+    : "N/A";
   return (
     <View className="bg-primary flex-1 ">
       <ScrollView
@@ -53,14 +53,22 @@ const MovieDetails = () => {
         </View>
         <View className="flex-col item-start justify-center mt-5 px-5">
           <Text className="text-white font-bold text-xl">{movie?.title}</Text>
-          <View className="flex-row item-center gap-x-1 mt-2">
+          <View className="flex-row item-center mt-2">
             <Text className="text-light-200 text-sm">
               {movie?.release_date?.split("-")[0]}
             </Text>
-            <Text className="text-light-200 text-sm mx-2">-</Text>
-            <Text className="text-light-200 text-sm">{movie?.adult ? "Adult" : "Family"}</Text>
-            <Text className="text-light-200 text-sm mx-2">-</Text>
-            <Text className="text-light-200 text-sm">{movie?.runtime}m</Text>
+            <Text className="text-light-200 text-sm mx-2">•</Text>
+            <Text className="text-light-200 text-sm">
+              {getMovieCertification(movie, "US")}
+            </Text>
+            <Text className="text-light-200 text-sm mx-2">•</Text>
+            <Text className="text-light-200 text-sm">
+              {movie?.runtime
+                ? `${Math.floor(movie.runtime / 60)}h${
+                    movie.runtime % 60 ? ` ${movie.runtime % 60}m` : ""
+                  }`
+                : "N/A"}
+            </Text>
           </View>
           <View className="flex-row item-center bg-dark-100 rounded-md px-2 py-1 gap-x-1 mt-2">
             <Image source={icons.star} className="size-4" />
@@ -68,31 +76,43 @@ const MovieDetails = () => {
               {Math.round(movie?.vote_average ?? 0)}/10
             </Text>
             <Text className="text-light-200 text-sm">
-              ({movie?.vote_count}votes)
+              ({movie?.vote_count} votes)
             </Text>
           </View>
           <MovieInfo label="Overview" value={movie?.overview} />
           <View className="flex flex-row gap-[50px] ">
-            <MovieInfo
-              label="Release date"
-              value={formattedDate}
-            />
-            <MovieInfo
-              label="Status"
-              value={movie?.status}
-            />
+            <MovieInfo label="Release date" value={formattedDate} />
+            <MovieInfo label="Status" value={movie?.status} />
           </View>
           <MovieInfo
             label="Genres"
-            value={movie?.genres?.map((g) => g.name).join("-") || "N/A"}
+            value={
+              movie?.genres?.length ? (
+                <View className="flex-row flex-wrap gap-2">
+                  {movie.genres.map((g) => (
+                    <View
+                      className="bg-dark-100 px-3 py-1 rounded-md"
+                      key={g.id}
+                    >
+                      <Text className="text-light-100 font-bold">{g.name}</Text>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                "N/A"
+              )
+            }
           />
           <MovieInfo
             label="Countries"
-            value={movie?.production_countries?.map((c) => c.name).join("-") || "N/A"}
+            value={
+              movie?.production_countries?.map((c) => c.name).join(" • ") ||
+              "N/A"
+            }
           />
           <MovieInfo
             label="Tagline"
-            value={movie?.tagline ? "Won is child's play" :"N/A"}
+            value={movie?.tagline || "No tagline available"}
           />
           <View className="flex flex-row gap-[50px] ">
             <MovieInfo
@@ -107,7 +127,8 @@ const MovieDetails = () => {
           <MovieInfo
             label="Production Companies"
             value={
-              movie?.production_companies?.map((c) => c.name).join("-") || "N/A"
+              movie?.production_companies?.map((c) => c.name).join(" • ") ||
+              "N/A"
             }
           />
         </View>

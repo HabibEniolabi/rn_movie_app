@@ -56,6 +56,14 @@ interface MovieDetails {
     name: string;
   }[];
   release_date: string;
+  release_dates?: {
+    results?: {
+      iso_3166_1: string;
+      release_dates?: {
+        certification: string;
+      }[];
+    }[];
+  };
   revenue: number;
   runtime: number | null;
   spoken_languages: {
