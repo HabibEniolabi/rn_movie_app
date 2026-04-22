@@ -28,7 +28,7 @@ const ProfileStatsCard = () => {
               {stat.value}
             </Text>
 
-            <Text className="mt-2 text-[14px] text-[#7B7996]">
+            <Text className="mt-2 text-[14px] text-dark-500">
               {stat.label}
             </Text>
           </View>

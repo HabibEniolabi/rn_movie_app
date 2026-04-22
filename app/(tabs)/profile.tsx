@@ -32,6 +32,9 @@ const Profile = () => {
         <Text className="text-light-200 font-medium text-[16px]">@micheal_movies</Text>
       </View>
       <ProfileStatsCard />
+      <View className="flex flex-col mt-6">
+        <Text className="text-dark-500 font-bold uppercase">Favourite Genres</Text>
+      </View>
     </View>
   );
 };
