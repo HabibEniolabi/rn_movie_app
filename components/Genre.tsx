@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
@@ -52,22 +52,24 @@ const Genre = ({ genres }: GenreProps) => {
         const theme = genreThemes[index % genreThemes.length];
 
         return (
-          <View
-            key={genre.id}
-            className="px-4 py-2 rounded-full"
-            style={{
-              backgroundColor: theme.bg,
-              borderWidth: 1.5,
-              borderColor: theme.border,
-            }}
-          >
-            <Text
-              className="text-sm font-semibold"
-              style={{ color: theme.text }}
+          <TouchableOpacity key={index}>
+            <View
+              key={genre.id}
+              className="px-4 py-2 rounded-full"
+              style={{
+                backgroundColor: theme.bg,
+                borderWidth: 1.5,
+                borderColor: theme.border,
+              }}
             >
-              {genre.name}
-            </Text>
-          </View>
+              <Text
+                className="text-sm font-semibold"
+                style={{ color: theme.text }}
+              >
+                {genre.name}
+              </Text>
+            </View>
+          </TouchableOpacity>
         );
       })}
     </View>

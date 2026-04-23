@@ -1,4 +1,11 @@
-import { Image, Switch, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { icons } from "@/constants/icons";
 import Octicons from "react-native-vector-icons/Octicons";
@@ -8,6 +15,7 @@ import ProfileStatsCard from "@/components/ProfileStatsCard";
 import Genre from "@/components/Genre";
 import { useLocalSearchParams } from "expo-router";
 import ProfileCardNavigation from "@/components/ProfileCardNavigation";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const favouriteGenres = [
   { id: 1, name: "Action" },
@@ -21,7 +29,7 @@ const favouriteGenres = [
 const profileItems = [
   {
     id: 1,
-    icon:  <Feather name="user" size={22} color="#8FB3FF" />,
+    icon: <Feather name="user" size={22} color="#8FB3FF" />,
     iconBgClass: "bg-surface-purple",
     title: "edit profile",
     subtitle: "Update your name & avatar",
@@ -50,10 +58,11 @@ const profileItems = [
     title: "language",
     subtitle: "English (US)",
     rightType: "chevron" as const,
-  }
-]
+  },
+];
 
 const Profile = () => {
+  const tabBarHeight = useBottomTabBarHeight();
   return (
     <View className="bg-primary flex-1 px-10">
       <View className="flex justify-between mt-20 mb-10 items-center flex-row">
@@ -76,36 +85,46 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
         <Text className="text-white font-bold text-[20px]">Micheal Ross</Text>
-        <Text className="text-light-200 font-medium text-[16px]">@micheal_movies</Text>
+        <Text className="text-light-200 font-medium text-[16px]">
+          @micheal_movies
+        </Text>
       </View>
       <ProfileStatsCard />
-      <View className="flex flex-col mt-6">
-        <Text className="text-dark-500 font-bold uppercase">Favourite Genres</Text>
-        <Genre genres={favouriteGenres}  />
-      </View>
-      <View className="flex flex-col mt-6">
-        <Text className="text-dark-500 font-bold uppercase">Account</Text>
-        {profileItems.map((item) => (
-          <ProfileCardNavigation 
-            key={item.id} 
-            icon={item.icon} 
-            iconBgClass={item.iconBgClass} 
-            title={item.title} 
-            subtitle={item.subtitle}
-            rightType={item.rightType}
-            toggle={
-              item.rightType ==="toggle" ? (
-                <Switch 
-                  value={true}
-                  onValueChange={() => {}}
-                  trackColor={{ false: "#2A2740", true: "#D946EF" }}
-                  thumbColor="#FFFFFF"
-                />
-              ) : undefined
-            }
-          />
-        ))}
-      </View>
+      <ScrollView
+        className="flex-1 bg-primary"
+        contentContainerStyle={{ paddingBottom: tabBarHeight + 40 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="flex flex-col mt-6">
+          <Text className="text-dark-500 font-bold uppercase">
+            Favourite Genres
+          </Text>
+          <Genre genres={favouriteGenres} />
+        </View>
+        <View className="flex flex-col gap-2 mt-6">
+          <Text className="text-dark-500 font-bold uppercase mb-3">Account</Text>
+          {profileItems.map((item) => (
+            <ProfileCardNavigation
+              key={item.id}
+              icon={item.icon}
+              iconBgClass={item.iconBgClass}
+              title={item.title}
+              subtitle={item.subtitle}
+              rightType={item.rightType}
+              toggle={
+                item.rightType === "toggle" ? (
+                  <Switch
+                    value={true}
+                    onValueChange={() => {}}
+                    trackColor={{ false: "#2A2740", true: "#D946EF" }}
+                    thumbColor="#FFFFFF"
+                  />
+                ) : undefined
+              }
+            />
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 };

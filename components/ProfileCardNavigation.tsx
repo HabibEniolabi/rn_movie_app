@@ -23,19 +23,21 @@ const ProfileCardNavigation = ({
 }: ProfileCardNavigationProps) => {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-      <View className="flex-row gap-3 items-center justify-between rounded-[24px] bg-dark-500 px-4 py-4">
+      <View className="flex-row gap-3 items-center justify-between border border-dark-400 rounded-[24px] bg-dark-300 px-4 py-4">
+        <View className="flex-row gap-2 items-center">
         <View
           className={`w-[54px] h-[54px] justify-center items-center rounded-[14px] ${iconBgClass}`}
         >
           {icon}
         </View>
         <View className="flex flex-col gap-2">
-          <Text className="text-[24px] font-bold capitalize text-white">
+          <Text className="text-[14px] font-bold capitalize text-white">
             {title}
           </Text>
-          <Text className="text-[14px] font-medium text-dark-500">
+          <Text className="text-[12px] font-medium text-dark-500">
             {subtitle}
           </Text>
+        </View>
         </View>
         <View>
           {rightType === "toggle" ? (
