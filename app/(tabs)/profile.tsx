@@ -1,4 +1,4 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Switch, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { icons } from "@/constants/icons";
 import Octicons from "react-native-vector-icons/Octicons";
@@ -7,6 +7,7 @@ import { images } from "@/constants/images";
 import ProfileStatsCard from "@/components/ProfileStatsCard";
 import Genre from "@/components/Genre";
 import { useLocalSearchParams } from "expo-router";
+import ProfileCardNavigation from "@/components/ProfileCardNavigation";
 
 const favouriteGenres = [
   { id: 1, name: "Action" },
@@ -16,6 +17,41 @@ const favouriteGenres = [
   { id: 5, name: "Drama" },
   { id: 6, name: "Horror" },
 ];
+
+const profileItems = [
+  {
+    id: 1,
+    icon:  <Feather name="user" size={22} color="#8FB3FF" />,
+    iconBgClass: "bg-surface-purple",
+    title: "edit profile",
+    subtitle: "Update your name & avatar",
+    rightType: "chevron" as const,
+  },
+  {
+    id: 2,
+    icon: <Feather name="gift" size={22} color="#7DD3FC" />,
+    iconBgClass: "bg-surface-plum",
+    title: "subscription",
+    subtitle: "Pro Plan · Renews Jan 2026",
+    rightType: "chevron" as const,
+  },
+  {
+    id: 3,
+    icon: <Feather name="bell" size={22} color="#FACC15" />,
+    iconBgClass: "bg-surface-olive",
+    title: "notifications",
+    subtitle: "New releases & reminders",
+    rightType: "toggle" as const,
+  },
+  {
+    id: 4,
+    icon: <Feather name="globe" size={22} color="#67E8F9" />,
+    iconBgClass: "bg-surface-teal",
+    title: "language",
+    subtitle: "English (US)",
+    rightType: "chevron" as const,
+  }
+]
 
 const Profile = () => {
   return (
@@ -46,6 +82,29 @@ const Profile = () => {
       <View className="flex flex-col mt-6">
         <Text className="text-dark-500 font-bold uppercase">Favourite Genres</Text>
         <Genre genres={favouriteGenres}  />
+      </View>
+      <View className="flex flex-col mt-6">
+        <Text className="text-dark-500 font-bold uppercase">Account</Text>
+        {profileItems.map((item) => (
+          <ProfileCardNavigation 
+            key={item.id} 
+            icon={item.icon} 
+            iconBgClass={item.iconBgClass} 
+            title={item.title} 
+            subtitle={item.subtitle}
+            rightType={item.rightType}
+            toggle={
+              item.rightType ==="toggle" ? (
+                <Switch 
+                  value={true}
+                  onValueChange={() => {}}
+                  trackColor={{ false: "#2A2740", true: "#D946EF" }}
+                  thumbColor="#FFFFFF"
+                />
+              ) : undefined
+            }
+          />
+        ))}
       </View>
     </View>
   );

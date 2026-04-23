@@ -5,24 +5,30 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      colors:{
+      colors: {
         primary: "#030014",
         secondary: "#151312",
         light: {
           100: "#D6C7FF",
           200: "#A8B5DB",
-          300: "#9CA4AB"
+          300: "#9CA4AB",
         },
         dark: {
           100: "#221F3D",
           200: "#0F0D23",
           300: "#141325",
           400: "#1F1F34",
-          500: "#7B7996"
+          500: "#7B7996",
         },
         accent: "#AB8BFF",
-        orange: "#EE8924"
-      }
+        orange: "#EE8924",
+      },
+      surface: {
+        purple: "#281E43",
+        plum: "#321A37",
+        olive: "#352E2B",
+        teal: "#172731",
+      },
     },
   },
   plugins: [],
