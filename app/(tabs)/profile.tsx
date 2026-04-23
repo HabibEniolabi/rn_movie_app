@@ -65,8 +65,8 @@ const Profile = () => {
   const tabBarHeight = useBottomTabBarHeight();
   return (
     <View className="bg-primary flex-1 px-10">
-      <View className="flex justify-between mt-20 mb-2 items-center flex-row">
-        <Text className="text-white font-bold text-lg">Profile</Text>
+      <View className="flex justify-between mt-16 mb-2 items-center flex-row">
+        <Text className="text-white font-bold text-[24px]">Profile</Text>
         <View className="flex items-center bg-dark-300 border-dark-400 border p-3 rounded-md">
           <TouchableOpacity>
             <Octicons name={"gear"} size={18} color="#000000" />
