@@ -5,6 +5,17 @@ import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import { images } from "@/constants/images";
 import ProfileStatsCard from "@/components/ProfileStatsCard";
+import Genre from "@/components/Genre";
+import { useLocalSearchParams } from "expo-router";
+
+const favouriteGenres = [
+  { id: 1, name: "Action" },
+  { id: 2, name: "Sci-Fi" },
+  { id: 3, name: "Thriller" },
+  { id: 4, name: "Animation" },
+  { id: 5, name: "Drama" },
+  { id: 6, name: "Horror" },
+];
 
 const Profile = () => {
   return (
@@ -34,6 +45,7 @@ const Profile = () => {
       <ProfileStatsCard />
       <View className="flex flex-col mt-6">
         <Text className="text-dark-500 font-bold uppercase">Favourite Genres</Text>
+        <Genre genres={favouriteGenres}  />
       </View>
     </View>
   );
