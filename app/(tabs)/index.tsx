@@ -15,9 +15,11 @@ import { fetchMovies } from "@/services/api";
 import MovieCard from "@/components/MovieCard";
 import { getTrendingMovies } from "@/services/appwrite";
 import TrendingCard from "@/components/TrendingCard";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 export default function Index() {
   const router = useRouter();
+  const tabBarHeight = useBottomTabBarHeight();
 
   const {
     data: trendingMovies,
@@ -36,7 +38,11 @@ export default function Index() {
       <ScrollView
         className="flex-1 px-5"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ minHeight: "100%", paddingBlock: 10 }}
+        contentContainerStyle={{
+          minHeight: "100%",
+          paddingBlock: 10,
+          paddingBottom: tabBarHeight + 40,
+        }}
       >
         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
         {moviesLoading || trendingLoading ? (

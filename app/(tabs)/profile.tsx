@@ -125,6 +125,11 @@ const Profile = () => {
               />
             ))}
           </View>
+          <TouchableOpacity activeOpacity={0.8}>
+            <View className="border border-[#7A1B68] bg-[#2B1230] justify-center items-center rounded-[14px]">
+              <Text className="text-[#F07CD6] font-bold p-5">Sign Out</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>

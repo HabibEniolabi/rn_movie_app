@@ -11,7 +11,7 @@ const genreThemes = [
   },
   {
     bg: "rgba(236, 72, 153, 0.15)", // pink tint
-    border: "rgba(236, 72, 153, 0.5)",
+    border: "#ec4899",
     text: "#F472B6",
   },
   {
