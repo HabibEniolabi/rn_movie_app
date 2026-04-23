@@ -29,32 +29,32 @@ const favouriteGenres = [
 const profileItems = [
   {
     id: 1,
-    icon: <Feather name="user" size={22} color="#8FB3FF" />,
-    iconBgClass: "bg-surface-purple",
+    icon: <Image source={images.user} className="w-[22px] h-[22px]" />,
+    iconBgClass: "#281E43",
     title: "edit profile",
     subtitle: "Update your name & avatar",
     rightType: "chevron" as const,
   },
   {
     id: 2,
-    icon: <Feather name="gift" size={22} color="#7DD3FC" />,
-    iconBgClass: "bg-surface-plum",
+    icon: <Image source={images.diamond} className="w-[22px] h-[22px]" />,
+    iconBgClass: "#321A37",
     title: "subscription",
     subtitle: "Pro Plan · Renews Jan 2026",
     rightType: "chevron" as const,
   },
   {
     id: 3,
-    icon: <Feather name="bell" size={22} color="#FACC15" />,
-    iconBgClass: "bg-surface-olive",
+    icon: <Image source={images.bell} className="w-[22px] h-[22px]" />,
+    iconBgClass: "#352E2B",
     title: "notifications",
     subtitle: "New releases & reminders",
     rightType: "toggle" as const,
   },
   {
     id: 4,
-    icon: <Feather name="globe" size={22} color="#67E8F9" />,
-    iconBgClass: "bg-surface-teal",
+    icon: <Image source={images.internet} className="w-[22px] h-[22px]" />,
+    iconBgClass: "#172731",
     title: "language",
     subtitle: "English (US)",
     rightType: "chevron" as const,
@@ -65,7 +65,7 @@ const Profile = () => {
   const tabBarHeight = useBottomTabBarHeight();
   return (
     <View className="bg-primary flex-1 px-10">
-      <View className="flex justify-between mt-20 mb-10 items-center flex-row">
+      <View className="flex justify-between mt-20 mb-2 items-center flex-row">
         <Text className="text-white font-bold text-lg">Profile</Text>
         <View className="flex items-center bg-dark-300 border-dark-400 border p-3 rounded-md">
           <TouchableOpacity>
@@ -101,28 +101,30 @@ const Profile = () => {
           </Text>
           <Genre genres={favouriteGenres} />
         </View>
-        <View className="flex flex-col gap-2 mt-6">
-          <Text className="text-dark-500 font-bold uppercase mb-3">Account</Text>
-          {profileItems.map((item) => (
-            <ProfileCardNavigation
-              key={item.id}
-              icon={item.icon}
-              iconBgClass={item.iconBgClass}
-              title={item.title}
-              subtitle={item.subtitle}
-              rightType={item.rightType}
-              toggle={
-                item.rightType === "toggle" ? (
-                  <Switch
-                    value={true}
-                    onValueChange={() => {}}
-                    trackColor={{ false: "#2A2740", true: "#D946EF" }}
-                    thumbColor="#FFFFFF"
-                  />
-                ) : undefined
-              }
-            />
-          ))}
+        <View className="flex flex-col gap-6 mt-6">
+          <Text className="text-dark-500 font-bold uppercase">Account</Text>
+          <View className="gap-1">
+            {profileItems.map((item) => (
+              <ProfileCardNavigation
+                key={item.id}
+                icon={item.icon}
+                iconBgClass={item.iconBgClass}
+                title={item.title}
+                subtitle={item.subtitle}
+                rightType={item.rightType}
+                toggle={
+                  item.rightType === "toggle" ? (
+                    <Switch
+                      value={true}
+                      onValueChange={() => {}}
+                      trackColor={{ false: "#2A2740", true: "#D946EF" }}
+                      thumbColor="#FFFFFF"
+                    />
+                  ) : undefined
+                }
+              />
+            ))}
+          </View>
         </View>
       </ScrollView>
     </View>

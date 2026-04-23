@@ -22,13 +22,7 @@ module.exports = {
         },
         accent: "#AB8BFF",
         orange: "#EE8924",
-      },
-      surface: {
-        purple: "#281E43",
-        plum: "#321A37",
-        olive: "#352E2B",
-        teal: "#172731",
-      },
+      }
     },
   },
   plugins: [],
