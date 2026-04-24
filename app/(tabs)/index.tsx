@@ -38,11 +38,7 @@ export default function Index() {
       <ScrollView
         className="flex-1 px-5"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          minHeight: "100%",
-          paddingBlock: 10,
-          paddingBottom: tabBarHeight + 40,
-        }}
+        contentContainerStyle={{ minHeight: "100%", paddingBlock: 10, paddingBottom: tabBarHeight + 40 }}
       >
         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
         {moviesLoading || trendingLoading ? (
