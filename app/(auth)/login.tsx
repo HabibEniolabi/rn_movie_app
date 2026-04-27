@@ -11,11 +11,17 @@ import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 import Feather from "react-native-vector-icons/Feather";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
+import { router } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Login = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] =  useState("")
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = () => {
+    router.replace("/(tabs)");
+  };
   return (
     <View className="bg-primary flex-1">
       <Image source={images.bg} className="absolute z-0 w-full" />
@@ -61,6 +67,7 @@ const Login = () => {
                 value={password}
                 onChangeText={setPassword}
                 placeholder="***********"
+                secureTextEntry={!showPassword}
                 placeholderTextColor="#3A3858"
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -75,7 +82,34 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <TouchableOpacity
+            onPress={() => router.push("/forgot-password")}
+            className="self-end"
+          >
+            <Text className="text-[#9B59F5] font-semibold">
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          onPress={handleLogin}
+          activeOpacity={0.85}
+          className="rounded-[18px] overflow-hidden mt-6"
+        >
+          <LinearGradient
+            colors={["#E040A0", "#9B59F5"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{
+              height: 56,
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 18,
+            }}
+          >
+            <Text className="text-white text-lg font-bold">Sign In</Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
