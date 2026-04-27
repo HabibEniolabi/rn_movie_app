@@ -19,7 +19,7 @@ const SocialButton = ({ title, onPress, icon, imageSource }: AuthButtonProps) =>
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.85}
-      className="flex-1 h-[56px] rounded-[18px] border border-[#2A2845] bg-[#141325] flex-row items-center justify-center gap-3"
+      className="flex-1 px-5 py-5 rounded-[18px] border border-[#2A2845] bg-[#141325] flex-row items-center justify-center gap-2"
     >
       {imageSource && (
         <Image

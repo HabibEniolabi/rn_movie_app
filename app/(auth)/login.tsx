@@ -126,6 +126,12 @@ const Login = () => {
             />
           ))}
         </View>
+        <View className="flex-row gap-2 items-center justify-center mt-8">
+          <Text className="font-bold text-dark-500 text-md">Don't have an account?</Text>
+          <TouchableOpacity onPress={() => router.push("/signup")} activeOpacity={0.85}>
+            <Text className="text-[#E040A0] font-bold text-[20px]">Sign Up</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
