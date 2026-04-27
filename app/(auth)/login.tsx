@@ -6,15 +6,32 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 import Feather from "react-native-vector-icons/Feather";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import { router } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
+import Button from "@/components/Button";
+import SocialButton from "@/components/SocialButton";
+
+const socialButton = [
+  {
+    title: "Google",
+    imageSource: images.google,
+  },
+  {
+    title: "Facebook",
+    imageSource: images.facebook,
+  },
+  {
+    title: "Apple",
+    imageSource: images.apple,
+  },
+];
 
 const Login = () => {
+  const passwordInputRef = useRef<TextInput>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -55,7 +72,7 @@ const Login = () => {
                 placeholderTextColor="#3A3858"
                 keyboardType="email-address"
                 autoCapitalize="none"
-                className="ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold"
+                className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
               />
             </View>
           </View>
@@ -66,14 +83,16 @@ const Login = () => {
               <TextInput
                 value={password}
                 onChangeText={setPassword}
-                placeholder="***********"
+                placeholder="Enter password"
                 secureTextEntry={!showPassword}
                 placeholderTextColor="#3A3858"
-                keyboardType="email-address"
                 autoCapitalize="none"
-                className="ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold"
+                className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
               />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                activeOpacity={0.7}
+              >
                 <Feather
                   name={showPassword ? "eye-off" : "eye"}
                   size={20}
@@ -91,25 +110,22 @@ const Login = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={handleLogin}
-          activeOpacity={0.85}
-          className="rounded-[18px] overflow-hidden mt-6"
-        >
-          <LinearGradient
-            colors={["#E040A0", "#9B59F5"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={{
-              height: 56,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 18,
-            }}
-          >
-            <Text className="text-white text-lg font-bold">Sign In</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+        <Button title={"Sign In"} onPress={() => handleLogin()} />
+        <View className="flex-row items-center my-3 gap-2">
+          <View className="flex-1 h-[1px] bg-[#2A2845]" />
+          <Text className="text-dark-500 text-sm">or continue with</Text>
+          <View className="flex-1 h-[1px] bg-[#2A2845]" />
+        </View>
+        <View className="gap-2 flex-row mt-4">
+          {socialButton.map((item, index) => (
+            <SocialButton
+              key={index}
+              title={item.title}
+              onPress={() => {}}
+              imageSource={item.imageSource}
+            />
+          ))}
+        </View>
       </ScrollView>
     </View>
   );

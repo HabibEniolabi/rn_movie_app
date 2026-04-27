@@ -6,6 +6,10 @@ import user from "@/assets/images/user.png";
 import internet from "@/assets/images/internet.png";
 import bell from "@/assets/images/bell.png";
 import diamond from "@/assets/images/diamond.png";
+import facebook from "@/assets/images/facebook.png";
+import google from "@/assets/images/google.png";
+import apple from "@/assets/images/apple.png";
+
 
 export const images = {
   bg,
@@ -15,5 +19,8 @@ export const images = {
   user,
   bell,
   diamond,
-  internet
+  internet,
+  facebook,
+  google,
+  apple
 };
