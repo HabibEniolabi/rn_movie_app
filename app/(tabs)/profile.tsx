@@ -16,6 +16,7 @@ import Genre from "@/components/Genre";
 import { useLocalSearchParams } from "expo-router";
 import ProfileCardNavigation from "@/components/ProfileCardNavigation";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
 
 const favouriteGenres = [
   { id: 1, name: "Action" },
@@ -125,7 +126,7 @@ const Profile = () => {
               />
             ))}
           </View>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => FIREBASE_AUTH.signOut()}>
             <View className="border border-[#7A1B68] bg-[#2B1230] justify-center items-center rounded-[14px]">
               <Text className="text-[#F07CD6] font-bold p-5">Sign Out</Text>
             </View>
