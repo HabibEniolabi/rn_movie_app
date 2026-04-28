@@ -9,6 +9,7 @@ import diamond from "@/assets/images/diamond.png";
 import facebook from "@/assets/images/facebook.png";
 import google from "@/assets/images/google.png";
 import apple from "@/assets/images/apple.png";
+import film from "@/assets/images/film.png";
 
 
 export const images = {
@@ -22,5 +23,6 @@ export const images = {
   internet,
   facebook,
   google,
-  apple
+  apple,
+  film
 };
