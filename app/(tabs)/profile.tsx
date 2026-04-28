@@ -7,13 +7,11 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { icons } from "@/constants/icons";
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import { images } from "@/constants/images";
 import ProfileStatsCard from "@/components/ProfileStatsCard";
 import Genre from "@/components/Genre";
-import { useLocalSearchParams } from "expo-router";
 import ProfileCardNavigation from "@/components/ProfileCardNavigation";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
@@ -70,7 +68,7 @@ const Profile = () => {
         <Text className="text-white font-bold text-[24px]">Profile</Text>
         <View className="flex items-center bg-dark-300 border-dark-400 border p-3 rounded-md">
           <TouchableOpacity>
-            <Octicons name={"gear"} size={18} color="#000000" />
+            <Octicons name={"gear"} size={18} color="#8B88A8" />
           </TouchableOpacity>
         </View>
       </View>

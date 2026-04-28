@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import "./globals.css";
 import { StatusBar } from "react-native";
- 
+
 export default function RootLayout() {
   return (
     <>
@@ -16,6 +16,12 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="(auth)/signup"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="onboarding"
           options={{
             headerShown: false,
           }}

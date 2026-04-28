@@ -1,12 +1,5 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { Redirect } from "expo-router";
 
-const Signup = () => {
-  return (
-    <View className='bg-primary flex-1'>
-      <Text>Signup</Text>
-    </View>
-  )
+export default function Signup() {
+  return <Redirect href="/onboarding/plan" />;
 }
-
-export default Signup
