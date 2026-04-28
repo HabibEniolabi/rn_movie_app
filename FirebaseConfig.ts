@@ -4,9 +4,15 @@ import { getAuth } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+const firebaseApiKey = process.env.EXPO_PUBLIC_FIREBASE_API_KEY;
+
+if (!firebaseApiKey) {
+  throw new Error("Missing EXPO_PUBLIC_FIREBASE_API_KEY");
+}
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBKXLgrZBvR6qOMEiaXOBXeoyDbh8zdqXw",
+  apiKey: firebaseApiKey,
   authDomain: "rnmovieapp-be57c.firebaseapp.com",
   projectId: "rnmovieapp-be57c",
   storageBucket: "rnmovieapp-be57c.firebasestorage.app",
