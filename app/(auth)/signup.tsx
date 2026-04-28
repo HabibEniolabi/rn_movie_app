@@ -3,7 +3,7 @@ import React from 'react'
 
 const Signup = () => {
   return (
-    <View>
+    <View className='bg-primary flex-1'>
       <Text>Signup</Text>
     </View>
   )

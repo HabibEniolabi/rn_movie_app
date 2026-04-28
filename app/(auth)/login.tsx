@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 import Feather from "react-native-vector-icons/Feather";
@@ -26,10 +26,6 @@ const socialButton = [
   {
     title: "Google",
     imageSource: images.google,
-  },
-  {
-    title: "Facebook",
-    imageSource: images.facebook,
   },
   {
     title: "Apple",
