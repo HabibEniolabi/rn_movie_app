@@ -11,7 +11,7 @@ const Plan = () => {
   const [selectedPlan, setSelectedPlan] = useState<"free" | "pro">("pro");
   const [selectIcon, setSelectIcon] = useState<true | false>(false);
   return (
-    <View className="bg-primary flex-1 px-10">
+    <View className="bg-primary flex-1 px-5">
       <View className="flex mt-16 flex-col">
         <OnboardingHeader step={1} />
         <ScrollView

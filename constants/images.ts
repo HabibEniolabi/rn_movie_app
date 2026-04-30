@@ -11,6 +11,7 @@ import google from "@/assets/images/google.png";
 import apple from "@/assets/images/apple.png";
 import film from "@/assets/images/film.png";
 import crown from "@/assets/images/crown.png";
+import gift from "@/assets/images/gift.png";
 
 
 export const images = {
@@ -26,5 +27,6 @@ export const images = {
   google,
   apple,
   film,
-  crown
+  crown,
+  gift
 };

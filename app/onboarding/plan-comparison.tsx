@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
@@ -37,7 +37,7 @@ const PlanComparison = () => {
         <ScrollView
           className="mt-8"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 60 }}
+          contentContainerStyle={{ paddingBottom: 80 }}
         >
           <BillingToggle value={billingType} onChange={setBillingType} />
           <View className="gap-5 mt-6">
@@ -174,6 +174,45 @@ const PlanComparison = () => {
                 },
               ]}
             />
+          </View>
+          <View className="flex-row items-center justify-center bg-[#1D9E75]/15 border border-[#1D9E75] rounded-[28px] p-5 py-3">
+            <View className="w-9 h-9 flex-1">
+              <Image source={images.gift} />
+            </View>
+            <View className="flex flex-col gap-3 flex-1">
+              <Text className="text-[#4DCFA0] font-bold text-lg">
+                7-day free trial on all paid plans
+              </Text>
+              <Text className="text-dark-200 text-sm">
+                Try Pro or Ultra free for a week. Cancel before the trial ends
+                and you won't be charged.
+              </Text>
+            </View>
+          </View>
+          <View className="flex-row gap-2 items-center justify-center mt-8">
+            <Text className="font-bold text-dark-500 text-sm">
+              By subscribing you agree to our 
+            </Text>
+            <TouchableOpacity
+              activeOpacity={0.85}
+            >
+              <Text className="text-[#E040A0] font-bold text-[20px]">
+                Terms
+              </Text>
+            </TouchableOpacity>
+            <Text className="font-bold text-dark-500 text-sm">
+              and
+            </Text>
+            <TouchableOpacity
+              activeOpacity={0.85}
+            >
+              <Text className="text-[#E040A0] font-bold text-[20px]">
+                Privacy Policy
+              </Text>
+            </TouchableOpacity>
+            <Text className="font-bold text-dark-500 text-sm">
+              Prices shown in USD. Cancel anytime.
+            </Text>
           </View>
         </ScrollView>
       </View>
