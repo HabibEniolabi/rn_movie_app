@@ -103,7 +103,7 @@ const Login = () => {
                 </View>
               </View>
               <View className="flex flex-col gap-2">
-                <Text className="text-md text-[#c] font-bold">Password</Text>
+                <Text className="text-md text-[#6A6880] font-bold">Password</Text>
                 <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
                   <EvilIcons name="lock" size={24} color="#3A3858" />
                   <TextInput

@@ -224,7 +224,7 @@ const PlanComparison = () => {
                   setCustomAlert({
                     visible: true,
                     title: "Terms",
-                    message: "I agree to the terms and conditions of the app.",
+                    message: "I agree to the terms and conditions of MovieFlix.",
                   });
                 }}
                 className="text-[#B15CFF] font-bold"
@@ -237,7 +237,7 @@ const PlanComparison = () => {
                   setCustomAlert({
                     visible: true,
                     title: "Privacy Policy",
-                    message: "I agree to the Privacy Policy of the app.",
+                    message: "I agree to the Privacy Policy of MovieFlix.",
                   });
                 }}
                 className="text-[#B15CFF] font-bold"

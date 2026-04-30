@@ -23,13 +23,15 @@ const OnboardingHeaderInfo = ({
         <Text className="text-3xl text-white font-bold">{title}</Text>
         <Text className="text-md text-dark-500 font-bold">{subtitle}</Text>
       </View>
-      <View className="self-start flex-row items-center gap-2 rounded-full border border-[#5C4520] bg-[#1D180F] px-4 py-2">
-        <View className="w-2 h-2 rounded-full bg-[#FFD84D]" />
+      {warning ? (
+        <View className="self-start flex-row items-center gap-2 rounded-full border border-[#5C4520] bg-[#1D180F] px-4 py-2">
+          <View className="w-2 h-2 rounded-full bg-[#FFD84D]" />
 
-        <Text className="text-[#FFD84D] font-bold text-sm">
-          Save 40% with yearly billing
-        </Text>
-      </View>
+          <Text className="text-[#FFD84D] font-bold text-sm">
+            {warning}
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 };
