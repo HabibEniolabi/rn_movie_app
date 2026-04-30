@@ -4,9 +4,12 @@ import OnboardingHeader from "@/components/OnboardingHeader";
 import OnboardingHeaderInfo from "@/components/OnboardingHeaderInfo";
 import PlanCard from "@/components/PlanCard";
 import { images } from "@/constants/images";
+import Button from "@/components/Button";
+import { router } from "expo-router";
 
 const Plan = () => {
   const [selectedPlan, setSelectedPlan] = useState<"free" | "pro">("pro");
+  const [selectIcon, setSelectIcon] = useState<true | false>(false);
   return (
     <View className="bg-primary flex-1 px-10">
       <View className="flex mt-16 flex-col">
@@ -55,6 +58,27 @@ const Plan = () => {
                 { label: "Offline downloads", available: true },
               ]}
             />
+          </View>
+          <View className="mt-8 flex fex-col gap-6">
+            <Button
+              title="Continue with Pro"
+              showArrow
+              variant="primary"
+              onPress={() => router.push("/onboarding/profile")}
+            />
+            <Button
+              title="Start with Free"
+              variant="outline"
+              onPress={() => router.push("/onboarding/profile")}
+            />
+          </View>
+          <View className="items-center justify-center flew-row mt-6 gap-1">
+            <Text className="text-dark-500 text-md">See full</Text>
+            <TouchableOpacity activeOpacity={0.8}>
+              <Text className="text-lg font-bold text-[#6A6880]">
+                plan comparison
+              </Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
