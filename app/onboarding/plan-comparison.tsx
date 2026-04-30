@@ -1,10 +1,20 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  Alert,
+  Modal,
+  Pressable,
+} from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
 import PlanComparisonCard from "@/components/PLanComparisonCard";
 import { images } from "@/constants/images";
 import BillingToggle from "@/components/BillingToggle";
+import QuickComparison from "@/components/QuickComparison";
 
 const PlanComparison = () => {
   const [billingType, setBillingType] = useState<"monthly" | "yearly">(
@@ -16,6 +26,15 @@ const PlanComparison = () => {
       params: { plan },
     });
   };
+  const [customAlert, setCustomAlert] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
+    visible: false,
+    title: "",
+    message: "",
+  });
   return (
     <View className="flex-1 bg-primary px-5">
       <View className="mt-12">
@@ -175,46 +194,93 @@ const PlanComparison = () => {
               ]}
             />
           </View>
-          <View className="flex-row items-center justify-center bg-[#1D9E75]/15 border border-[#1D9E75] rounded-[28px] p-5 py-3">
-            <View className="w-9 h-9 flex-1">
-              <Image source={images.gift} />
+          <QuickComparison />
+          <View className="flex-row items-center mt-6 bg-[#10201F] border border-[#1D9E75] rounded-[28px] px-5 py-5">
+            <View className="w-[60px] h-[60px] items-center justify-center mr-4">
+              <Image
+                source={images.gift}
+                className="w-[50px] h-[50px]"
+                resizeMode="contain"
+              />
             </View>
-            <View className="flex flex-col gap-3 flex-1">
-              <Text className="text-[#4DCFA0] font-bold text-lg">
+
+            <View className="flex-1">
+              <Text className="text-[#4DCFA0] font-bold text-lg mb-2">
                 7-day free trial on all paid plans
               </Text>
-              <Text className="text-dark-200 text-sm">
+
+              <Text className="text-[#8B88A8] text-base leading-6">
                 Try Pro or Ultra free for a week. Cancel before the trial ends
-                and you won't be charged.
+                and you won&apos;t be charged.
               </Text>
             </View>
           </View>
-          <View className="flex-row gap-2 items-center justify-center mt-8">
-            <Text className="font-bold text-dark-500 text-sm">
-              By subscribing you agree to our 
-            </Text>
-            <TouchableOpacity
-              activeOpacity={0.85}
-            >
-              <Text className="text-[#E040A0] font-bold text-[20px]">
+
+          <View className="mt-8 px-2">
+            <Text className="text-dark-500 text-sm text-center leading-7">
+              By subscribing you agree to our{" "}
+              <Text
+                onPress={() => {
+                  setCustomAlert({
+                    visible: true,
+                    title: "Terms",
+                    message: "I agree to the terms and conditions of the app.",
+                  });
+                }}
+                className="text-[#B15CFF] font-bold"
+              >
                 Terms
-              </Text>
-            </TouchableOpacity>
-            <Text className="font-bold text-dark-500 text-sm">
-              and
-            </Text>
-            <TouchableOpacity
-              activeOpacity={0.85}
-            >
-              <Text className="text-[#E040A0] font-bold text-[20px]">
+              </Text>{" "}
+              and{" "}
+              <Text
+                onPress={() => {
+                  setCustomAlert({
+                    visible: true,
+                    title: "Privacy Policy",
+                    message: "I agree to the Privacy Policy of the app.",
+                  });
+                }}
+                className="text-[#B15CFF] font-bold"
+              >
                 Privacy Policy
               </Text>
-            </TouchableOpacity>
-            <Text className="font-bold text-dark-500 text-sm">
+              .
+            </Text>
+
+            <Text className="text-dark-500 text-sm text-center leading-7 mt-1">
               Prices shown in USD. Cancel anytime.
             </Text>
           </View>
         </ScrollView>
+        <Modal
+          visible={customAlert.visible}
+          transparent
+          animationType="fade"
+          onRequestClose={() =>
+            setCustomAlert((prev) => ({ ...prev, visible: false }))
+          }
+        >
+          <View className="flex-1 bg-black/60 items-center justify-center px-6">
+            <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
+              <Text className="text-white text-2xl font-bold text-center">
+                {customAlert.title}
+              </Text>
+
+              <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
+                {customAlert.message}
+              </Text>
+
+              <Pressable
+                onPress={() =>
+                  setCustomAlert((prev) => ({ ...prev, visible: false }))
+                }
+                className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
+              >
+                <Text className="text-white font-bold text-lg">Okay</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
       </View>
     </View>
   );
