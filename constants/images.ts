@@ -10,6 +10,7 @@ import facebook from "@/assets/images/facebook.png";
 import google from "@/assets/images/google.png";
 import apple from "@/assets/images/apple.png";
 import film from "@/assets/images/film.png";
+import crown from "@/assets/images/crown.png";
 
 
 export const images = {
@@ -24,5 +25,6 @@ export const images = {
   facebook,
   google,
   apple,
-  film
+  film,
+  crown
 };

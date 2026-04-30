@@ -72,10 +72,15 @@ const Plan = () => {
               onPress={() => router.push("/onboarding/profile")}
             />
           </View>
-          <View className="items-center justify-center flew-row mt-6 gap-1">
-            <Text className="text-dark-500 text-md">See full</Text>
-            <TouchableOpacity activeOpacity={0.8}>
-              <Text className="text-lg font-bold text-[#6A6880]">
+          <View className="flex-row gap-2 items-center justify-center mt-3">
+            <Text className="font-bold text-dark-500 text-md">
+             see full
+            </Text>
+            <TouchableOpacity
+              onPress={() => router.push("/onboarding/plan-comparison")}
+              activeOpacity={0.85}
+            >
+              <Text className="text-[#9B59F5] font-bold text-[20px]">
                 plan comparison
               </Text>
             </TouchableOpacity>
