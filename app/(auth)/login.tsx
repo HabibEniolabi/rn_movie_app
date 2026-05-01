@@ -5,11 +5,12 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Modal,
+  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 import { images } from "@/constants/images";
@@ -39,22 +40,60 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const auth = FIREBASE_AUTH;
 
+  const getLoginErrorMessage = (errorCode?: string) => {
+    switch (errorCode) {
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/user-not-found":
+        return "No account found with this email.";
+      case "auth/wrong-password":
+        return "Incorrect password. Please try again.";
+      case "auth/invalid-credential":
+        return "Invalid email or password. Please try again.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please try again later.";
+      case "auth/user-disabled":
+        return "This account has been disabled.";
+      default:
+        return "Something went wrong. Please try again.";
+    }
+  };
+
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Missing details", "Please enter your email and password.");
+      setCustomAlert({
+        visible: true,
+        title: "Missing details",
+        message: "Please enter your email and password.",
+      });
       return;
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email.trim().toLowerCase(), password);
+      await signInWithEmailAndPassword(
+        auth,
+        email.trim().toLowerCase(),
+        password
+      );
       router.replace("/(tabs)");
     } catch (error: any) {
-      Alert.alert(
-        "Login failed",
-        error?.message || "Something went wrong. Please try again."
-      );
+      setCustomAlert({
+        visible: true,
+        title: "Login failed",
+        message: getLoginErrorMessage(error?.code),
+      });
     }
   };
+
+  const [customAlert, setCustomAlert] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
+    visible: false,
+    title: "",
+    message: "",
+  });
   return (
     <KeyboardAvoidingView
       className="bg-primary flex-1"
@@ -103,7 +142,9 @@ const Login = () => {
                 </View>
               </View>
               <View className="flex flex-col gap-2">
-                <Text className="text-md text-[#6A6880] font-bold">Password</Text>
+                <Text className="text-md text-[#6A6880] font-bold">
+                  Password
+                </Text>
                 <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
                   <EvilIcons name="lock" size={24} color="#3A3858" />
                   <TextInput
@@ -168,6 +209,35 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </ScrollView>
+          <Modal
+            visible={customAlert.visible}
+            transparent
+            animationType="fade"
+            onRequestClose={() =>
+              setCustomAlert((prev) => ({ ...prev, visible: false }))
+            }
+          >
+            <View className="flex-1 bg-black/60 items-center justify-center px-6">
+              <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
+                <Text className="text-white text-2xl font-bold text-center">
+                  {customAlert.title}
+                </Text>
+
+                <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
+                  {customAlert.message}
+                </Text>
+
+                <Pressable
+                  onPress={() =>
+                    setCustomAlert((prev) => ({ ...prev, visible: false }))
+                  }
+                  className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
+                >
+                  <Text className="text-white font-bold text-lg">Okay</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

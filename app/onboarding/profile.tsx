@@ -8,8 +8,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
-  Alert,
   ScrollView,
+  Modal,
+  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 import OnboardingHeader from "@/components/OnboardingHeader";
@@ -120,22 +121,41 @@ const Profile = () => {
     }
   };
 
+  const [customAlert, setCustomAlert] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
+    visible: false,
+    title: "",
+    message: "",
+  });
+
   const handleCreateAccount = async () => {
     if (!firstName.trim() || !lastName.trim() || !email.trim() || !password) {
-      Alert.alert("Missing details", "Please complete all fields.");
+      setCustomAlert({
+        visible: true,
+        title: "Missing details",
+        message: "Please complete all fields.",
+      });
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert("Weak password", "Password must be at least 6 characters.");
+      setCustomAlert({
+        visible: true,
+        title: "Weak password",
+        message: "Password must be at least 6 characters.",
+      });
       return;
     }
 
     if (!agreed) {
-      Alert.alert(
-        "Terms required",
-        "Please agree to the Terms of Service and Privacy Policy."
-      );
+      setCustomAlert({
+        visible: true,
+        title: "Terms required",
+        message: "Please agree to the Terms of Service and Privacy Policy.",
+      });
       return;
     }
 
@@ -170,7 +190,11 @@ const Profile = () => {
       console.log("Error code:", error?.code);
       console.log("Error message:", error?.message);
 
-      Alert.alert("Signup failed", getSignupErrorMessage(error?.code));
+      setCustomAlert({
+        visible: true,
+        title: "Signup failed",
+        message: getSignupErrorMessage(error?.code),
+      });
     }
   };
   return (
@@ -373,6 +397,35 @@ const Profile = () => {
               </View>
             </ScrollView>
           </View>
+          <Modal
+            visible={customAlert.visible}
+            transparent
+            animationType="fade"
+            onRequestClose={() =>
+              setCustomAlert((prev) => ({ ...prev, visible: false }))
+            }
+          >
+            <View className="flex-1 bg-black/60 items-center justify-center px-6">
+              <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
+                <Text className="text-white text-2xl font-bold text-center">
+                  {customAlert.title}
+                </Text>
+
+                <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
+                  {customAlert.message}
+                </Text>
+
+                <Pressable
+                  onPress={() =>
+                    setCustomAlert((prev) => ({ ...prev, visible: false }))
+                  }
+                  className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
+                >
+                  <Text className="text-white font-bold text-lg">Okay</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

@@ -1,13 +1,14 @@
 import {
-  Alert,
   Image,
+  Modal,
+  Pressable,
   ScrollView,
   Switch,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import { images } from "@/constants/images";
@@ -66,6 +67,16 @@ const profileItems = [
 const Profile = () => {
   const tabBarHeight = useBottomTabBarHeight();
 
+  const [customAlert, setCustomAlert] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
+    visible: false,
+    title: "",
+    message: "",
+  });
+
   const handleSignOut = async () => {
     try {
       await signOut(FIREBASE_AUTH);
@@ -73,11 +84,11 @@ const Profile = () => {
       router.replace("/login");
     } catch (error: any) {
       console.log("Sign out error:", error);
-
-      Alert.alert(
-        "Sign out failed",
-        error?.message || "Something went wrong. Please try again."
-      );
+      setCustomAlert({
+        visible: true,
+        title: "Sign out failed",
+        message: error?.message || "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -143,16 +154,42 @@ const Profile = () => {
               />
             ))}
           </View>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={handleSignOut}
-          >
+          <TouchableOpacity activeOpacity={0.8} onPress={handleSignOut}>
             <View className="border border-[#7A1B68] bg-[#2B1230] justify-center items-center rounded-[14px]">
               <Text className="text-[#F07CD6] font-bold p-5">Sign Out</Text>
             </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Modal
+        visible={customAlert.visible}
+        transparent
+        animationType="fade"
+        onRequestClose={() =>
+          setCustomAlert((prev) => ({ ...prev, visible: false }))
+        }
+      >
+        <View className="flex-1 bg-black/60 items-center justify-center px-6">
+          <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
+            <Text className="text-white text-2xl font-bold text-center">
+              {customAlert.title}
+            </Text>
+
+            <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
+              {customAlert.message}
+            </Text>
+
+            <Pressable
+              onPress={() =>
+                setCustomAlert((prev) => ({ ...prev, visible: false }))
+              }
+              className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
+            >
+              <Text className="text-white font-bold text-lg">Okay</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
