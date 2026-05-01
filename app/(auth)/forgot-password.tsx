@@ -1,12 +1,5 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { Redirect } from "expo-router";
 
-const ForgotPassword = () => {
-  return (
-    <View>
-      <Text>ForgotPassword</Text>
-    </View>
-  )
+export default function ForgotPassword() {
+  return <Redirect href="/forgot-password/old-password" />;
 }
-
-export default ForgotPassword
