@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import { router } from "expo-router";
 import { doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
@@ -15,16 +22,34 @@ const MAX_DOTS = 6;
 const Genres = () => {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
 
+  const [customAlert, setCustomAlert] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
+    visible: false,
+    title: "",
+    message: "",
+  });
+
   const handleStartWatching = async () => {
     if (selectedGenres.length < 3) {
-      Alert.alert("Select more genres", "Please select at least 3 genres.");
+      setCustomAlert({
+        visible: true,
+        title: "Select more genres",
+        message: "Please select at least 3 genres.",
+      });
       return;
     }
 
     const user = FIREBASE_AUTH.currentUser;
 
     if (!user) {
-      Alert.alert("Auth error", "No logged-in user found.");
+      setCustomAlert({
+        visible: true,
+        title: "Auth error",
+        message: "No logged-in user found.",
+      });
       return;
     }
 
@@ -44,10 +69,12 @@ const Genres = () => {
     } catch (error: any) {
       console.log("Save genres error:", error);
 
-      Alert.alert(
-        "Error",
-        error?.message || "Could not save your genres. Please try again."
-      );
+      setCustomAlert({
+        visible: true,
+        title: "Error",
+        message:
+          error?.message || "Could not save your genres. Please try again.",
+      });
     }
   };
 
@@ -78,7 +105,7 @@ const Genres = () => {
     }
   };
 
-const canStartWatching = selectedGenres.length >= MINIMUM_SELECTION;
+  const canStartWatching = selectedGenres.length >= MINIMUM_SELECTION;
 
   const toggleGenre = (genreId: string) => {
     setSelectedGenres((current) => {
@@ -197,6 +224,35 @@ const canStartWatching = selectedGenres.length >= MINIMUM_SELECTION;
           </View>
         </ScrollView>
       </View>
+      <Modal
+        visible={customAlert.visible}
+        transparent
+        animationType="fade"
+        onRequestClose={() =>
+          setCustomAlert((prev) => ({ ...prev, visible: false }))
+        }
+      >
+        <View className="flex-1 bg-black/60 items-center justify-center px-6">
+          <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
+            <Text className="text-white text-2xl font-bold text-center">
+              {customAlert.title}
+            </Text>
+
+            <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
+              {customAlert.message}
+            </Text>
+
+            <Pressable
+              onPress={() =>
+                setCustomAlert((prev) => ({ ...prev, visible: false }))
+              }
+              className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
+            >
+              <Text className="text-white font-bold text-lg">Okay</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
