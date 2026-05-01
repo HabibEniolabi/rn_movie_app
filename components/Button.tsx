@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 interface ButtonProps {
   title: string;
   onPress: () => void;
@@ -18,11 +19,26 @@ const Button = ({
 }: ButtonProps) => {
   const isPrimary = variant === "primary";
   const isOutline = variant === "outline";
+
+  const backgroundColor = disabled
+    ? "#2A2845"
+    : isPrimary
+      ? "#B954F5"
+      : "transparent";
+
+  const borderColor = isOutline || disabled ? "#2A2845" : "transparent";
+
+  const textColor = disabled
+    ? "#8B88A8"
+    : isPrimary
+      ? "#FFFFFF"
+      : "#6A6880";
+
   return (
     <View
-      className="rounded-[28px]"
+      className="w-full rounded-[22px]"
       style={
-        isPrimary
+        isPrimary && !disabled
           ? {
               shadowColor: "#9B59F5",
               shadowOffset: { width: 0, height: 10 },
@@ -37,26 +53,27 @@ const Button = ({
         onPress={onPress}
         disabled={disabled}
         activeOpacity={0.85}
-        className={`h-[64px] rounded-[22px] items-center flex-row justify-center gap-4 ${
-          isPrimary ? "bg-[#B954F5]" : "bg-transparent border border-[#2A2845]"
-        } ${disabled ? "opacity-50" : "opacity-100"}`}
-        // style={{
-        //   backgroundColor: "rgba(185, 84, 245, 1)",
-        // }}
+        className="w-full h-[64px] rounded-[22px] items-center justify-center flex-row gap-4"
+        style={{
+          backgroundColor,
+          borderWidth: isOutline || disabled ? 1 : 0,
+          borderColor,
+        }}
       >
         <Text
-          className={`text-xl font-bold ${
-            isPrimary ? "text-white" : "text-[#6A6880]"
-          }`}
+          className="text-xl font-bold text-center"
+          style={{ color: textColor }}
+          numberOfLines={1}
         >
           {title}
         </Text>
-        {showArrow && (
+
+        {showArrow && !disabled && (
           <View className="w-9 h-9 rounded-[12px] bg-white/20 items-center justify-center">
             <FontAwesome
               name="long-arrow-right"
               color="#ffffff"
-              size={12}
+              size={16}
             />
           </View>
         )}
