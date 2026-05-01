@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   ScrollView,
   Switch,
@@ -15,6 +16,8 @@ import Genre from "@/components/Genre";
 import ProfileCardNavigation from "@/components/ProfileCardNavigation";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { router } from "expo-router";
+import { signOut } from "firebase/auth";
 
 const favouriteGenres = [
   { id: 1, name: "Action" },
@@ -62,6 +65,22 @@ const profileItems = [
 
 const Profile = () => {
   const tabBarHeight = useBottomTabBarHeight();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(FIREBASE_AUTH);
+
+      router.replace("/login");
+    } catch (error: any) {
+      console.log("Sign out error:", error);
+
+      Alert.alert(
+        "Sign out failed",
+        error?.message || "Something went wrong. Please try again."
+      );
+    }
+  };
+
   return (
     <View className="bg-primary flex-1 px-10">
       <View className="flex justify-between mt-16 mb-2 items-center flex-row">
@@ -124,7 +143,10 @@ const Profile = () => {
               />
             ))}
           </View>
-          <TouchableOpacity activeOpacity={0.8} onPress={() => FIREBASE_AUTH.signOut()}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={handleSignOut}
+          >
             <View className="border border-[#7A1B68] bg-[#2B1230] justify-center items-center rounded-[14px]">
               <Text className="text-[#F07CD6] font-bold p-5">Sign Out</Text>
             </View>
