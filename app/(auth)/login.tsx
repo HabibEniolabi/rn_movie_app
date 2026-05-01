@@ -46,7 +46,7 @@ const Login = () => {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      await signInWithEmailAndPassword(auth, email.trim().toLowerCase(), password);
       router.replace("/(tabs)");
     } catch (error: any) {
       Alert.alert(

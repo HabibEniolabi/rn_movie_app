@@ -3,8 +3,8 @@ import React from 'react'
 
 const Genres = () => {
   return (
-    <View>
-      <Text>Genres</Text>
+    <View className='bg-primary flex-1'>
+      <Text className='text-white my-auto mx-auto'>Genres</Text>
     </View>
   )
 }
