@@ -8,7 +8,6 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Keyboard,
-  Alert,
   Modal,
   Pressable,
 } from "react-native";
