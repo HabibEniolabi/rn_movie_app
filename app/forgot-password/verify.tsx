@@ -182,18 +182,18 @@ const Verify = () => {
             <Feather name="chevron-left" size={24} color="#8B88A8" />
           </TouchableOpacity>
 
-          <View className="flex-col items-center justify-center mt-12 gap-6">
+          <View className="flex-col items-start mt-12 gap-6">
             <View className="bg-[#2A2845] rounded-full px-4 py-2 justify-start">
               <Text className="text-[#10B981] font-bold text-sm">
                 ✓ Code verified
               </Text>
             </View>
 
-            <View className="flex-col gap-6 items-center">
+            <View className="flex-col gap-4 items-start">
               <Text className="text-white text-3xl text-center font-bold">
                 Create new password 🔒
               </Text>
-              <Text className="text-dark-500 text-base leading-6 text-center">
+              <Text className="text-dark-500 text-base leading-6">
                 Your new password must be different from previously used passwords.
               </Text>
             </View>
