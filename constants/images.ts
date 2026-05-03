@@ -12,6 +12,8 @@ import apple from "@/assets/images/apple.png";
 import film from "@/assets/images/film.png";
 import crown from "@/assets/images/crown.png";
 import gift from "@/assets/images/gift.png";
+import email from "@/assets/images/email.png";
+import lock from "@/assets/images/lock.png";
 
 
 export const images = {
@@ -28,5 +30,7 @@ export const images = {
   apple,
   film,
   crown,
-  gift
+  gift,
+  lock,
+  email
 };

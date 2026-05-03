@@ -40,6 +40,16 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const auth = FIREBASE_AUTH;
 
+  const [customAlert, setCustomAlert] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
+    visible: false,
+    title: "",
+    message: "",
+  });
+
   const getLoginErrorMessage = (errorCode?: string) => {
     switch (errorCode) {
       case "auth/invalid-email":
@@ -85,15 +95,6 @@ const Login = () => {
     }
   };
 
-  const [customAlert, setCustomAlert] = useState<{
-    visible: boolean;
-    title: string;
-    message: string;
-  }>({
-    visible: false,
-    title: "",
-    message: "",
-  });
   return (
     <KeyboardAvoidingView
       className="bg-primary flex-1"
