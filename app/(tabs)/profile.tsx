@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import { images } from "@/constants/images";
@@ -16,9 +16,10 @@ import ProfileStatsCard from "@/components/ProfileStatsCard";
 import Genre from "@/components/Genre";
 import ProfileCardNavigation from "@/components/ProfileCardNavigation";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { FIREBASE_AUTH, FIREBASE_DB } from "@/FirebaseConfig";
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const favouriteGenres = [
   { id: 1, name: "Action" },
@@ -66,6 +67,8 @@ const profileItems = [
 
 const Profile = () => {
   const tabBarHeight = useBottomTabBarHeight();
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
 
   const [customAlert, setCustomAlert] = useState<{
     visible: boolean;
@@ -76,6 +79,28 @@ const Profile = () => {
     title: "",
     message: "",
   });
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+    const user = FIREBASE_AUTH.currentUser;
+
+    if (!user) return;
+
+    const userDoc = await getDoc(doc(FIREBASE_DB, "users", user.uid));
+
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+
+      setFullName(data.fullName || user.displayName || "User");
+      setUsername(`@${data.firstName?.toLowerCase() || "user"}_movies`);
+    } else {
+      setFullName(user.displayName || "User");
+      setUsername(`@${user.email?.split("@")[0] || "user"}`);
+    }
+  };
+
+  fetchProfile();
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -113,9 +138,9 @@ const Profile = () => {
             <Feather name={"edit-3"} size={18} color="#ffffff" />
           </TouchableOpacity>
         </View>
-        <Text className="text-white font-bold text-[20px]">Micheal Ross</Text>
+        <Text className="text-white font-bold text-[20px]">{fullName}</Text>
         <Text className="text-light-200 font-medium text-[16px]">
-          @micheal_movies
+          {username}
         </Text>
       </View>
       <ProfileStatsCard />
