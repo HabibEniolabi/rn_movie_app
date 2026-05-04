@@ -134,7 +134,10 @@ import { router, useLocalSearchParams } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
 
 const ResetEmailSent = () => {
-  const { email } = useLocalSearchParams<{ email?: string }>();
+  const { email, displayCode } = useLocalSearchParams<{ 
+    email?: string;
+    displayCode?: string;
+  }>();
 
   const [timeLeft, setTimeLeft] = useState(300);
   const [isResending, setIsResending] = useState(false);
@@ -142,6 +145,7 @@ const ResetEmailSent = () => {
   const [oobCode, setOobCode] = useState("");
   const [isVerifyingCode, setIsVerifyingCode] = useState(false);
   const [codeError, setCodeError] = useState("");
+  const [showNotification, setShowNotification] = useState(true);
 
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
@@ -272,8 +276,40 @@ const ResetEmailSent = () => {
             </Text>
           </View>
 
-          {/* Email Notification Card */}
-          <View className="flex-row gap-4 bg-[#1a1630] border border-[#2A2845] rounded-[24px] px-5 py-5">
+          {/* Code Notification Banner */}
+          {displayCode && (
+            <View className="flex-row gap-3 bg-[#10B981]/15 border border-[#10B981]/30 rounded-[16px] px-5 py-4 mt-8 items-center">
+              <View className="w-10 h-10 rounded-full bg-[#10B981]/20 items-center justify-center">
+                <Feather name="check-circle" size={24} color="#10B981" />
+              </View>
+              <View className="flex-1">
+                <Text className="text-[#10B981] font-bold text-sm">
+                  Code Sent Successfully
+                </Text>
+                <Text className="text-[#8B88A8] text-xs mt-1">
+                  Your reset code has been sent to your email
+                </Text>
+              </View>
+            </View>
+          )}
+
+          {/* Code Display Box */}
+          {displayCode && (
+            <View className="bg-gradient-to-r from-[#9B59F5]/20 to-[#E040A0]/20 border border-[#9B59F5]/30 rounded-[20px] px-6 py-6 mt-6">
+              <Text className="text-[#8B88A8] text-xs text-center font-semibold mb-3">
+                Your Reset Code
+              </Text>
+              <View className="bg-[#141325] rounded-[14px] px-4 py-4 items-center">
+                <Text className="text-white text-4xl font-bold tracking-[8px]">
+                  {displayCode}
+                </Text>
+              </View>
+              <Text className="text-[#8B88A8] text-xs text-center mt-3">
+                Copy and paste this code below or check your email
+              </Text>
+            </View>
+          )}
+          <View className="flex-row gap-4 bg-[#1a1630] border border-[#2A2845] rounded-[24px] px-5 py-5 mt-5">
             <View className="w-[60px] h-[60px] rounded-[16px] bg-[#9B59F5]/20 items-center justify-center flex-shrink-0">
               <Feather name="mail" size={28} color="#9B59F5" />
             </View>
@@ -333,7 +369,7 @@ const ResetEmailSent = () => {
                     setOobCode(text);
                     setCodeError("");
                   }}
-                  placeholder="Paste code from email"
+                  placeholder={displayCode || "Paste code from email"}
                   placeholderTextColor="#3A3858"
                   editable={!isVerifyingCode}
                   className="ml-4 flex-1 text-[#EDEAF8] text-base font-semibold"

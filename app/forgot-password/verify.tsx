@@ -191,7 +191,7 @@ const Verify = () => {
 
             <View className="flex-col gap-4 items-start">
               <Text className="text-white text-3xl text-center font-bold">
-                Create new password 🔒
+                Create new password 🔐
               </Text>
               <Text className="text-dark-500 text-base leading-6">
                 Your new password must be different from previously used passwords.

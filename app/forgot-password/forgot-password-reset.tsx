@@ -201,7 +201,6 @@
 // };
 
 // export default ForgotPassword;
-
 import {
   View,
   Text,
@@ -465,9 +464,14 @@ const ForgotPassword = () => {
                 <Pressable
                   onPress={() => {
                     setCustomAlert((prev) => ({ ...prev, visible: false }));
+                    // Generate a local code to display
+                    const localCode = Math.random().toString(36).substring(2, 8).toUpperCase();
                     router.push({
                       pathname: "/forgot-password/reset-email-sent",
-                      params: { email: email.trim().toLowerCase() },
+                      params: { 
+                        email: email.trim().toLowerCase(),
+                        displayCode: localCode,
+                      },
                     });
                   }}
                   className="flex-1 h-[48px] rounded-[16px] bg-[#10B981] items-center justify-center flex-row gap-2"
