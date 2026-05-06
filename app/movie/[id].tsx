@@ -1,11 +1,13 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
 import { icons } from "@/constants/icons";
 import { router } from "expo-router";
 import { getMovieCertification } from "@/utils/helpers";
+import { saveFavorite, removeFavorite } from "@/services/appwrite";
+import Octicons from "react-native-vector-icons/Octicons";
 
 interface MovieInfoProps {
   label: string;
@@ -23,10 +25,26 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => (
 
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
+  const [isClicked, setIsClicked] = useState(false)
 
   const { data: movie, loading } = useFetch(() =>
     fetchMovieDetails(id as string)
   );
+
+  const handleToggleSave = async () => {
+    if (!movie) return;
+    try{
+      if(isClicked) {
+        await removeFavorite(movie?.id)
+        setIsClicked(false)
+      }else{
+        await saveFavorite(movie);
+        setIsClicked(true);
+      }
+    }catch(error) {
+      console.log("Favorite error:", error);
+    }
+  }
 
   const formattedDate = movie?.release_date
     ? `${new Date(movie.release_date).toLocaleDateString("en-US", {
@@ -70,14 +88,26 @@ const MovieDetails = () => {
                 : "N/A"}
             </Text>
           </View>
-          <View className="flex-row item-center bg-dark-100 rounded-md px-2 py-1 gap-x-1 mt-2">
-            <Image source={icons.star} className="size-4" />
-            <Text className="text-white font-bold text-sm">
-              {Math.round(movie?.vote_average ?? 0)}/10
-            </Text>
-            <Text className="text-light-200 text-sm">
-              ({movie?.vote_count} votes)
-            </Text>
+          <View className="flex-row gap-4">
+            <View className="flex-row item-center bg-dark-100 rounded-md px-2 py-1 gap-x-1 mt-2">
+              <Image source={icons.star} className="size-4" />
+              <Text className="text-white font-bold text-sm">
+                {Math.round(movie?.vote_average ?? 0)}/10
+              </Text>
+              <Text className="text-light-200 text-sm">
+                ({movie?.vote_count} votes)
+              </Text>
+            </View>
+            <TouchableOpacity 
+              onPress={handleToggleSave}
+              disabled={!movie}
+            >
+              <Octicons
+                name={isClicked ? "bookmark-fill" : "bookmark"}
+                size={24}
+                color={isClicked ? "#FFD700" : "#FFFFFF"}
+              />
+            </TouchableOpacity>
           </View>
           <MovieInfo label="Overview" value={movie?.overview} />
           <View className="flex flex-row gap-[50px] ">

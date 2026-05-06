@@ -91,7 +91,7 @@ export const getExistingFavorite = async (movieId: number | string) => {
   }
 };
 
-export const saveFavorite = async (movie: Movie) => {
+export const saveFavorite = async (movie: Movie | MovieDetails) => {
   try {
     const user = await account.get();
 
