@@ -1,13 +1,15 @@
-import { Client, Databases, ID, Query } from "react-native-appwrite";
+import { Client, Databases, ID, Query, Account } from "react-native-appwrite";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+const FAVORITES_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_FAVORITES_COLLECTION_ID!;
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
 
 const database = new Databases(client);
+const account = new Account(client);
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
   try {
@@ -52,3 +54,114 @@ export const getTrendingMovies =  async():Promise<TrendingMovie[]> => {
     return undefined;
   }
 }
+
+export type SavedMovie = {
+  $id: string;
+  $createdAt: string;
+  userId: string;
+  movieId: string;
+  title: string;
+  posterPath?: string;
+  releaseDate?: string;
+  voteAverage?: number;
+  overview?: string;
+  runtime?: string;
+  reviewCount?: string;
+  genres?: string;
+};
+
+export const getExistingFavorite = async (movieId: number | string) => {
+  try {
+    const user = await account.get();
+
+    const result = await database.listDocuments(
+      DATABASE_ID,
+      FAVORITES_COLLECTION_ID,
+      [
+        Query.equal("userId", user.$id),
+        Query.equal("movieId", String(movieId)),
+        Query.limit(1),
+      ]
+    );
+
+    return result.documents[0] as unknown as SavedMovie | undefined;
+  } catch (error) {
+    console.log("Error checking favorite", error);
+    return undefined;
+  }
+};
+
+export const saveFavorite = async (movie: Movie) => {
+  try {
+    const user = await account.get();
+
+    const existingFavorite = await getExistingFavorite(movie.id);
+
+    if (existingFavorite) {
+      return existingFavorite;
+    }
+
+    const result = await database.createDocument(
+      DATABASE_ID,
+      FAVORITES_COLLECTION_ID,
+      ID.unique(),
+      {
+        userId: user.$id,
+        movieId: String(movie.id),
+        title: movie.title,
+        posterPath: movie.poster_path ?? "",
+        releaseDate: movie.release_date ?? "",
+        voteAverage: movie.vote_average ?? 0,
+        overview: movie.overview ?? "",
+
+        // You can improve these later when you fetch movie details
+        runtime: "",
+        reviewCount: movie.vote_count ? `${movie.vote_count} reviews` : "",
+        genres: "",
+      }
+    );
+
+    return result as unknown as SavedMovie;
+  } catch (error) {
+    console.log("Error saving favorite", error);
+    throw error;
+  }
+};
+
+export const removeFavorite = async (movieId: number | string) => {
+  try {
+    const existingFavorite = await getExistingFavorite(movieId);
+
+    if (!existingFavorite) return;
+
+    await database.deleteDocument(
+      DATABASE_ID,
+      FAVORITES_COLLECTION_ID,
+      existingFavorite.$id
+    );
+  } catch (error) {
+    console.log("Error removing favorite", error);
+    throw error;
+  }
+};
+
+export const getSavedMovies = async (): Promise<SavedMovie[]> => {
+  try {
+    const user = await account.get();
+
+    const result = await database.listDocuments(
+      DATABASE_ID,
+      FAVORITES_COLLECTION_ID,
+      [
+        Query.equal("userId", user.$id),
+        Query.orderDesc("$createdAt"),
+        Query.limit(100),
+      ]
+    );
+
+    return result.documents as unknown as SavedMovie[];
+  } catch (error) {
+    console.log("Error fetching saved movies", error);
+    return [];
+  }
+};
