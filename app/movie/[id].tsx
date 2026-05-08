@@ -14,7 +14,7 @@ interface MovieInfoProps {
   value?: React.ReactNode;
 }
 
-const MovieInfo = ({ label, value }: MovieInfoProps) => (
+export const MovieInfo = ({ label, value }: MovieInfoProps) => (
   <View className="flex-col items-start justify-center mt-5">
     <Text className="text-light-200 font-normal text-sm">{label}</Text>
     <Text className="text-light-100 font-bold gap-x-2 text-sm mt-2">
