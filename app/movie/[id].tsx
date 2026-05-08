@@ -7,7 +7,7 @@ import { icons } from "@/constants/icons";
 import { router } from "expo-router";
 import { getMovieCertification } from "@/utils/helpers";
 import { saveFavorite, removeFavorite } from "@/services/appwrite";
-import Octicons from "react-native-vector-icons/Octicons";
+import Entypo from "react-native-vector-icons/Entypo";
 
 interface MovieInfoProps {
   label: string;
@@ -88,7 +88,7 @@ const MovieDetails = () => {
                 : "N/A"}
             </Text>
           </View>
-          <View className="flex-row gap-4">
+          <View className="flex-row gap-4 items-center">
             <View className="flex-row item-center bg-dark-100 rounded-md px-2 py-1 gap-x-1 mt-2">
               <Image source={icons.star} className="size-4" />
               <Text className="text-white font-bold text-sm">
@@ -101,11 +101,12 @@ const MovieDetails = () => {
             <TouchableOpacity 
               onPress={handleToggleSave}
               disabled={!movie}
+              className="active:bg-dark-300"
             >
-              <Octicons
-                name={isClicked ? "bookmark-fill" : "bookmark"}
+              <Entypo
+                name={isClicked ? "heart" : "heart-outlined"}
                 size={24}
-                color={isClicked ? "#FFD700" : "#FFFFFF"}
+                color={isClicked ? "#EF4444" : "#DC2626"}
               />
             </TouchableOpacity>
           </View>

@@ -1,8 +1,9 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SavedMovie } from "@/services/appwrite";
 import { removeFavorite } from "@/services/appwrite";
 import { icons } from "@/constants/icons";
+import Entypo from "react-native-vector-icons/Entypo";
 
 interface SaveCardProps {
   movie: SavedMovie;
@@ -20,12 +21,15 @@ const formatReviewCount = (count: number): string => {
 };
 
 const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
+  const [isClicked, setIsClicked] = useState(true);
   const handleRemove = async () => {
     try {
+      setIsClicked(false);
       await removeFavorite(movie.movieId);
       onRemove();
     } catch (error) {
       console.error("Error removing favorite:", error);
+      setIsClicked(true);
     }
   };
   // Split genres string and get only first 2
@@ -47,13 +51,14 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
     : 0;
 
   return (
-    <View className="flex-row gap-2 bg-dark-300 rounded-[22px] p-3 mb-4 items-center justify-center">
-      
-        <Image
-          source={{ uri: movie.posterPath }}
-          className="w-16 h-16 rounded-md"
-          resizeMode="contain"
-        />
+    <View className="flex-row gap-1 bg-dark-300 rounded-[22px] p-3 mb-4 items-center justify-center border-dark-400 border">
+      <Image
+        source={{
+          uri: `https://image.tmdb.org/t/p/w500/${movie?.posterPath}`,
+        }}
+        className="w-[95px] h-[95px] rounded-[20px]"
+        resizeMode="contain"
+      />
       <View className="flex-1">
         <Text className="font-bold text-lg text-white">{movie.title}</Text>
         <View className="flex-row item-center mt-2">
@@ -63,8 +68,8 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
           <Text className="text-light-200 text-sm mx-2">•</Text>
           <Text className="text-light-200 text-sm">
             {runtimeMinutes > 0
-              ? `${Math.floor(runtimeMinutes/ 60)}h${
-                  runtimeMinutes% 60 ? ` ${runtimeMinutes% 60}m` : ""
+              ? `${Math.floor(runtimeMinutes / 60)}h${
+                  runtimeMinutes % 60 ? ` ${runtimeMinutes % 60}m` : ""
                 }`
               : "N/A"}
           </Text>
@@ -82,7 +87,7 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
           <View className="flex-row flex-wrap gap-2 mt-2">
             {genreList.map((genre) => (
               <View
-                className="bg-dark-100 px-3 py-1 rounded-full border border-dark-500"
+                className="bg-dark-300 px-3 py-1 rounded-full border border-dark-400"
                 key={genre}
               >
                 <Text className="text-light-100 font-bold text-sm">
@@ -95,9 +100,13 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
       </View>
       <TouchableOpacity
         onPress={handleRemove}
-        className="bg-dark-300 border border-dark-300 rounded-[14px] p-8"
+        className="p-3 rounded-full active:bg-dark-300"
       >
-        <Text className="text-lg">🔖</Text>
+        <Entypo
+          name={isClicked ? "heart" : "heart-outlined"}
+          size={22}
+          color={isClicked ? "#EF4444" : "#FFFFFF"}
+        />
       </TouchableOpacity>
     </View>
   );
