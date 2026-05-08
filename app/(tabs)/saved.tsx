@@ -61,7 +61,7 @@ const Saved = () => {
   }
 
   return (
-    <View className="bg-primary flex-1 px-10">
+    <View className="bg-primary flex-1 px-5">
       <View className="flex justify-between mt-16 items-center flex-row">
         <Text className="text-white font-bold text-[24px]">My Watchlist</Text>
         <View className="flex items-center bg-dark-300 border-dark-400 border p-3 rounded-md">

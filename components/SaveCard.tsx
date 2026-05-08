@@ -9,6 +9,16 @@ interface SaveCardProps {
   onRemove: () => void;
 }
 
+const formatReviewCount = (count: number): string => {
+  if (count >= 1000000) {
+    return `${(count / 1000000).toFixed(1)}M`;
+  } else if (count >= 1000) {
+    return `${(count / 1000).toFixed(1)}K`;
+  } else {
+    return count.toString();
+  }
+};
+
 const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
   const handleRemove = async () => {
     try {
@@ -26,15 +36,24 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
         .slice(0, 2)
     : [];
 
+  // Parse runtime: extract number from "120 mins" string
+  const runtimeMinutes = movie.runtime
+    ? parseInt(movie.runtime.replace(/[^0-9]/g, "")) || 0
+    : 0;
+
+  // Parse reviewCount: extract number from "1500 reviews" string
+  const reviewCountNumber = movie.reviewCount
+    ? parseInt(movie.reviewCount.replace(/[^0-9]/g, "")) || 0
+    : 0;
+
   return (
     <View className="flex-row gap-2 bg-dark-300 rounded-[22px] p-3 mb-4 items-center justify-center">
-      {movie.posterPath && (
+      
         <Image
           source={{ uri: movie.posterPath }}
           className="w-16 h-16 rounded-md"
           resizeMode="contain"
         />
-      )}
       <View className="flex-1">
         <Text className="font-bold text-lg text-white">{movie.title}</Text>
         <View className="flex-row item-center mt-2">
@@ -43,20 +62,20 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
           </Text>
           <Text className="text-light-200 text-sm mx-2">•</Text>
           <Text className="text-light-200 text-sm">
-            {movie?.runtime
-              ? `${Math.floor(movie.runtime / 60)}h${
-                  movie.runtime % 60 ? ` ${movie.runtime % 60}m` : ""
+            {runtimeMinutes > 0
+              ? `${Math.floor(runtimeMinutes/ 60)}h${
+                  runtimeMinutes% 60 ? ` ${runtimeMinutes% 60}m` : ""
                 }`
               : "N/A"}
           </Text>
         </View>
-        <View className="flex-row item-center bg-dark-100 rounded-md px-2 py-1 gap-x-1 mt-2">
+        <View className="flex-row item-center gap-x-1 mt-2">
           <Image source={icons.star} className="size-4" />
           <Text className="text-white font-bold text-sm">
-            {Math.round(movie?.voteAverage ?? 0)}/10
+            {(movie?.voteAverage ?? 0).toFixed(1)}/10
           </Text>
           <Text className="text-light-200 text-sm">
-            ({movie?.reviewCount} reviews)
+            ({formatReviewCount(reviewCountNumber)} reviews)
           </Text>
         </View>
         {genreList.length > 0 && (
@@ -76,9 +95,9 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
       </View>
       <TouchableOpacity
         onPress={handleRemove}
-        className="bg-dark-300 border border-dark-300 rounded-[14px]"
+        className="bg-dark-300 border border-dark-300 rounded-[14px] p-8"
       >
-        <Text className="text-md">🔖</Text>
+        <Text className="text-lg">🔖</Text>
       </TouchableOpacity>
     </View>
   );
