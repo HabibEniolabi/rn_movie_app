@@ -1,4 +1,5 @@
 import { Client, Databases, ID, Query, Account } from "react-native-appwrite";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
@@ -51,7 +52,7 @@ export const getTrendingMovies =  async():Promise<TrendingMovie[]> => {
     return result.documents as unknown as TrendingMovie[];
   } catch(error) {
     console.error(error);
-    return undefined;
+    return [];
   }
 }
 
@@ -72,13 +73,15 @@ export type SavedMovie = {
 
 export const getExistingFavorite = async (movieId: number | string) => {
   try {
-    const user = await account.get();
+     const firebaseUser = FIREBASE_AUTH.currentUser;
+    
+    if (!firebaseUser) return undefined;
 
     const result = await database.listDocuments(
       DATABASE_ID,
       FAVORITES_COLLECTION_ID,
       [
-        Query.equal("userId", user.$id),
+        Query.equal("userId", firebaseUser.uid),
         Query.equal("movieId", String(movieId)),
         Query.limit(1),
       ]
@@ -93,37 +96,52 @@ export const getExistingFavorite = async (movieId: number | string) => {
 
 export const saveFavorite = async (movie: Movie | MovieDetails) => {
   try {
-    const user = await account.get();
+    console.log("🟡 Starting saveFavorite for:", movie.title);
+    
+    const firebaseUser = FIREBASE_AUTH.currentUser;
+    
+    console.log("🟡 Firebase user:", firebaseUser?.uid);
+    
+    if (!firebaseUser) {
+      console.log("❌ No Firebase user found");
+      throw new Error("User not authenticated");
+    }
 
     const existingFavorite = await getExistingFavorite(movie.id);
+    console.log("🟡 Existing favorite:", existingFavorite);
 
     if (existingFavorite) {
+      console.log("✅ Already favorited");
       return existingFavorite;
     }
 
+    console.log("🟡 Creating document in Appwrite...");
+    
     const result = await database.createDocument(
       DATABASE_ID,
       FAVORITES_COLLECTION_ID,
       ID.unique(),
       {
-        userId: user.$id,
+        userId: firebaseUser.uid,
         movieId: String(movie.id),
         title: movie.title,
         posterPath: movie.poster_path ?? "",
         releaseDate: movie.release_date ?? "",
         voteAverage: movie.vote_average ?? 0,
         overview: movie.overview ?? "",
-
-        // You can improve these later when you fetch movie details
-        runtime: "",
+        runtime: "runtime" in movie ? `${movie.runtime} mins` : "",
         reviewCount: movie.vote_count ? `${movie.vote_count} reviews` : "",
-        genres: "",
+        genres: 
+          "genres" in movie
+            ? movie.genres.map((genre) => genre.name).join(",")
+            : "",
       }
     );
 
+    console.log("✅ Favorite saved:", result);
     return result as unknown as SavedMovie;
   } catch (error) {
-    console.log("Error saving favorite", error);
+    console.error("❌ Error saving favorite:", error);
     throw error;
   }
 };
@@ -147,13 +165,15 @@ export const removeFavorite = async (movieId: number | string) => {
 
 export const getSavedMovies = async (): Promise<SavedMovie[]> => {
   try {
-    const user = await account.get();
+    const firebaseUser = FIREBASE_AUTH.currentUser;
+    
+    if (!firebaseUser) return [];
 
     const result = await database.listDocuments(
       DATABASE_ID,
       FAVORITES_COLLECTION_ID,
       [
-        Query.equal("userId", user.$id),
+        Query.equal("userId", firebaseUser.uid),
         Query.orderDesc("$createdAt"),
         Query.limit(100),
       ]
