@@ -5,10 +5,7 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
   Platform,
-  ScrollView,
   Modal,
   Pressable,
 } from "react-native";
@@ -24,6 +21,7 @@ import { FIREBASE_AUTH, FIREBASE_DB } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import Button from "@/components/Button";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const socialButton = [
   {
@@ -200,234 +198,231 @@ const Profile = () => {
   return (
     <KeyboardAvoidingView
       className="bg-primary flex-1"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="flex-1 bg-primary px-5">
-          <View className="flex mt-16 flex-col">
-            <OnboardingHeader step={2} />
-            <ScrollView
-              className="mt-8"
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 80 }}
-            >
-              <OnboardingHeaderInfo
-                title="Create account ✨"
-                subtitle="Join 50,000+ movie lovers today"
-              />
-              <View className="mt-10 flex flex-col gap-6">
-                <View className="flex-row gap-4">
-                  <View className="flex-1 flex-col gap-2">
-                    <Text className="text-md text-[#6A6880] font-bold">
-                      First name
-                    </Text>
-                    <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
-                      <Image
-                        source={images.user}
-                        className="w-5 h-5"
-                        resizeMode="contain"
-                        tintColor="#8B88A8"
-                      />
-                      <TextInput
-                        value={firstName}
-                        onChangeText={setFirstName}
-                        placeholder="Alex"
-                        placeholderTextColor="#3A3858"
-                        autoCapitalize="words"
-                        className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
-                      />
-                    </View>
-                  </View>
-                  <View className="flex-1 flex-col gap-2">
-                    <Text className="text-md text-[#6A6880] font-bold">
-                      Last name
-                    </Text>
-                    <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
-                      <TextInput
-                        value={lastName}
-                        onChangeText={setLastName}
-                        placeholder="Okonkwo"
-                        placeholderTextColor="#3A3858"
-                        autoCapitalize="words"
-                        className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
-                      />
-                    </View>
-                  </View>
-                </View>
-                <View className="flex flex-col gap-2">
+      <View className="flex-1 bg-primary px-5">
+        <View className="flex mt-16 flex-col">
+          <OnboardingHeader step={2} />
+          <KeyboardAwareScrollView
+            className="mt-8"
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            enableOnAndroid
+            extraScrollHeight={30}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          >
+            <OnboardingHeaderInfo
+              title="Create account ✨"
+              subtitle="Join 50,000+ movie lovers today"
+            />
+            <View className="mt-10 flex flex-col gap-6">
+              <View className="flex-row gap-4">
+                <View className="flex-1 flex-col gap-2">
                   <Text className="text-md text-[#6A6880] font-bold">
-                    Email address
+                    First name
                   </Text>
                   <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
-                    <Feather name="mail" size={18} color="#3A3858" />
-
+                    <Image
+                      source={images.user}
+                      className="w-5 h-5"
+                      resizeMode="contain"
+                      tintColor="#8B88A8"
+                    />
                     <TextInput
-                      value={email}
-                      onChangeText={setEmail}
-                      placeholder="your@example.com"
+                      value={firstName}
+                      onChangeText={setFirstName}
+                      placeholder="Alex"
                       placeholderTextColor="#3A3858"
-                      keyboardType="email-address"
-                      autoCapitalize="none"
-                      autoCorrect={false}
+                      autoCapitalize="words"
                       className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
                     />
                   </View>
                 </View>
-                <View className="flex flex-col gap-2">
-                  <Text className="text-md text-[#8B88A8] font-bold">
-                    Password
+                <View className="flex-1 flex-col gap-2">
+                  <Text className="text-md text-[#6A6880] font-bold">
+                    Last name
                   </Text>
-
-                  <View className="flex-row items-center rounded-[18px] border border-[#2A2845] bg-[#141325] px-6 h-[64px]">
-                    <EvilIcons name="lock" size={26} color="#8B88A8" />
-
+                  <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
                     <TextInput
-                      value={password}
-                      onChangeText={setPassword}
-                      placeholder="Enter password"
+                      value={lastName}
+                      onChangeText={setLastName}
+                      placeholder="Okonkwo"
                       placeholderTextColor="#3A3858"
-                      secureTextEntry={!showPassword}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      className="ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold"
+                      autoCapitalize="words"
+                      className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
                     />
-
-                    <TouchableOpacity
-                      onPress={() => setShowPassword((prev) => !prev)}
-                      activeOpacity={0.7}
-                    >
-                      <Feather
-                        name={showPassword ? "eye-off" : "eye"}
-                        size={20}
-                        color="#8B88A8"
-                      />
-                    </TouchableOpacity>
                   </View>
-
-                  {/* Password strength */}
-                  {password.length > 0 && (
-                    <View className="mt-1">
-                      <View className="flex-row gap-2 mb-2">
-                        {[1, 2, 3, 4].map((item) => (
-                          <View
-                            key={item}
-                            className="flex-1 h-[5px] rounded-full"
-                            style={{
-                              backgroundColor:
-                                item <= strength.score
-                                  ? strength.color
-                                  : "#2A2845",
-                            }}
-                          />
-                        ))}
-                      </View>
-
-                      <Text
-                        className="text-base font-bold"
-                        style={{ color: strength.color }}
-                      >
-                        {strength.label} {strength.message}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-
-                {/* Terms checkbox */}
-                <View className="flex-row items-start gap-4 mt-1">
-                  <TouchableOpacity
-                    onPress={() => setAgreed((prev) => !prev)}
-                    activeOpacity={0.8}
-                    className={`w-9 h-9 rounded-[10px] items-center justify-center ${
-                      agreed
-                        ? "bg-[#C44CE0]"
-                        : "bg-transparent border border-[#2A2845]"
-                    }`}
-                  >
-                    {agreed && (
-                      <Feather name="check" size={22} color="#FFFFFF" />
-                    )}
-                  </TouchableOpacity>
-
-                  <Text className="flex-1 text-[#8B88A8] text-base leading-6">
-                    I agree to the{" "}
-                    <Text className="text-[#B15CFF] font-bold">
-                      Terms of Service
-                    </Text>{" "}
-                    and{" "}
-                    <Text className="text-[#B15CFF] font-bold">
-                      Privacy Policy
-                    </Text>{" "}
-                    of MovieStream
-                  </Text>
                 </View>
               </View>
-              <View className="mt-6">
-                <Button
-                  title={"Create Account"}
-                  onPress={handleCreateAccount}
-                />
-              </View>
-              <View className="flex-row items-center my-3 gap-2">
-                <View className="flex-1 h-[1px] bg-[#2A2845]" />
-                <Text className="text-dark-500 text-sm">or continue with</Text>
-                <View className="flex-1 h-[1px] bg-[#2A2845]" />
-              </View>
-              <View className="gap-2 flex-row mt-4">
-                {socialButton.map((item, index) => (
-                  <SocialButton
-                    key={index}
-                    title={item.title}
-                    onPress={() => {}}
-                    imageSource={item.imageSource}
+              <View className="flex flex-col gap-2">
+                <Text className="text-md text-[#6A6880] font-bold">
+                  Email address
+                </Text>
+                <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
+                  <Feather name="mail" size={18} color="#3A3858" />
+
+                  <TextInput
+                    value={email}
+                    onChangeText={setEmail}
+                    placeholder="your@example.com"
+                    placeholderTextColor="#3A3858"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
                   />
-                ))}
+                </View>
               </View>
-              <View className="flex-row gap-2 items-center justify-center mt-8">
-                <Text className="font-bold text-dark-500 text-md">
-                  Already have an account?
+              <View className="flex flex-col gap-2">
+                <Text className="text-md text-[#8B88A8] font-bold">
+                  Password
                 </Text>
+
+                <View className="flex-row items-center rounded-[18px] border border-[#2A2845] bg-[#141325] px-6 h-[64px]">
+                  <EvilIcons name="lock" size={26} color="#8B88A8" />
+
+                  <TextInput
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="Enter password"
+                    placeholderTextColor="#3A3858"
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    className="ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold"
+                  />
+
+                  <TouchableOpacity
+                    onPress={() => setShowPassword((prev) => !prev)}
+                    activeOpacity={0.7}
+                  >
+                    <Feather
+                      name={showPassword ? "eye-off" : "eye"}
+                      size={20}
+                      color="#8B88A8"
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                {/* Password strength */}
+                {password.length > 0 && (
+                  <View className="mt-1">
+                    <View className="flex-row gap-2 mb-2">
+                      {[1, 2, 3, 4].map((item) => (
+                        <View
+                          key={item}
+                          className="flex-1 h-[5px] rounded-full"
+                          style={{
+                            backgroundColor:
+                              item <= strength.score
+                                ? strength.color
+                                : "#2A2845",
+                          }}
+                        />
+                      ))}
+                    </View>
+
+                    <Text
+                      className="text-base font-bold"
+                      style={{ color: strength.color }}
+                    >
+                      {strength.label} {strength.message}
+                    </Text>
+                  </View>
+                )}
+              </View>
+
+              {/* Terms checkbox */}
+              <View className="flex-row items-start gap-4 mt-1">
                 <TouchableOpacity
-                  onPress={() => router.push("/(auth)/login")}
-                  activeOpacity={0.85}
+                  onPress={() => setAgreed((prev) => !prev)}
+                  activeOpacity={0.8}
+                  className={`w-9 h-9 rounded-[10px] items-center justify-center ${
+                    agreed
+                      ? "bg-[#C44CE0]"
+                      : "bg-transparent border border-[#2A2845]"
+                  }`}
                 >
-                  <Text className="text-[#E040A0] font-bold text-[20px]">
-                    Sign In
-                  </Text>
+                  {agreed && <Feather name="check" size={22} color="#FFFFFF" />}
                 </TouchableOpacity>
-              </View>
-            </ScrollView>
-          </View>
-          <Modal
-            visible={customAlert.visible}
-            transparent
-            animationType="fade"
-            onRequestClose={() =>
-              setCustomAlert((prev) => ({ ...prev, visible: false }))
-            }
-          >
-            <View className="flex-1 bg-black/60 items-center justify-center px-6">
-              <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
-                <Text className="text-white text-2xl font-bold text-center">
-                  {customAlert.title}
-                </Text>
 
-                <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
-                  {customAlert.message}
+                <Text className="flex-1 text-[#8B88A8] text-base leading-6">
+                  I agree to the{" "}
+                  <Text className="text-[#B15CFF] font-bold">
+                    Terms of Service
+                  </Text>{" "}
+                  and{" "}
+                  <Text className="text-[#B15CFF] font-bold">
+                    Privacy Policy
+                  </Text>{" "}
+                  of MovieStream
                 </Text>
-
-                <Pressable
-                  onPress={() =>
-                    setCustomAlert((prev) => ({ ...prev, visible: false }))
-                  }
-                  className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
-                >
-                  <Text className="text-white font-bold text-lg">Okay</Text>
-                </Pressable>
               </View>
             </View>
-          </Modal>
+            <View className="mt-6">
+              <Button title={"Create Account"} onPress={handleCreateAccount} />
+            </View>
+            <View className="flex-row items-center my-3 gap-2">
+              <View className="flex-1 h-[1px] bg-[#2A2845]" />
+              <Text className="text-dark-500 text-sm">or continue with</Text>
+              <View className="flex-1 h-[1px] bg-[#2A2845]" />
+            </View>
+            <View className="gap-2 flex-row mt-4">
+              {socialButton.map((item, index) => (
+                <SocialButton
+                  key={index}
+                  title={item.title}
+                  onPress={() => {}}
+                  imageSource={item.imageSource}
+                />
+              ))}
+            </View>
+            <View className="flex-row gap-2 items-center justify-center mt-8">
+              <Text className="font-bold text-dark-500 text-md">
+                Already have an account?
+              </Text>
+              <TouchableOpacity
+                onPress={() => router.push("/(auth)/login")}
+                activeOpacity={0.85}
+              >
+                <Text className="text-[#E040A0] font-bold text-[20px]">
+                  Sign In
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAwareScrollView>
         </View>
-      </TouchableWithoutFeedback>
+        <Modal
+          visible={customAlert.visible}
+          transparent
+          animationType="fade"
+          onRequestClose={() =>
+            setCustomAlert((prev) => ({ ...prev, visible: false }))
+          }
+        >
+          <View className="flex-1 bg-black/60 items-center justify-center px-6">
+            <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
+              <Text className="text-white text-2xl font-bold text-center">
+                {customAlert.title}
+              </Text>
+
+              <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
+                {customAlert.message}
+              </Text>
+
+              <Pressable
+                onPress={() =>
+                  setCustomAlert((prev) => ({ ...prev, visible: false }))
+                }
+                className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
+              >
+                <Text className="text-white font-bold text-lg">Okay</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </KeyboardAvoidingView>
   );
 };

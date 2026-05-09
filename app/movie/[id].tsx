@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import { getMovieCertification } from "@/utils/helpers";
 import { saveFavorite, removeFavorite } from "@/services/appwrite";
 import Entypo from "react-native-vector-icons/Entypo";
+import { getExistingFavorite } from "@/services/appwrite";
 
 interface MovieInfoProps {
   label: string;
@@ -25,7 +26,7 @@ export const MovieInfo = ({ label, value }: MovieInfoProps) => (
 
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
-  const [isClicked, setIsClicked] = useState(false)
+  const [isClicked, setIsClicked] = useState(false);
 
   const { data: movie, loading } = useFetch(() =>
     fetchMovieDetails(id as string)
@@ -33,18 +34,37 @@ const MovieDetails = () => {
 
   const handleToggleSave = async () => {
     if (!movie) return;
-    try{
-      if(isClicked) {
-        await removeFavorite(movie?.id)
-        setIsClicked(false)
-      }else{
+    try {
+      if (isClicked) {
+        await removeFavorite(movie?.id);
+        setIsClicked(false);
+      } else {
         await saveFavorite(movie);
         setIsClicked(true);
       }
-    }catch(error) {
+    } catch (error) {
       console.log("Favorite error:", error);
     }
-  }
+  };
+
+  useEffect(() => {
+    const checkIfFavorited = async () => {
+      try {
+        if (movie?.id) {
+          const existing = await getExistingFavorite(movie.id);
+          if (existing) {
+            setIsClicked(true); // Heart is red if already saved
+          } else {
+            setIsClicked(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking favorite:", error);
+      }
+    };
+
+    checkIfFavorited();
+  }, [movie?.id]);
 
   const formattedDate = movie?.release_date
     ? `${new Date(movie.release_date).toLocaleDateString("en-US", {
@@ -97,11 +117,11 @@ const MovieDetails = () => {
               <Text className="text-light-200 text-sm">
                 ({movie?.vote_count} votes)
               </Text>
-            </View>
-            <TouchableOpacity 
+            </View> 
+            <TouchableOpacity
               onPress={handleToggleSave}
               disabled={!movie}
-              className="active:bg-dark-300"
+              className="active:bg-dark-300 mt-2"
             >
               <Entypo
                 name={isClicked ? "heart" : "heart-outlined"}

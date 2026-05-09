@@ -2,13 +2,10 @@ import {
   View,
   Text,
   Image,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   Modal,
   Pressable,
 } from "react-native";
@@ -22,6 +19,7 @@ import Button from "@/components/Button";
 import SocialButton from "@/components/SocialButton";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const socialButton = [
   {
@@ -98,11 +96,22 @@ const Login = () => {
   return (
     <KeyboardAvoidingView
       className="bg-primary flex-1"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="bg-primary flex-1">
-          <Image source={images.bg} className="absolute z-0 w-full" />
+      <View className="bg-primary flex-1">
+        <Image source={images.bg} className="absolute z-0 w-full" />
+
+        <KeyboardAwareScrollView
+          className="flex-1 px-10"
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          enableOnAndroid
+          extraScrollHeight={30}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: 100,
+          }}
+        >
           <View className="flex flex-col items-center mt-6">
             <Image
               source={icons.logo}
@@ -113,21 +122,22 @@ const Login = () => {
             </Text>
             <Text className="text-dark-500 text-sm">300+ movies online</Text>
           </View>
-          <ScrollView
-            className="flex-1 px-10 mt-6"
-            showsVerticalScrollIndicator={false}
-          >
+
+          <View className="mt-6">
             <Text className="text-white font-bold md-3 text-4xl">
               Welcome back 👋🏽
             </Text>
+
             <Text className="text-[#6A6880] font-bold text-lg">
               Sign in to continue watching
             </Text>
+
             <View className="mt-10 flex flex-col gap-6">
               <View className="flex flex-col gap-2">
                 <Text className="text-md text-[#6A6880] font-bold">
                   Email address
                 </Text>
+
                 <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
                   <Feather name="mail" size={18} color="#3A3858" />
 
@@ -138,16 +148,21 @@ const Login = () => {
                     placeholderTextColor="#3A3858"
                     keyboardType="email-address"
                     autoCapitalize="none"
-                    className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
+                    autoCorrect={false}
+                    returnKeyType="next"
+                    className="ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold"
                   />
                 </View>
               </View>
+
               <View className="flex flex-col gap-2">
                 <Text className="text-md text-[#6A6880] font-bold">
                   Password
                 </Text>
+
                 <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
                   <EvilIcons name="lock" size={24} color="#3A3858" />
+
                   <TextInput
                     value={password}
                     onChangeText={setPassword}
@@ -155,8 +170,11 @@ const Login = () => {
                     secureTextEntry={!showPassword}
                     placeholderTextColor="#3A3858"
                     autoCapitalize="none"
-                    className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    className="ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold"
                   />
+
                   <TouchableOpacity
                     onPress={() => setShowPassword(!showPassword)}
                     activeOpacity={0.7}
@@ -169,6 +187,7 @@ const Login = () => {
                   </TouchableOpacity>
                 </View>
               </View>
+
               <TouchableOpacity
                 onPress={() => router.push("/forgot-password")}
                 className="self-end"
@@ -178,14 +197,17 @@ const Login = () => {
                 </Text>
               </TouchableOpacity>
             </View>
+
             <View className="mt-6">
-              <Button title={"Sign In"} onPress={() => handleLogin()} />
+              <Button title="Sign In" onPress={handleLogin} />
             </View>
+
             <View className="flex-row items-center my-3 gap-2">
               <View className="flex-1 h-[1px] bg-[#2A2845]" />
               <Text className="text-dark-500 text-sm">or continue with</Text>
               <View className="flex-1 h-[1px] bg-[#2A2845]" />
             </View>
+
             <View className="gap-2 flex-row mt-4">
               {socialButton.map((item, index) => (
                 <SocialButton
@@ -196,10 +218,12 @@ const Login = () => {
                 />
               ))}
             </View>
+
             <View className="flex-row gap-2 items-center justify-center mt-8">
               <Text className="font-bold text-dark-500 text-md">
                 Don't have an account?
               </Text>
+
               <TouchableOpacity
                 onPress={() => router.push("/signup")}
                 activeOpacity={0.85}
@@ -209,38 +233,39 @@ const Login = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </ScrollView>
-          <Modal
-            visible={customAlert.visible}
-            transparent
-            animationType="fade"
-            onRequestClose={() =>
-              setCustomAlert((prev) => ({ ...prev, visible: false }))
-            }
-          >
-            <View className="flex-1 bg-black/60 items-center justify-center px-6">
-              <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
-                <Text className="text-white text-2xl font-bold text-center">
-                  {customAlert.title}
-                </Text>
+          </View>
+        </KeyboardAwareScrollView>
 
-                <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
-                  {customAlert.message}
-                </Text>
+        <Modal
+          visible={customAlert.visible}
+          transparent
+          animationType="fade"
+          onRequestClose={() =>
+            setCustomAlert((prev) => ({ ...prev, visible: false }))
+          }
+        >
+          <View className="flex-1 bg-black/60 items-center justify-center px-6">
+            <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
+              <Text className="text-white text-2xl font-bold text-center">
+                {customAlert.title}
+              </Text>
 
-                <Pressable
-                  onPress={() =>
-                    setCustomAlert((prev) => ({ ...prev, visible: false }))
-                  }
-                  className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
-                >
-                  <Text className="text-white font-bold text-lg">Okay</Text>
-                </Pressable>
-              </View>
+              <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
+                {customAlert.message}
+              </Text>
+
+              <Pressable
+                onPress={() =>
+                  setCustomAlert((prev) => ({ ...prev, visible: false }))
+                }
+                className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
+              >
+                <Text className="text-white font-bold text-lg">Okay</Text>
+              </Pressable>
             </View>
-          </Modal>
-        </View>
-      </TouchableWithoutFeedback>
+          </View>
+        </Modal>
+      </View>
     </KeyboardAvoidingView>
   );
 };
