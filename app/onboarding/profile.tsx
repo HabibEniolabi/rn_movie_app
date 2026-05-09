@@ -43,6 +43,7 @@ const Profile = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getPasswordStrength = (value: string) => {
     let score = 0;
@@ -130,6 +131,8 @@ const Profile = () => {
   });
 
   const handleCreateAccount = async () => {
+    if (isSubmitting) return;
+
     if (!firstName.trim() || !lastName.trim() || !email.trim() || !password) {
       setCustomAlert({
         visible: true,
@@ -158,6 +161,8 @@ const Profile = () => {
     }
 
     try {
+      setIsSubmitting(true);
+
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email.trim().toLowerCase(),
@@ -193,6 +198,8 @@ const Profile = () => {
         title: "Signup failed",
         message: getSignupErrorMessage(error?.code),
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -361,7 +368,10 @@ const Profile = () => {
               </View>
             </View>
             <View className="mt-6">
-              <Button title={"Create Account"} onPress={handleCreateAccount} />
+              <Button
+                title={isSubmitting ? "Creating account..." : "Create Account"}
+                onPress={handleCreateAccount}
+              />
             </View>
             <View className="flex-row items-center my-3 gap-2">
               <View className="flex-1 h-[1px] bg-[#2A2845]" />
