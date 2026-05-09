@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import Octicons from "react-native-vector-icons/Octicons";
 import SaveCard from "@/components/SaveCard";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const Saved = () => {
   const [savedMovies, setSavedMovies] = useState<SavedMovie[]>([]);
@@ -12,15 +13,15 @@ const Saved = () => {
   const [olderMovies, setOlderMovies] = useState<SavedMovie[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const tabBarHeight = useBottomTabBarHeight();
+
   useEffect(() => {
     fetchSavedMovies();
   }, []);
 
   const fetchSavedMovies = async () => {
     try {
-      console.log("🟡 Fetching saved movies...");
       const movies = await getSavedMovies();
-      console.log("✅ Fetched movies:", movies);
       setSavedMovies(movies);
       
       // Split into recent (last 7 days) and older
@@ -40,7 +41,6 @@ const Saved = () => {
       setRecentMovies(recent);
       setOlderMovies(older);
     } catch (error) {
-      console.error("❌ Error fetching saved movies:", error);
     } finally {
       setLoading(false);
     }
@@ -79,6 +79,7 @@ const Saved = () => {
       <ScrollView
         className="flex-1 bg-primary"
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ minHeight: "100%", paddingBlock: 10, paddingBottom: tabBarHeight + 40 }}
       >
         {/* Recently Added Section */}
         {recentMovies.length > 0 && (
