@@ -42,7 +42,7 @@ const PlanComparison = () => {
           <TouchableOpacity
             onPress={() => router.back()}
             activeOpacity={0.8}
-            className="p-2 rounded-[12px] border border-[#2A2845] bg-dark-300 items-center justify-center"
+            className="px-2 py-2 rounded-[12px] border border-[#2A2845] bg-dark-300 items-center justify-center"
           >
             <Feather name="chevron-left" size={24} color="#8B88A8" />
           </TouchableOpacity>

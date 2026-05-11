@@ -48,6 +48,12 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="account"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     </>
   );

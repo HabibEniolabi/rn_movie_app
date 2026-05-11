@@ -38,6 +38,7 @@ const profileItems = [
     title: "edit profile",
     subtitle: "Update your name & avatar",
     rightType: "chevron" as const,
+    onPress: () => {}
   },
   {
     id: 2,
@@ -46,6 +47,7 @@ const profileItems = [
     title: "subscription",
     subtitle: "Pro Plan · Renews Jan 2026",
     rightType: "chevron" as const,
+    onPress: () => router.push("/onboarding/plan-comparison")
   },
   {
     id: 3,
@@ -54,6 +56,7 @@ const profileItems = [
     title: "notifications",
     subtitle: "New releases & reminders",
     rightType: "toggle" as const,
+    onPress: () => {}
   },
   {
     id: 4,
@@ -62,6 +65,7 @@ const profileItems = [
     title: "language",
     subtitle: "English (US)",
     rightType: "chevron" as const,
+    onPress: () => router.push("/account/language")
   },
 ];
 
@@ -176,6 +180,7 @@ const Profile = () => {
                     />
                   ) : undefined
                 }
+                onPress={item.onPress}
               />
             ))}
           </View>
