@@ -1,7 +1,13 @@
 import { Stack } from "expo-router";
 import "./globals.css";
+import { loadSavedLanguage } from '../interfaces/i18n';
+import { useEffect } from "react";
+
 
 export default function RootLayout() {
+  useEffect(() => {
+    loadSavedLanguage();
+  }, []);
   return (
     <>
       <Stack>
