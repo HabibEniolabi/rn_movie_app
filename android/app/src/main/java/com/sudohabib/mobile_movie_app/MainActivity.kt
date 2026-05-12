@@ -1,4 +1,4 @@
-package com.movieflix
+package com.sudohabib.mobile_movie_app
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build
