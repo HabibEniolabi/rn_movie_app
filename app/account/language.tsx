@@ -53,7 +53,7 @@ const Language = () => {
         >
           <Feather name="chevron-left" size={24} color="#8B88A8" />
         </TouchableOpacity>
-        <Text className="text-white font-bold text-[24px] text-center -ml-[58px]">
+        <Text className="text-white font-bold text-[24px] text-center">
           {t("language")}
         </Text>
       </View>
