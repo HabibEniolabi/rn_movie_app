@@ -1,89 +1,142 @@
+/**
+ * Verify Screen
+ * Confirmation screen after reset email is sent
+ *
+ * Separation:
+ * - UI: Imported reusable components only
+ * - Logic: Navigation handlers
+ * - Style: All styling via theme tokens
+ */
+
 import {
-  View,
-  Text,
+  BackButton,
+  Description,
+  FooterAction,
+  GradientButton,
+  HeadingWithEmail,
+  IconCircle,
+} from "@/components/FPComponents";
+import { COLORS, SPACING } from "@/services/themes";
+import { router, useLocalSearchParams } from "expo-router";
+import React from "react";
+import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TouchableOpacity,
   ScrollView,
+  TouchableWithoutFeedback,
+  View
 } from "react-native";
-import React from "react";
-import { router, useLocalSearchParams } from "expo-router";
-import Feather from "react-native-vector-icons/Feather";
 
-const Verify = () => {
-  const { email } = useLocalSearchParams<{ email?: string }>();
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+const EMAIL_PLACEHOLDER = "your email";
+const INSTRUCTIONS = "Click the link in your email to create a new password. After that, come back and sign in with your new password.";
+
+// ============================================================================
+// LOGIC: Navigation Handler
+// ============================================================================
+
+interface NavigationActions {
+  handleBackToSignIn: () => void;
+  handleGoBack: () => void;
+  handleSendAgain: () => void;
+}
+
+const useNavigationActions = (): NavigationActions => ({
+  handleBackToSignIn: () => {
+    router.replace("/login");
+  },
+  handleGoBack: () => {
+    router.back();
+  },
+  handleSendAgain: () => {
+    router.replace("/forgot-password");
+  },
+});
+
+// ============================================================================
+// SCREEN COMPONENT
+// ============================================================================
+
+export const Verify: React.FC = () => {
+  // Extract params
+  const { email } = useLocalSearchParams();
+  const displayEmail = (email as string) || EMAIL_PLACEHOLDER;
+
+  // Setup hooks
+  const navigation = useNavigationActions();
 
   return (
     <KeyboardAvoidingView
-      className="bg-primary flex-1"
+      className="flex-1"
+      style={{ backgroundColor: COLORS.primary }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView
-          className="flex-1 bg-primary"
+          className="flex-1 mt-16"
+          style={{ backgroundColor: COLORS.primary }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingHorizontal: 32,
-            paddingTop: 20,
-            paddingBottom: 40,
+            paddingHorizontal: SPACING.xxl,
+            paddingTop: SPACING.md,
+            paddingBottom: SPACING.lg * 2 + SPACING.md,
           }}
         >
-          <TouchableOpacity
-            activeOpacity={0.9}
-            onPress={() => router.back()}
-            className="p-2 rounded-[12px] border border-[#2A2845] bg-dark-300 items-center justify-center self-start"
+          {/* Header: Back Button */}
+          <BackButton onPress={navigation.handleGoBack} />
+
+          {/* Main Content - Centered */}
+          <View
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              marginTop: SPACING.xxxl,
+              gap: SPACING.xl,
+            }}
           >
-            <Feather name="chevron-left" size={24} color="#8B88A8" />
-          </TouchableOpacity>
+            {/* Icon Circle */}
+            <IconCircle 
+              iconName="mail" 
+              iconSize={56}
+              iconColor={COLORS.text.primary}
+            />
 
-          <View className="flex-col items-center mt-16 gap-6">
-            <View className="w-[120px] h-[120px] rounded-full bg-[#9B59F5]/20 border border-[#9B59F5]/30 items-center justify-center">
-              <Feather name="mail" size={56} color="#9B59F5" />
-            </View>
+            {/* Heading with Email */}
+            <HeadingWithEmail
+              mainText="Almost done 📩"
+              labelText="We sent the reset link to"
+              email={displayEmail}
+              emailColor="#9B59F5"
+            />
 
-            <Text className="text-white text-3xl text-center font-bold">
-              Almost done 📩
-            </Text>
-
-            <Text className="text-dark-500 text-base leading-7 text-center">
-              We sent the reset link to
-            </Text>
-
-            <Text className="text-[#9B59F5] text-lg font-bold text-center">
-              {email || "your email"}
-            </Text>
-
-            <Text className="text-dark-500 text-base leading-7 text-center">
-              Click the link in your email to create a new password. After that,
-              come back and sign in with your new password.
-            </Text>
+            {/* Instructions */}
+            <Description
+              text={INSTRUCTIONS}
+              color={COLORS.text.muted}
+              style={{ marginTop: SPACING.md }}
+            />
           </View>
 
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.replace("/login")}
-            className="h-[56px] rounded-[16px] bg-[#E040A0] items-center justify-center mt-10"
-          >
-            <Text className="text-white font-bold text-lg">
-              Back to Sign In
-            </Text>
-          </TouchableOpacity>
+          {/* Actions - Bottom */}
+          <View style={{ marginTop: SPACING.lg }}>
+            {/* Primary Button */}
+            <GradientButton
+              label="Back to Sign In"
+              onPress={navigation.handleBackToSignIn}
+              colors={["#E040A0", "#D946C4"]}
+            />
 
-          <View className="flex-row gap-2 items-center justify-center mt-8">
-            <Text className="font-bold text-[#8B88A8] text-base">
-              Didn’t receive it?
-            </Text>
-
-            <TouchableOpacity
-              onPress={() => router.replace("/forgot-password")}
-              activeOpacity={0.85}
-            >
-              <Text className="text-[#E040A0] font-bold text-base">
-                Send again
-              </Text>
-            </TouchableOpacity>
+            {/* Secondary Action */}
+            <FooterAction
+              label="Didn't receive it?"
+              actionText="Send again"
+              onPress={navigation.handleSendAgain}
+              actionColor="#E040A0"
+            />
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
