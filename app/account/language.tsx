@@ -45,7 +45,7 @@ const Language = () => {
 
   return (
     <View className="bg-primary flex-1 px-5">
-      <View className="flex-row items-center mt-16 mb-4">
+      <View className="flex-row gap-8 items-center mt-16 mb-4">
         <TouchableOpacity
           onPress={() => router.back()}
           activeOpacity={0.8}

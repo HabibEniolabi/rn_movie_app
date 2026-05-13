@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import Feather from "react-native-vector-icons/Feather";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface FeatureItem {
   label: string;
@@ -48,27 +49,60 @@ const PlanCard = ({
     >
       {/* Top badge */}
       {badge ? (
-        <View className="absolute top-0 right-0 bg-[#E14ECF] px-6 py-2 rounded-bl-[24px]">
-          <Text className="text-white text-[12px] font-bold uppercase">
-            {badge}
-          </Text>
+        <View
+          className="absolute top-0 right-0 overflow-hidden"
+          style={{
+            borderBottomLeftRadius: 24,
+          }}
+        >
+          <LinearGradient
+            colors={["#D946C4", "#9B4DFF"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{
+              paddingHorizontal: 28,
+              paddingVertical: 8,
+            }}
+          >
+            <Text className="text-white text-[12px] font-bold uppercase tracking-wide">
+              {badge}
+            </Text>
+          </LinearGradient>
         </View>
       ) : null}
 
       {/* Selector */}
       <View
         className={`absolute right-5 ${
-          badge ? "top-[30px]" : "top-6"
-        } w-[22px] h-[22px] rounded-full border-2 items-center justify-center ${
-          selected ? "border-[#E14ECF] bg-[#E14ECF]" : "border-[#4F517A]"
+          badge ? "top-[30px]" : "top-8"
+        } w-[22px] h-[22px] items-center justify-center ${
+          selected ? "" : "border-2 border-[#4F517A]"
         }`}
         style={{
+          borderRadius: 999,
+          overflow: "hidden",
           zIndex: 999,
           elevation: 999,
+
+          borderWidth: selected ? 0 : 2,
+          borderColor: selected ? "transparent" : "#4F517A",
         }}
       >
         {selected ? (
-          <View className="w-3 h-3 rounded-full bg-white border border-white/80" />
+          <LinearGradient
+            colors={["#D946C4", "#9B4DFF"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{
+              width: 22,
+              height: 22,
+              borderRadius: 999,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <View className="w-3 h-3 rounded-full bg-white" />
+          </LinearGradient>
         ) : null}
       </View>
 

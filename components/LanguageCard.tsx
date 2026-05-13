@@ -21,7 +21,7 @@ const LanguageCard = ({
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={onPress}
-      className={`min-h-[105px] rounded-[24px] border px-7 mb-3 flex-row items-center justify-between ${
+      className={`min-h-[75px] rounded-[24px] border px-7 mb-3 flex-row items-center justify-between ${
         selected
           ? 'bg-[#24104A] border-[#9B4DFF]'
           : 'bg-dark-300 border-[#2A2845]'
