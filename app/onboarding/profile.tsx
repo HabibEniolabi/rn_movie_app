@@ -22,6 +22,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import Button from "@/components/Button";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { LinearGradient } from "expo-linear-gradient";
 
 const socialButton = [
   {
@@ -345,13 +346,28 @@ const Profile = () => {
                 <TouchableOpacity
                   onPress={() => setAgreed((prev) => !prev)}
                   activeOpacity={0.8}
-                  className={`w-9 h-9 rounded-[10px] items-center justify-center ${
-                    agreed
-                      ? "bg-[#C44CE0]"
-                      : "bg-transparent border border-[#2A2845]"
-                  }`}
+                  className="w-9 h-9 rounded-[10px] items-center justify-center overflow-hidden"
+                  style={{
+                    borderWidth: agreed ? 0 : 1,
+                    borderColor: agreed ? "transparent" : "#2A2845",
+                  }}
                 >
-                  {agreed && <Feather name="check" size={22} color="#FFFFFF" />}
+                  {agreed ? (
+                    <LinearGradient
+                      colors={["#D946C4", "#9B4DFF"]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: 10,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Feather name="check" size={22} color="#FFFFFF" />
+                    </LinearGradient>
+                  ) : null}
                 </TouchableOpacity>
 
                 <Text className="flex-1 text-[#8B88A8] text-base leading-6">

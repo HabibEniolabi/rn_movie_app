@@ -8,6 +8,7 @@ import {
 import React from "react";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { LinearGradient } from "expo-linear-gradient";
 
 type PlanVariant = "free" | "pro" | "ultra";
 
@@ -36,31 +37,65 @@ interface PlanComparisonCardProps {
 const getVariantStyle = (variant: PlanVariant) => {
   if (variant === "ultra") {
     return {
-      border: "border-[#6B5528]",
-      title: "text-[#FFC857]",
-      iconBg: "bg-[#342744]",
-      button: "bg-[#B954F5]",
-      buttonText: "text-white",
+      borderColors: ["#C8A94A", "#8B5CF6"] as const,
+      title: "#FFC857",
+      iconBg: "#2D2541",
+      iconCircleBg: "#342D2B",
+      iconColor: "#FFD84D",
+      buttonColors: ["#F6C85F", "#E653B8", "#9B4DFF"] as const,
+      badgeColors: ["#E14ECF", "#9B4DFF"] as const,
     };
   }
 
   if (variant === "pro") {
     return {
-      border: "border-[#8B5CF6]",
-      title: "text-[#F07DE0]",
-      iconBg: "bg-[#342050]",
-      button: "bg-[#B954F5]",
-      buttonText: "text-white",
+      borderColors: ["#D946C4", "#8B5CF6"] as const,
+      title: "#F07DE0",
+      iconBg: "#342050",
+      iconCircleBg: "#153C3A",
+      iconColor: "#45E0B8",
+      buttonColors: ["#D946C4", "#9B4DFF"] as const,
+      badgeColors: ["#D946C4", "#9B4DFF"] as const,
     };
   }
 
   return {
-    border: "border-[#2A2845]",
-    title: "text-white",
-    iconBg: "bg-[#211F3A]",
-    button: "bg-transparent border border-[#2A2845]",
-    buttonText: "text-[#7F7B9D]",
+    borderColors: ["#2A2845", "#2A2845"] as const,
+    title: "#FFFFFF",
+    iconBg: "#211F3A",
+    iconCircleBg: "#153C3A",
+    iconColor: "#45E0B8",
+    buttonColors: ["#141325", "#141325"] as const,
+    badgeColors: ["#2A2845", "#2A2845"] as const,
   };
+};
+
+const PriceText = ({ price }: { price: string }) => {
+  const match = price.match(/^(\$?)(\d+)(\.\d+)$/);
+
+  if (!match) {
+    return (
+      <Text className="text-white text-[32px] font-extrabold">{price}</Text>
+    );
+  }
+
+  const [, currency, amount, cents] = match;
+
+  return (
+    <View className="flex-row items-start justify-end">
+      <Text className="text-white text-[15px] font-bold mt-[4px]">
+        {currency}
+      </Text>
+
+      <Text className="text-white text-[40px] font-extrabold leading-[42px]">
+        {amount}
+      </Text>
+
+      <Text className="text-white text-[20px] font-extrabold mt-[15px]">
+        {cents}
+      </Text>
+    </View>
+  );
 };
 
 const HighlightText = ({
@@ -74,10 +109,10 @@ const HighlightText = ({
 }) => {
   if (!highlight || !label.includes(highlight)) {
     return (
-      <Text className="text-[#BDBAD8] text-[16px] flex-1 leading-6">
+      <Text className="text-[#A9A6C2] text-[15px] leading-[22px] flex-1">
         {label}
         {trailingText ? (
-          <Text className="text-[#9B59F5] font-bold"> {trailingText}</Text>
+          <Text className="text-[#C778FF] font-extrabold"> {trailingText}</Text>
         ) : null}
       </Text>
     );
@@ -86,12 +121,12 @@ const HighlightText = ({
   const [before, after] = label.split(highlight);
 
   return (
-    <Text className="text-[#BDBAD8] text-[16px] flex-1 leading-6">
+    <Text className="text-[#A9A6C2] text-[15px] leading-[22px] flex-1">
       {before}
-      <Text className="text-[#EDEAF8] font-bold">{highlight}</Text>
+      <Text className="text-[#EDEAF8] font-extrabold">{highlight}</Text>
       {after}
       {trailingText ? (
-        <Text className="text-[#9B59F5] font-bold"> {trailingText}</Text>
+        <Text className="text-[#C778FF] font-extrabold"> {trailingText}</Text>
       ) : null}
     </Text>
   );
@@ -112,120 +147,178 @@ const PlanComparisonCard = ({
 }: PlanComparisonCardProps) => {
   const styles = getVariantStyle(variant);
   const isFree = variant === "free";
+  const isUltra = variant === "ultra";
 
   return (
-    <View
-      className={`rounded-[28px] border-2 ${styles.border} bg-[#141325] px-5 py-6`}
+    <LinearGradient
+      colors={styles.borderColors}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{
+        borderRadius: 30,
+        padding: 2,
+      }}
     >
-      <View className="flex-row items-start justify-between">
-        <View className="flex-row items-center flex-1">
-          <View
-            className={`w-[54px] h-[54px] rounded-[18px] items-center justify-center ${styles.iconBg}`}
+      <View className="rounded-[28px] bg-[#111022] px-5 py-6 overflow-hidden">
+        {/* Badge */}
+        {badge ? (
+          <LinearGradient
+            colors={styles.badgeColors}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{
+              position: "absolute",
+              top: 24,
+              right: 20,
+              borderRadius: 999,
+              paddingHorizontal: 18,
+              paddingVertical: 7,
+              zIndex: 2,
+            }}
           >
-            <Image
-              source={iconSource}
-              className="w-11 h-11"
-              resizeMode="contain"
-            />
-          </View>
-
-          <View className="ml-4 flex-1">
-            <Text className={`text-[18px] font-bold ${styles.title}`}>
-              {title}
+            <Text className="text-white text-[12px] font-extrabold uppercase tracking-[1.5px]">
+              {badge}
             </Text>
+          </LinearGradient>
+        ) : null}
 
-            <Text className="text-[#7F7B9D] text-[12px] mt-1 leading-6">
-              {subtitle}
-            </Text>
-          </View>
-        </View>
+        {/* Header */}
+        <View className="flex-row items-start">
+          <View className="flex-row items-start flex-1 min-w-0 pr-2">
+            <View
+              className="w-[68px] h-[68px] rounded-[22px] items-center justify-center"
+              style={{ backgroundColor: styles.iconBg }}
+            >
+              <Image
+                source={iconSource}
+                className="w-[44px] h-[44px]"
+                resizeMode="contain"
+              />
+            </View>
 
-        <View className="items-end max-w-[155px]">
-          {badge ? (
-            <View className="bg-[#C44CE0] px-4 py-2 rounded-full mb-2">
-              <Text className="text-white text-[12px] font-bold">
-                {badge}
+            <View className="ml-4 flex-1 min-w-0">
+              <Text
+                className="text-[20px] font-extrabold"
+                style={{ color: styles.title }}
+                numberOfLines={1}
+              >
+                {title}
+              </Text>
+
+              <Text
+                className="text-[#7F7B9D] text-[14px] mt-1 leading-[20px]"
+                numberOfLines={2}
+              >
+                {subtitle}
               </Text>
             </View>
-          ) : null}
-
-          {oldPrice ? (
-            <Text
-              className="text-[#6A6880] text-sm font-bold"
-              style={{ textDecorationLine: "line-through" }}
-            >
-              {oldPrice}
-            </Text>
-          ) : null}
-
-          <Text className="text-white text-[22px] font-bold">{price}</Text>
-
-          <Text className="text-[#7F7B9D] text-[14px] text-right leading-5">
-            {period}
-          </Text>
-        </View>
-      </View>
-
-      <View className="h-[1px] bg-[#2A2845] my-6" />
-
-      <View className="gap-4">
-        {features.map((feature, index) => {
-          const iconType =
-            feature.iconType || (feature.available === false ? "x" : "check");
-
-          const isDisabled = iconType === "x";
-          const isStar = iconType === "star";
-
-          return (
-            <View key={index} className="flex-row items-center">
-              <View
-                className={`w-9 h-9 rounded-full items-center justify-center ${
-                  isStar
-                    ? "bg-[#3A3029]"
-                    : isDisabled
-                      ? "bg-[#1F1D35]"
-                      : "bg-[#153C3A]"
-                }`}
-              >
-                {isStar ? (
-                  <FontAwesome name="star" size={16} color="#FFD84D" />
-                ) : (
-                  <Feather
-                    name={isDisabled ? "x" : "check"}
-                    size={18}
-                    color={isDisabled ? "#4F4B6A" : "#45E0B8"}
-                  />
-                )}
-              </View>
-
-              <View className="ml-4 flex-1">
-                <HighlightText
-                  label={feature.label}
-                  highlight={feature.highlight}
-                  trailingText={feature.trailingText}
-                />
-              </View>
-            </View>
-          );
-        })}
-      </View>
-
-      <TouchableOpacity
-        onPress={onPress}
-        activeOpacity={0.85}
-        className={`h-[58px] rounded-[18px] items-center justify-center mt-8 flex-row gap-3 ${styles.button}`}
-      >
-        <Text className={`text-lg font-bold ${styles.buttonText}`}>
-          {buttonTitle}
-        </Text>
-
-        {!isFree ? (
-          <View className="w-9 h-9 rounded-[12px] bg-white/20 items-center justify-center">
-            <FontAwesome name="long-arrow-right" color="#ffffff" size={18} />
           </View>
-        ) : null}
-      </TouchableOpacity>
-    </View>
+
+          <View
+            className="items-end"
+            style={{
+              width: 118,
+              paddingTop: badge ? 38 : 0,
+            }}
+          >
+            {oldPrice ? (
+              <Text
+                className="text-[#5F5C77] text-[12px] font-bold"
+                style={{ textDecorationLine: "line-through" }}
+              >
+                {oldPrice}
+              </Text>
+            ) : null}
+
+            <PriceText price={price} />
+
+            <Text className="text-[#7F7B9D] text-[13px] text-right leading-[18px]">
+              {period}
+            </Text>
+          </View>
+        </View>
+
+        <View className="h-[1px] bg-[#2A2845] my-6" />
+
+        {/* Features */}
+        <View className="gap-4">
+          {features.map((feature, index) => {
+            const iconType =
+              feature.iconType || (feature.available === false ? "x" : "check");
+
+            const isDisabled = iconType === "x";
+            const isStar = iconType === "star" || isUltra;
+
+            return (
+              <View key={index} className="flex-row items-center">
+                <View
+                  className="w-[38px] h-[38px] rounded-full items-center justify-center"
+                  style={{
+                    backgroundColor: isStar
+                      ? "#342D2B"
+                      : isDisabled
+                        ? "#1F1D35"
+                        : styles.iconCircleBg,
+                  }}
+                >
+                  {isStar ? (
+                    <FontAwesome name="star" size={17} color="#FFD84D" />
+                  ) : (
+                    <Feather
+                      name={isDisabled ? "x" : "check"}
+                      size={20}
+                      color={isDisabled ? "#4F4B6A" : styles.iconColor}
+                    />
+                  )}
+                </View>
+
+                <View className="ml-4 flex-1">
+                  <HighlightText
+                    label={feature.label}
+                    highlight={feature.highlight}
+                    trailingText={feature.trailingText}
+                  />
+                </View>
+              </View>
+            );
+          })}
+        </View>
+
+        {/* CTA */}
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.88}
+          className="mt-8 rounded-[20px] overflow-hidden"
+        >
+          <LinearGradient
+            colors={styles.buttonColors}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{
+              height: 58,
+              borderRadius: 20,
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+            }}
+          >
+            <Text
+              className={`text-[16px] font-extrabold ${
+                isFree ? "text-[#7F7B9D]" : "text-white"
+              }`}
+            >
+              {buttonTitle}
+            </Text>
+
+            {!isFree ? (
+              <View className="ml-3 w-[34px] h-[34px] rounded-[12px] bg-white/15 items-center justify-center">
+                <FontAwesome name="long-arrow-right" color="#ffffff" size={18} />
+              </View>
+            ) : null}
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+    </LinearGradient>
   );
 };
 
