@@ -20,6 +20,7 @@ import { images } from "@/constants/images";
 import Button from "@/components/Button";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { LinearGradient } from "expo-linear-gradient";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -66,7 +67,7 @@ const ForgotPassword = () => {
 
     try {
       setIsSending(true);
-      
+
       // Send password reset email via Firebase
       await sendPasswordResetEmail(auth, cleanEmail);
 
@@ -107,10 +108,14 @@ const ForgotPassword = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView 
-          className="flex-1 bg-primary"
+        <ScrollView
+          className="flex-1 bg-primary mt-12"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 32, paddingTop: 20, paddingBottom: 40 }}
+          contentContainerStyle={{
+            paddingHorizontal: 32,
+            paddingTop: 20,
+            paddingBottom: 40,
+          }}
         >
           <TouchableOpacity
             activeOpacity={0.9}
@@ -132,7 +137,8 @@ const ForgotPassword = () => {
                   Forgot Password?
                 </Text>
                 <Text className="text-dark-500 text-base leading-6 text-center">
-                  No worries! Enter your registered email and we'll send you a reset code.
+                  No worries! Enter your registered email and we'll send you a
+                  reset code.
                 </Text>
               </View>
             </View>
@@ -156,9 +162,20 @@ const ForgotPassword = () => {
                 className="ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold"
               />
               {isValidEmail(email) && (
-                <View className="bg-[#E040A0] rounded-full p-2">
-                  <Feather name="check" size={18} color="#ffffff" />
-                </View>
+                <LinearGradient
+                  colors={["#D946C4", "#9B4DFF"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: 999,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Feather name="check" size={18} color="#FFFFFF" />
+                </LinearGradient>
               )}
             </View>
           </View>
@@ -171,8 +188,8 @@ const ForgotPassword = () => {
                 We'll send a reset code to{" "}
                 <Text className="text-[#9B59F5] font-bold">
                   {email.trim().toLowerCase() || "alex@example.com"}.
-                </Text>
-                {" "}Check your inbox to proceed.
+                </Text>{" "}
+                Check your inbox to proceed.
               </Text>
             </View>
           )}
@@ -259,10 +276,13 @@ const ForgotPassword = () => {
                   onPress={() => {
                     setCustomAlert((prev) => ({ ...prev, visible: false }));
                     // Generate a local code to display
-                    const localCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+                    const localCode = Math.random()
+                      .toString(36)
+                      .substring(2, 8)
+                      .toUpperCase();
                     router.push({
                       pathname: "/forgot-password/reset-email-sent",
-                      params: { 
+                      params: {
                         email: email.trim().toLowerCase(),
                         displayCode: localCode,
                       },
@@ -285,8 +305,8 @@ const ForgotPassword = () => {
                   customAlert.type === "success"
                     ? "bg-[#10B981]"
                     : customAlert.type === "error"
-                      ? "bg-[#FF6B6B]"
-                      : "bg-[#9B59F5]"
+                    ? "bg-[#FF6B6B]"
+                    : "bg-[#9B59F5]"
                 }`}
               >
                 <Text className="text-white font-bold text-lg">Okay</Text>

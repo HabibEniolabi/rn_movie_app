@@ -15,6 +15,7 @@ import OnboardingHeader from "@/components/OnboardingHeader";
 import OnboardingHeaderInfo from "@/components/OnboardingHeaderInfo";
 import { movieGenres } from "@/services/genres";
 import Button from "@/components/Button";
+import { LinearGradient } from "expo-linear-gradient";
 
 const MINIMUM_SELECTION = 3;
 const MAX_DOTS = 6;
@@ -162,14 +163,28 @@ const Genres = () => {
                   onPress={() => toggleGenre(genre.id)}
                   className={`w-[48%] h-[132px] rounded-[22px] border mb-5 items-center justify-center relative ${
                     isSelected
-                      ? "border-[#8B5CF6] bg-[#21102F]"
+                      ? "border-[#A855F7] bg-[#21102F]"
                       : "border-[#2A2845] bg-[#141325]"
                   }`}
                 >
                   {isSelected && (
-                    <View className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#C44CE0] items-center justify-center">
+                    <LinearGradient
+                      colors={["#D946C4", "#9B4DFF"]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{
+                        position: "absolute",
+                        top: 16,
+                        right: 16,
+                        width: 36,
+                        height: 36,
+                        borderRadius: 999,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <Feather name="check" size={22} color="#FFFFFF" />
-                    </View>
+                    </LinearGradient>
                   )}
 
                   <Text className="text-[34px] mb-4">{genre.icon}</Text>
