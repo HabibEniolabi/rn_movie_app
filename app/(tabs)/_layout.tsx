@@ -3,6 +3,7 @@ import { images } from "@/constants/images";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Image, ImageBackground, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const TabIcon = ({ icon, label, focused }: any) => {
   if(focused) {
@@ -24,7 +25,9 @@ const TabIcon = ({ icon, label, focused }: any) => {
     </View>
   );
 };
-const _layout = () => {
+const Layout = () => {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{
@@ -51,13 +54,13 @@ const _layout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          title: "home",
+          title: t("tabs.home"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               icon={icons.home}
               focused={focused}
-              label="Home"
+              label={t("tabs.home")}
             />
           ),
         }}
@@ -65,13 +68,13 @@ const _layout = () => {
       <Tabs.Screen
         name="search"
         options={{
-          title: "search",
+          title: t("tabs.search"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               icon={icons.search}
               focused={focused}
-              label="Search"
+              label={t("tabs.search")}
             />
           ),
         }}
@@ -79,13 +82,13 @@ const _layout = () => {
       <Tabs.Screen
         name="saved"
         options={{
-          title: "saved",
+          title: t("tabs.saved"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               icon={icons.save}
               focused={focused}
-              label="Saved"
+              label={t("tabs.saved")}
             />
           ),
         }}
@@ -93,13 +96,13 @@ const _layout = () => {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "profile",
+          title: t("tabs.profile"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               icon={icons.person}
               focused={focused}
-              label="Profile"
+              label={t("tabs.profile")}
             />
           ),
         }}
@@ -108,4 +111,4 @@ const _layout = () => {
   );
 };
 
-export default _layout;
+export default Layout;

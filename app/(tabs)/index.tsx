@@ -50,17 +50,17 @@ export default function Index() {
             className="mt-10 self-center"
           />
         ) : moviesError || trendingError ? (
-          <Text>Error: {moviesError?.message || trendingError?.message}</Text>
+          <Text>{t("common.error")}:{" "} {moviesError?.message || trendingError?.message || t("errors.failedToLoadMovies")}</Text>
         ) : (
           <View className="flex-1 mt-5">
             <SearchBar
               onPress={() => router.push("/search")}
-              placeholder="Search through 300+ movies online"
+              placeholder={t("home.searchMovies")}
             />
             {trendingMovies && (
               <View className="mt-10">
                 <Text className="text-lg text-white font-bold mt-5 mb-3">
-                  {t("trendingMovies")}
+                  {t("home.trendingMovies")}
                 </Text>
                 <FlatList
                   className="mb-4 mt-3"
@@ -78,7 +78,7 @@ export default function Index() {
 
             <>
               <Text className="text-lg text-white font-bold mt-5 mb-3">
-                {t("latestMovies")}
+                {t("home.latestMovies")}
               </Text>
               <FlatList
                 data={movies}

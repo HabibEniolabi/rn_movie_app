@@ -1,20 +1,54 @@
 {
-  "language": "Idioma",
-  "searchLanguage": "Pesquisar idioma...",
-  "current": "Atual",
-  "allLanguages": "Todos os idiomas",
-  "applyLanguage": "Aplicar idioma",
-  "done": "Concluído",
-  "noLanguageFound": "Nenhum idioma encontrado",
-  "languageUpdated": "Idioma atualizado com sucesso",
-  "couldNotUpdateLanguage": "Não foi possível atualizar o idioma. Tente novamente.",
-
-  "english": "Inglês",
-  "french": "Francês",
-  "spanish": "Espanhol",
-  "german": "Alemão",
-  "portuguese": "Português",
-  "japanese": "Japonês",
-  "korean": "Coreano",
-  "arabic": "Árabe"
+  "common": {
+    "error": "Erro",
+    "done": "Concluído",
+    "okay": "OK",
+    "loading": "Carregando...",
+    "somethingWentWrong": "Algo deu errado. Tente novamente."
+  },
+  "tabs": {
+    "home": "Início",
+    "search": "Buscar",
+    "saved": "Salvos",
+    "profile": "Perfil"
+  },
+  "home": {
+    "searchMovies": "Pesquise entre mais de 300 filmes online",
+    "trendingMovies": "Filmes em alta",
+    "latestMovies": "Filmes recentes"
+  },
+  "movie": {
+    "movie": "Filme",
+    "noTitleAvailable": "Nenhum título disponível",
+    "unknownYear": "Ano desconhecido"
+  },
+  "errors": {
+    "failedToLoadMovies": "Falha ao carregar filmes."
+  },
+  "language": {
+    "title": "Idioma",
+    "searchLanguage": "Pesquisar idioma...",
+    "current": "Atual",
+    "allLanguages": "Todos os idiomas",
+    "applyLanguage": "Aplicar idioma",
+    "languageUpdated": "Idioma atualizado com sucesso",
+    "languageUpdateFailed": "Não foi possível atualizar o idioma. Tente novamente.",
+    "noLanguageFound": "Nenhum idioma encontrado",
+    "english": "Inglês",
+    "french": "Francês",
+    "spanish": "Espanhol",
+    "german": "Alemão",
+    "portuguese": "Português",
+    "japanese": "Japonês",
+    "korean": "Coreano",
+    "arabic": "Árabe",
+    "englishNative": "English (US)",
+    "frenchNative": "Français",
+    "spanishNative": "Español",
+    "germanNative": "Deutsch",
+    "portugueseNative": "Português",
+    "japaneseNative": "日本語",
+    "koreanNative": "한국어",
+    "arabicNative": "العربية"
+  }
 }

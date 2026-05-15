@@ -1,20 +1,54 @@
 {
-  "language": "Langue",
-  "searchLanguage": "Rechercher une langue...",
-  "current": "Actuel",
-  "allLanguages": "Toutes les langues",
-  "applyLanguage": "Appliquer la langue",
-  "done": "Terminé",
-  "noLanguageFound": "Aucune langue trouvée",
-  "languageUpdated": "Langue mise à jour avec succès",
-  "couldNotUpdateLanguage": "Impossible de mettre à jour la langue. Veuillez réessayer.",
-
-  "english": "Anglais",
-  "french": "Français",
-  "spanish": "Espagnol",
-  "german": "Allemand",
-  "portuguese": "Portugais",
-  "japanese": "Japonais",
-  "korean": "Coréen",
-  "arabic": "Arabe"
+  "common": {
+    "error": "Erreur",
+    "loading": "Chargement...",
+    "done": "Terminé",
+    "okay": "D'accord",
+    "somethingWentWrong": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "tabs": {
+    "home": "Accueil",
+    "search": "Recherche",
+    "saved": "Enregistrés",
+    "profile": "Profil"
+  },
+  "home": {
+    "searchMovies": "Rechercher parmi plus de 300 films en ligne",
+    "trendingMovies": "Films tendance",
+    "latestMovies": "Derniers films"
+  },
+  "movie": {
+    "movie": "Film",
+    "noTitleAvailable": "Aucun titre disponible",
+    "unknownYear": "Année inconnue"
+  },
+  "errors": {
+    "failedToLoadMovies": "Impossible de charger les films."
+  },
+  "language": {
+    "title": "Langue",
+    "searchLanguage": "Rechercher une langue...",
+    "current": "Actuel",
+    "allLanguages": "Toutes les langues",
+    "applyLanguage": "Appliquer la langue",
+    "languageUpdated": "Langue mise à jour avec succès",
+    "languageUpdateFailed": "Impossible de mettre à jour la langue. Veuillez réessayer.",
+    "noLanguageFound": "Aucune langue trouvée",
+    "english": "Anglais",
+    "french": "Français",
+    "spanish": "Espagnol",
+    "german": "Allemand",
+    "portuguese": "Portugais",
+    "japanese": "Japonais",
+    "korean": "Coréen",
+    "arabic": "Arabe",
+    "englishNative": "English (US)",
+    "frenchNative": "Français",
+    "spanishNative": "Español",
+    "germanNative": "Deutsch",
+    "portugueseNative": "Português",
+    "japaneseNative": "日本語",
+    "koreanNative": "한국어",
+    "arabicNative": "العربية"
+  }
 }

@@ -1,20 +1,54 @@
 {
-  "language": "言語",
-  "searchLanguage": "言語を検索...",
-  "current": "現在",
-  "allLanguages": "すべての言語",
-  "applyLanguage": "言語を適用",
-  "done": "完了",
-  "noLanguageFound": "言語が見つかりません",
-  "languageUpdated": "言語が正常に更新されました",
-  "couldNotUpdateLanguage": "言語を更新できませんでした。もう一度お試しください。",
-
-  "english": "英語",
-  "french": "フランス語",
-  "spanish": "スペイン語",
-  "german": "ドイツ語",
-  "portuguese": "ポルトガル語",
-  "japanese": "日本語",
-  "korean": "韓国語",
-  "arabic": "アラビア語"
+  "common": {
+    "error": "エラー",
+    "done": "完了",
+    "okay": "OK",
+    "loading": "読み込み中...",
+    "somethingWentWrong": "問題が発生しました。もう一度お試しください。"
+  },
+  "tabs": {
+    "home": "ホーム",
+    "search": "検索",
+    "saved": "保存済み",
+    "profile": "プロフィール"
+  },
+  "home": {
+    "searchMovies": "300本以上の映画をオンラインで検索",
+    "trendingMovies": "トレンド映画",
+    "latestMovies": "最新映画"
+  },
+  "movie": {
+    "movie": "映画",
+    "noTitleAvailable": "タイトルがありません",
+    "unknownYear": "不明な年"
+  },
+  "errors": {
+    "failedToLoadMovies": "映画を読み込めませんでした。"
+  },
+  "language": {
+    "title": "言語",
+    "searchLanguage": "言語を検索...",
+    "current": "現在",
+    "allLanguages": "すべての言語",
+    "applyLanguage": "言語を適用",
+    "languageUpdated": "言語が正常に更新されました",
+    "languageUpdateFailed": "言語を更新できませんでした。もう一度お試しください。",
+    "noLanguageFound": "言語が見つかりません",
+    "english": "英語",
+    "french": "フランス語",
+    "spanish": "スペイン語",
+    "german": "ドイツ語",
+    "portuguese": "ポルトガル語",
+    "japanese": "日本語",
+    "korean": "韓国語",
+    "arabic": "アラビア語",
+    "englishNative": "English (US)",
+    "frenchNative": "Français",
+    "spanishNative": "Español",
+    "germanNative": "Deutsch",
+    "portugueseNative": "Português",
+    "japaneseNative": "日本語",
+    "koreanNative": "한국어",
+    "arabicNative": "العربية"
+  }
 }

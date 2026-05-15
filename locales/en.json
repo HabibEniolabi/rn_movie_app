@@ -1,20 +1,54 @@
 {
-  "language": "Language",
-  "searchLanguage": "Search language...",
-  "current": "Current",
-  "allLanguages": "All Languages",
-  "applyLanguage": "Apply Language",
-  "done": "Done",
-  "noLanguageFound": "No language found",
-  "languageUpdated": "Language updated successfully",
-  "couldNotUpdateLanguage": "Could not update language. Please try again.",
-
-  "english": "English",
-  "french": "French",
-  "spanish": "Spanish",
-  "german": "German",
-  "portuguese": "Portuguese",
-  "japanese": "Japanese",
-  "korean": "Korean",
-  "arabic": "Arabic"
+  "common": {
+    "error": "Error",
+    "loading": "Loading...",
+    "done": "Done",
+    "okay": "Okay",
+    "somethingWentWrong": "Something went wrong. Please try again."
+  },
+  "tabs": {
+    "home": "Home",
+    "search": "Search",
+    "saved": "Saved",
+    "profile": "Profile"
+  },
+  "home": {
+    "searchMovies": "Search through 300+ movies online",
+    "trendingMovies": "Trending Movies",
+    "latestMovies": "Latest Movies"
+  },
+  "movie": {
+    "movie": "Movie",
+    "noTitleAvailable": "No title available",
+    "unknownYear": "Unknown year"
+  },
+  "errors": {
+    "failedToLoadMovies": "Failed to load movies."
+  },
+  "language": {
+    "title": "Language",
+    "searchLanguage": "Search language...",
+    "current": "Current",
+    "allLanguages": "All Languages",
+    "applyLanguage": "Apply Language",
+    "languageUpdated": "Language updated successfully",
+    "languageUpdateFailed": "Could not update language. Please try again.",
+    "noLanguageFound": "No language found",
+    "english": "English",
+    "french": "French",
+    "spanish": "Spanish",
+    "german": "German",
+    "portuguese": "Portuguese",
+    "japanese": "Japanese",
+    "korean": "Korean",
+    "arabic": "Arabic",
+    "englishNative": "English (US)",
+    "frenchNative": "Français",
+    "spanishNative": "Español",
+    "germanNative": "Deutsch",
+    "portugueseNative": "Português",
+    "japaneseNative": "日本語",
+    "koreanNative": "한국어",
+    "arabicNative": "العربية"
+  }
 }

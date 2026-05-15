@@ -78,6 +78,7 @@ const Language = () => {
         title: t("done"),
         message: t("languageUpdated"),
       });
+      router.back();
     } catch (error) {
       console.log("Language change error:", error);
       setCustomAlert({
@@ -100,7 +101,7 @@ const Language = () => {
         </TouchableOpacity>
 
         <Text className="text-white font-bold text-[24px] text-center">
-          {t("language")}
+          {t("language.title")}
         </Text>
       </View>
 
@@ -110,7 +111,7 @@ const Language = () => {
         <TextInput
           value={search}
           onChangeText={setSearch}
-          placeholder={t("searchLanguage")}
+          placeholder={t("language.searchLanguage")}
           placeholderTextColor="#5D5A7A"
           className="flex-1 text-white text-[20px] ml-3 font-semibold"
         />
@@ -125,7 +126,7 @@ const Language = () => {
             {currentLanguageData && (
               <View className="mb-6">
                 <Text className="text-[#5D5A7A] font-bold tracking-[3px] text-[14px] mb-4">
-                  {t("current").toUpperCase()}
+                  {t("language.current").toUpperCase()}
                 </Text>
 
                 <LanguageCard
@@ -137,7 +138,7 @@ const Language = () => {
             )}
 
             <Text className="text-[#5D5A7A] font-bold tracking-[3px] text-[14px] mb-4">
-              {t("allLanguages").toUpperCase()}
+              {t("language.allLanguages").toUpperCase()}
             </Text>
           </View>
         }
@@ -150,7 +151,7 @@ const Language = () => {
         )}
         ListEmptyComponent={
           <Text className="text-[#8B88A8] text-[16px] text-center mt-8">
-            {t("noLanguageFound")}
+            {t("language.noLanguageFound")}
           </Text>
         }
         contentContainerStyle={{
@@ -177,7 +178,7 @@ const Language = () => {
             }}
           >
             <Text className="text-white text-[24px] font-bold">
-              {hasLanguageChanged ? t("applyLanguage") : t("done")}
+              {hasLanguageChanged ? t("language.applyLanguage") : t("common.done")}
             </Text>
           </LinearGradient>
         </TouchableOpacity>

@@ -1,20 +1,54 @@
 {
-  "language": "Sprache",
-  "searchLanguage": "Sprache suchen...",
-  "current": "Aktuell",
-  "allLanguages": "Alle Sprachen",
-  "applyLanguage": "Sprache anwenden",
-  "done": "Fertig",
-  "noLanguageFound": "Keine Sprache gefunden",
-  "languageUpdated": "Sprache erfolgreich aktualisiert",
-  "couldNotUpdateLanguage": "Sprache konnte nicht aktualisiert werden. Bitte versuche es erneut.",
-
-  "english": "Englisch",
-  "french": "Französisch",
-  "spanish": "Spanisch",
-  "german": "Deutsch",
-  "portuguese": "Portugiesisch",
-  "japanese": "Japanisch",
-  "korean": "Koreanisch",
-  "arabic": "Arabisch"
+  "common": {
+    "error": "Fehler",
+    "done": "Fertig",
+    "okay": "OK",
+    "loading": "Wird geladen...",
+    "somethingWentWrong": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "tabs": {
+    "home": "Start",
+    "search": "Suche",
+    "saved": "Gespeichert",
+    "profile": "Profil"
+  },
+  "home": {
+    "searchMovies": "Durchsuche über 300 Filme online",
+    "trendingMovies": "Trendfilme",
+    "latestMovies": "Neueste Filme"
+  },
+  "movie": {
+    "movie": "Film",
+    "noTitleAvailable": "Kein Titel verfügbar",
+    "unknownYear": "Unbekanntes Jahr"
+  },
+  "errors": {
+    "failedToLoadMovies": "Filme konnten nicht geladen werden."
+  },
+  "language": {
+    "title": "Sprache",
+    "searchLanguage": "Sprache suchen...",
+    "current": "Aktuell",
+    "allLanguages": "Alle Sprachen",
+    "applyLanguage": "Sprache anwenden",
+    "languageUpdated": "Sprache erfolgreich aktualisiert",
+    "languageUpdateFailed": "Sprache konnte nicht aktualisiert werden. Bitte versuche es erneut.",
+    "noLanguageFound": "Keine Sprache gefunden",
+    "english": "Englisch",
+    "french": "Französisch",
+    "spanish": "Spanisch",
+    "german": "Deutsch",
+    "portuguese": "Portugiesisch",
+    "japanese": "Japanisch",
+    "korean": "Koreanisch",
+    "arabic": "Arabisch",
+    "englishNative": "English (US)",
+    "frenchNative": "Français",
+    "spanishNative": "Español",
+    "germanNative": "Deutsch",
+    "portugueseNative": "Português",
+    "japaneseNative": "日本語",
+    "koreanNative": "한국어",
+    "arabicNative": "العربية"
+  }
 }

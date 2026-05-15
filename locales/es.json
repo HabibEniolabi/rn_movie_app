@@ -1,20 +1,54 @@
 {
-  "language": "Idioma",
-  "searchLanguage": "Buscar idioma...",
-  "current": "Actual",
-  "allLanguages": "Todos los idiomas",
-  "applyLanguage": "Aplicar idioma",
-  "done": "Listo",
-  "noLanguageFound": "No se encontró ningún idioma",
-  "languageUpdated": "Idioma actualizado correctamente",
-  "couldNotUpdateLanguage": "No se pudo actualizar el idioma. Inténtalo de nuevo.",
-
-  "english": "Inglés",
-  "french": "Francés",
-  "spanish": "Español",
-  "german": "Alemán",
-  "portuguese": "Portugués",
-  "japanese": "Japonés",
-  "korean": "Coreano",
-  "arabic": "Árabe"
+  "common": {
+    "error": "Error",
+    "loading": "Cargando...",
+    "done": "Listo",
+    "okay": "Aceptar",
+    "somethingWentWrong": "Algo salió mal. Inténtalo de nuevo."
+  },
+  "tabs": {
+    "home": "Inicio",
+    "search": "Buscar",
+    "saved": "Guardados",
+    "profile": "Perfil"
+  },
+  "home": {
+    "searchMovies": "Busca entre más de 300 películas en línea",
+    "trendingMovies": "Películas en tendencia",
+    "latestMovies": "Últimas películas"
+  },
+  "movie": {
+    "movie": "Película",
+    "noTitleAvailable": "No hay título disponible",
+    "unknownYear": "Año desconocido"
+  },
+  "errors": {
+    "failedToLoadMovies": "No se pudieron cargar las películas."
+  },
+  "language": {
+    "title": "Idioma",
+    "searchLanguage": "Buscar idioma...",
+    "current": "Actual",
+    "allLanguages": "Todos los idiomas",
+    "applyLanguage": "Aplicar idioma",
+    "languageUpdated": "Idioma actualizado correctamente",
+    "languageUpdateFailed": "No se pudo actualizar el idioma. Inténtalo de nuevo.",
+    "noLanguageFound": "No se encontró ningún idioma",
+    "english": "Inglés",
+    "french": "Francés",
+    "spanish": "Español",
+    "german": "Alemán",
+    "portuguese": "Portugués",
+    "japanese": "Japonés",
+    "korean": "Coreano",
+    "arabic": "Árabe",
+    "englishNative": "English (US)",
+    "frenchNative": "Français",
+    "spanishNative": "Español",
+    "germanNative": "Deutsch",
+    "portugueseNative": "Português",
+    "japaneseNative": "日本語",
+    "koreanNative": "한국어",
+    "arabicNative": "العربية"
+  }
 }
