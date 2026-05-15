@@ -75,5 +75,19 @@
     "animation": "رسوم متحركة",
     "drama": "دراما",
     "horror": "رعب"
+  },
+  "saved": {
+    "title": "قائمتي",
+    "movieCount_one": "تم حفظ فيلم واحد",
+    "movieCount_other": "تم حفظ {{count}} أفلام",
+    "recentlyAdded": "المضافة حديثًا ({{count}})",
+    "olderSaves": "المحفوظات الأقدم ({{count}})",
+    "noSavedMovies": "لا توجد أفلام محفوظة بعد"
+  },
+  "watchlistTabs": {
+    "all": "الكل",
+    "watching": "قيد المشاهدة",
+    "completed": "مكتملة",
+    "planToWatch": "أخطط للمشاهدة"
   }
 }

@@ -75,5 +75,19 @@
     "animation": "アニメーション",
     "drama": "ドラマ",
     "horror": "ホラー"
+  },
+  "saved": {
+    "title": "マイウォッチリスト",
+    "movieCount_one": "{{count}}本の映画を保存済み",
+    "movieCount_other": "{{count}}本の映画を保存済み",
+    "recentlyAdded": "最近追加 ({{count}})",
+    "olderSaves": "以前の保存 ({{count}})",
+    "noSavedMovies": "保存された映画はまだありません"
+  },
+  "watchlistTabs": {
+    "all": "すべて",
+    "watching": "視聴中",
+    "completed": "完了",
+    "planToWatch": "視聴予定"
   }
 }

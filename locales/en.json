@@ -75,5 +75,19 @@
     "animation": "Animation",
     "drama": "Drama",
     "horror": "Horror"
+  },
+  "saved": {
+    "title": "My Watchlist",
+    "movieCount_one": "{{count}} movie saved",
+    "movieCount_other": "{{count}} movies saved",
+    "recentlyAdded": "Recently Added ({{count}})",
+    "olderSaves": "Older Saves ({{count}})",
+    "noSavedMovies": "No saved movies yet"
+  },
+  "watchlistTabs": {
+    "all": "All",
+    "watching": "Watching",
+    "completed": "Completed",
+    "planToWatch": "Plan to Watch"
   }
 }

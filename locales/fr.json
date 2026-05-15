@@ -75,5 +75,19 @@
     "animation": "Animation",
     "drama": "Drame",
     "horror": "Horreur"
+  },
+  "saved": {
+    "title": "Ma liste",
+    "movieCount_one": "{{count}} film enregistré",
+    "movieCount_other": "{{count}} films enregistrés",
+    "recentlyAdded": "Ajoutés récemment ({{count}})",
+    "olderSaves": "Anciens enregistrements ({{count}})",
+    "noSavedMovies": "Aucun film enregistré pour le moment"
+  },
+  "watchlistTabs": {
+    "all": "Tous",
+    "watching": "En cours",
+    "completed": "Terminés",
+    "planToWatch": "À regarder"
   }
 }

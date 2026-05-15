@@ -75,5 +75,19 @@
     "animation": "애니메이션",
     "drama": "드라마",
     "horror": "공포"
+  },
+  "saved": {
+    "title": "내 시청 목록",
+    "movieCount_one": "{{count}}개의 영화 저장됨",
+    "movieCount_other": "{{count}}개의 영화 저장됨",
+    "recentlyAdded": "최근 추가됨 ({{count}})",
+    "olderSaves": "이전 저장 항목 ({{count}})",
+    "noSavedMovies": "아직 저장된 영화가 없습니다"
+  },
+  "watchlistTabs": {
+    "all": "전체",
+    "watching": "보는 중",
+    "completed": "완료",
+    "planToWatch": "볼 예정"
   }
 }

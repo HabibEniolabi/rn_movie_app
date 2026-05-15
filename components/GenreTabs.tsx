@@ -1,13 +1,32 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
-const tabs = ["All", "Watching", "Completed", "Plan to Watch"];
+const tabs = [
+  {
+    key: "all",
+    label: "watchlistTabs.all",
+  },
+  {
+    key: "watching",
+    label: "watchlistTabs.watching",
+  },
+  {
+    key: "completed",
+    label: "watchlistTabs.completed",
+  },
+  {
+    key: "planToWatch",
+    label: "watchlistTabs.planToWatch",
+  },
+];
 
 const ACTIVE_GRADIENT = ["#D946C4", "#9B4DFF"] as const;
 
 const GenreTabs = () => {
   const [activeTab, setActiveTab] = useState("All");
+  const { t } = useTranslation();
 
   return (
     <View>
@@ -18,13 +37,13 @@ const GenreTabs = () => {
       >
         <View className="flex-row gap-3">
           {tabs.map((tab) => {
-            const isActive = activeTab === tab;
+            const isActive = activeTab === tab.key;
 
             return (
               <TouchableOpacity
-                key={tab}
+                key={tab.key}
                 activeOpacity={0.85}
-                onPress={() => setActiveTab(tab)}
+                onPress={() => setActiveTab(tab.key)}
                 className={`px-6 py-2 rounded-full border overflow-hidden ${
                   isActive
                     ? "border-transparent"
@@ -52,7 +71,7 @@ const GenreTabs = () => {
                     isActive ? "text-white" : "text-[#6F6C8F]"
                   }`}
                 >
-                  {tab}
+                  {t(tab.label)}
                 </Text>
               </TouchableOpacity>
             );

@@ -2,12 +2,21 @@ import GenreTabs from "@/components/GenreTabs";
 import { icons } from "@/constants/icons";
 import { getSavedMovies, SavedMovie } from "@/services/appwrite";
 import React, { useEffect, useState } from "react";
-import { Text, View, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import Octicons from "react-native-vector-icons/Octicons";
 import SaveCard from "@/components/SaveCard";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useTranslation } from "react-i18next";
 
 const Saved = () => {
+  const { t } = useTranslation();
+
   const [savedMovies, setSavedMovies] = useState<SavedMovie[]>([]);
   const [recentMovies, setRecentMovies] = useState<SavedMovie[]>([]);
   const [olderMovies, setOlderMovies] = useState<SavedMovie[]>([]);
@@ -23,7 +32,7 @@ const Saved = () => {
     try {
       const movies = await getSavedMovies();
       setSavedMovies(movies);
-      
+
       // Split into recent (last 7 days) and older
       const now = new Date();
       const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -63,7 +72,9 @@ const Saved = () => {
   return (
     <View className="bg-primary flex-1 px-5">
       <View className="flex justify-between mt-16 items-center flex-row">
-        <Text className="text-white font-bold text-[24px]">My Watchlist</Text>
+        <Text className="text-white font-bold text-[24px]">
+          {t("saved.title")}
+        </Text>
         <View className="flex items-center bg-dark-300 border-dark-400 border p-3 rounded-md">
           <TouchableOpacity>
             <Octicons name={"plus"} size={18} color="#000000" />
@@ -72,20 +83,24 @@ const Saved = () => {
       </View>
       <View className="flex flex-col gap-1 gap-4">
         <Text className="text-dark-500">
-          {savedMovies.length} movie{savedMovies.length !== 1 ? "s" : ""} saved
+          {t("saved.movieCount", { count: savedMovies.length })}
         </Text>
         <GenreTabs />
       </View>
       <ScrollView
         className="flex-1 bg-primary"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ minHeight: "100%", paddingBlock: 10, paddingBottom: tabBarHeight + 40 }}
+        contentContainerStyle={{
+          minHeight: "100%",
+          paddingBlock: 10,
+          paddingBottom: tabBarHeight + 40,
+        }}
       >
         {/* Recently Added Section */}
         {recentMovies.length > 0 && (
           <View className="flex flex-col mt-6">
             <Text className="text-dark-500 font-bold uppercase mb-4">
-              Recently Added ({recentMovies.length})
+              {t("saved.recentlyAdded", { count: recentMovies.length })}
             </Text>
             {recentMovies.map((movie) => (
               <SaveCard
@@ -101,7 +116,7 @@ const Saved = () => {
         {olderMovies.length > 0 && (
           <View className="flex flex-col mt-6">
             <Text className="text-dark-500 font-bold uppercase mb-4">
-              Older Saves ({olderMovies.length})
+              {t("saved.olderSaves", { count: olderMovies.length })}
             </Text>
             {olderMovies.map((movie) => (
               <SaveCard
@@ -116,7 +131,9 @@ const Saved = () => {
         {/* Empty State */}
         {savedMovies.length === 0 && (
           <View className="flex-1 items-center justify-center mt-10">
-            <Text className="text-light-200 text-lg">No saved movies yet</Text>
+            <Text className="text-light-200 text-lg">
+              {t("saved.noSavedMovies")}
+            </Text>
           </View>
         )}
       </ScrollView>

@@ -75,5 +75,19 @@
     "animation": "Animação",
     "drama": "Drama",
     "horror": "Terror"
+  },
+  "saved": {
+    "title": "Minha lista",
+    "movieCount_one": "{{count}} filme salvo",
+    "movieCount_other": "{{count}} filmes salvos",
+    "recentlyAdded": "Adicionados recentemente ({{count}})",
+    "olderSaves": "Salvos antigos ({{count}})",
+    "noSavedMovies": "Nenhum filme salvo ainda"
+  },
+  "watchlistTabs": {
+    "all": "Todos",
+    "watching": "Assistindo",
+    "completed": "Concluídos",
+    "planToWatch": "Para assistir"
   }
 }
