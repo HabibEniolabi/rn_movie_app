@@ -17,9 +17,10 @@ import { getTrendingMovies } from "@/services/appwrite";
 import TrendingCard from "@/components/TrendingCard";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export default function Index() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -27,20 +28,32 @@ export default function Index() {
     data: trendingMovies,
     loading: trendingLoading,
     error: trendingError,
+    refetch: refetchTrendingMovies,
   } = useFetch(getTrendingMovies);
 
   const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
+    refetch: refetchMovies,
   } = useFetch(() => fetchMovies({ query: "" }));
+
+  useEffect(() => {
+    refetchTrendingMovies();
+    refetchMovies()
+  }, [i18n.language]);
+
   return (
     <View className="flex-1 bg-primary">
       <Image source={images.bg} className="absolute z-0 w-full" />
       <ScrollView
         className="flex-1 px-5"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ minHeight: "100%", paddingBlock: 10, paddingBottom: tabBarHeight + 40 }}
+        contentContainerStyle={{
+          minHeight: "100%",
+          paddingBlock: 10,
+          paddingBottom: tabBarHeight + 40,
+        }}
       >
         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
         {moviesLoading || trendingLoading ? (
@@ -50,7 +63,12 @@ export default function Index() {
             className="mt-10 self-center"
           />
         ) : moviesError || trendingError ? (
-          <Text>{t("common.error")}:{" "} {moviesError?.message || trendingError?.message || t("errors.failedToLoadMovies")}</Text>
+          <Text>
+            {t("common.error")}:{" "}
+            {moviesError?.message ||
+              trendingError?.message ||
+              t("errors.failedToLoadMovies")}
+          </Text>
         ) : (
           <View className="flex-1 mt-5">
             <SearchBar

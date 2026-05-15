@@ -97,9 +97,24 @@
     "searchForMovie": "Search for a movie"
   },
   "movie": {
-  "notAvailable": "N/A",
-  "reviewCount": "({{count}} reviews)",
-  "noTitleAvailable": "No title available",
-  "unknownYear": "Unknown year"
-}
+    "notAvailable": "N/A",
+    "reviewCount": "({{count}} reviews)",
+    "noTitleAvailable": "No title available",
+    "unknownYear": "Unknown year",
+    "overview": "Overview",
+    "releaseDate": "Release date",
+    "status": "Status",
+    "genres": "Genres",
+    "countries": "Countries",
+    "tagline": "Tagline",
+    "noTaglineAvailable": "No tagline available",
+    "budget": "Budget",
+    "revenue": "Revenue",
+    "productionCompanies": "Production Companies",
+    "goBack": "Go back",
+    "worldwide": "Worldwide",
+    "million": "million",
+    "voteCount_one": "({{count}} vote)",
+    "voteCount_other": "({{count}} votes)"
+  }
 }

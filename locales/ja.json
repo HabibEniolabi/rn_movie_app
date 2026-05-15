@@ -100,6 +100,21 @@
     "notAvailable": "該当なし",
     "reviewCount": "({{count}}件のレビュー)",
     "noTitleAvailable": "タイトルがありません",
-    "unknownYear": "不明な年"
+    "unknownYear": "不明な年",
+    "overview": "概要",
+    "releaseDate": "公開日",
+    "status": "ステータス",
+    "genres": "ジャンル",
+    "countries": "国",
+    "tagline": "キャッチコピー",
+    "noTaglineAvailable": "キャッチコピーはありません",
+    "budget": "予算",
+    "revenue": "収益",
+    "productionCompanies": "制作会社",
+    "goBack": "戻る",
+    "worldwide": "全世界",
+    "million": "百万",
+    "voteCount_one": "({{count}}票)",
+    "voteCount_other": "({{count}}票)"
   }
 }

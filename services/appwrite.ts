@@ -1,9 +1,11 @@
 import { Client, Databases, ID, Query, Account } from "react-native-appwrite";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { fetchMovieDetails } from "./api";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
-const FAVORITES_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_FAVORITES_COLLECTION_ID!;
+const FAVORITES_COLLECTION_ID =
+  process.env.EXPO_PUBLIC_APPWRITE_FAVORITES_COLLECTION_ID!;
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
@@ -43,18 +45,37 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
     throw error;
   }
 };
-export const getTrendingMovies =  async():Promise<TrendingMovie[]> => {
+export const getTrendingMovies = async (): Promise<TrendingMovie[]> => {
   try {
-     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
       Query.limit(5),
       Query.orderDesc("count"),
-    ]); 
-    return result.documents as unknown as TrendingMovie[];
-  } catch(error) {
+    ]);
+
+    const localizedTrendingMovies = await Promise.all(
+      result.documents.map(async (doc) => {
+        try {
+          const details = await fetchMovieDetails(String(doc.movie_id));
+
+          return {
+            ...doc,
+            title: details.title || doc.title,
+            poster_url: details.poster_path
+              ? `https://image.tmdb.org/t/p/w500${details.poster_path}`
+              : doc.poster_url,
+          };
+        } catch (error) {
+          return doc;
+        }
+      })
+    );
+
+    return localizedTrendingMovies as unknown as TrendingMovie[];
+  } catch (error) {
     console.error(error);
     return [];
   }
-}
+};
 
 export type SavedMovie = {
   $id: string;
@@ -73,8 +94,8 @@ export type SavedMovie = {
 
 export const getExistingFavorite = async (movieId: number | string) => {
   try {
-     const firebaseUser = FIREBASE_AUTH.currentUser;
-    
+    const firebaseUser = FIREBASE_AUTH.currentUser;
+
     if (!firebaseUser) return undefined;
 
     const result = await database.listDocuments(
@@ -123,9 +144,7 @@ export const saveFavorite = async (movie: Movie | MovieDetails) => {
         voteAverage: movie.vote_average ?? 0,
         overview: movie.overview ?? "",
         runtime:
-          "runtime" in movie && movie.runtime
-            ? `${movie.runtime} mins`
-            : "",
+          "runtime" in movie && movie.runtime ? `${movie.runtime} mins` : "",
         reviewCount: movie.vote_count ? `${movie.vote_count} reviews` : "",
         genres:
           "genres" in movie && Array.isArray(movie.genres)
@@ -163,7 +182,7 @@ export const removeFavorite = async (movieId: number | string) => {
 export const getSavedMovies = async (): Promise<SavedMovie[]> => {
   try {
     const firebaseUser = FIREBASE_AUTH.currentUser;
-    
+
     if (!firebaseUser) return [];
 
     const result = await database.listDocuments(

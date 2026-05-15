@@ -100,6 +100,21 @@
     "notAvailable": "N/D",
     "reviewCount": "({{count}} avis)",
     "noTitleAvailable": "Aucun titre disponible",
-    "unknownYear": "Année inconnue"
+    "unknownYear": "Année inconnue",
+    "overview": "Résumé",
+    "releaseDate": "Date de sortie",
+    "status": "Statut",
+    "genres": "Genres",
+    "countries": "Pays",
+    "tagline": "Slogan",
+    "noTaglineAvailable": "Aucun slogan disponible",
+    "budget": "Budget",
+    "revenue": "Revenus",
+    "productionCompanies": "Sociétés de production",
+    "goBack": "Retour",
+    "worldwide": "Monde entier",
+    "million": "millions",
+    "voteCount_one": "({{count}} vote)",
+    "voteCount_other": "({{count}} votes)"
   }
 }

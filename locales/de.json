@@ -100,6 +100,21 @@
     "notAvailable": "Nicht verfügbar",
     "reviewCount": "({{count}} Bewertungen)",
     "noTitleAvailable": "Kein Titel verfügbar",
-    "unknownYear": "Unbekanntes Jahr"
+    "unknownYear": "Unbekanntes Jahr",
+    "overview": "Übersicht",
+    "releaseDate": "Veröffentlichungsdatum",
+    "status": "Status",
+    "genres": "Genres",
+    "countries": "Länder",
+    "tagline": "Slogan",
+    "noTaglineAvailable": "Kein Slogan verfügbar",
+    "budget": "Budget",
+    "revenue": "Einnahmen",
+    "productionCompanies": "Produktionsfirmen",
+    "goBack": "Zurück",
+    "worldwide": "Weltweit",
+    "million": "Millionen",
+    "voteCount_one": "({{count}} Stimme)",
+    "voteCount_other": "({{count}} Stimmen)"
   }
 }

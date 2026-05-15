@@ -100,6 +100,21 @@
     "notAvailable": "N/D",
     "reviewCount": "({{count}} avaliações)",
     "noTitleAvailable": "Nenhum título disponível",
-    "unknownYear": "Ano desconhecido"
+    "unknownYear": "Ano desconhecido",
+    "overview": "Visão geral",
+    "releaseDate": "Data de lançamento",
+    "status": "Estado",
+    "genres": "Gêneros",
+    "countries": "Países",
+    "tagline": "Slogan",
+    "noTaglineAvailable": "Nenhum slogan disponível",
+    "budget": "Orçamento",
+    "revenue": "Receita",
+    "productionCompanies": "Produtoras",
+    "goBack": "Voltar",
+    "worldwide": "Mundial",
+    "million": "milhões",
+    "voteCount_one": "({{count}} voto)",
+    "voteCount_other": "({{count}} votos)"
   }
 }

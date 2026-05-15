@@ -1,7 +1,7 @@
 import GenreTabs from "@/components/GenreTabs";
 import { icons } from "@/constants/icons";
 import { getSavedMovies, SavedMovie } from "@/services/appwrite";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Text,
   View,
@@ -26,15 +26,6 @@ const Saved = () => {
   const [loading, setLoading] = useState(true);
 
   const tabBarHeight = useBottomTabBarHeight();
-
-  // useEffect(() => {
-  //   fetchSavedMovies();
-  // }, [i18n.language]);
-  useFocusEffect(
-    useCallback(() => {
-      fetchSavedMovies();
-    }, [i18n.language])
-  );
 
   const fetchSavedMovies = async () => {
     try {
@@ -93,6 +84,12 @@ const Saved = () => {
       setLoading(false);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchSavedMovies();
+    }, [i18n.language])
+  );
 
   const handleRemoveMovie = (movieId: string) => {
     setSavedMovies(savedMovies.filter((m) => m.$id !== movieId));

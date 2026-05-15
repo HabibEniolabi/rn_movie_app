@@ -100,6 +100,21 @@
     "notAvailable": "غير متاح",
     "reviewCount": "({{count}} مراجعة)",
     "noTitleAvailable": "لا يوجد عنوان متاح",
-    "unknownYear": "سنة غير معروفة"
+    "unknownYear": "سنة غير معروفة",
+    "overview": "نظرة عامة",
+    "releaseDate": "تاريخ الإصدار",
+    "status": "الحالة",
+    "genres": "الأنواع",
+    "countries": "الدول",
+    "tagline": "الشعار",
+    "noTaglineAvailable": "لا يوجد شعار متاح",
+    "budget": "الميزانية",
+    "revenue": "الإيرادات",
+    "productionCompanies": "شركات الإنتاج",
+    "goBack": "رجوع",
+    "worldwide": "عالميًا",
+    "million": "مليون",
+    "voteCount_one": "({{count}} صوت)",
+    "voteCount_other": "({{count}} أصوات)"
   }
 }

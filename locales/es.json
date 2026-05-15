@@ -100,6 +100,21 @@
     "notAvailable": "N/D",
     "reviewCount": "({{count}} reseñas)",
     "noTitleAvailable": "No hay título disponible",
-    "unknownYear": "Año desconocido"
+    "unknownYear": "Año desconocido",
+    "overview": "Resumen",
+    "releaseDate": "Fecha de estreno",
+    "status": "Estado",
+    "genres": "Géneros",
+    "countries": "Países",
+    "tagline": "Eslogan",
+    "noTaglineAvailable": "No hay eslogan disponible",
+    "budget": "Presupuesto",
+    "revenue": "Ingresos",
+    "productionCompanies": "Productoras",
+    "goBack": "Volver",
+    "worldwide": "Mundial",
+    "million": "millones",
+    "voteCount_one": "({{count}} voto)",
+    "voteCount_other": "({{count}} votos)"
   }
 }

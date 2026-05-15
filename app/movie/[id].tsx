@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import useFetch from "@/services/useFetch";
@@ -9,28 +16,59 @@ import { getMovieCertification } from "@/utils/helpers";
 import { saveFavorite, removeFavorite } from "@/services/appwrite";
 import Entypo from "react-native-vector-icons/Entypo";
 import { getExistingFavorite } from "@/services/appwrite";
+import { useTranslation } from "react-i18next";
 
 interface MovieInfoProps {
   label: string;
   value?: React.ReactNode;
+  notAvailable: string;
 }
 
-export const MovieInfo = ({ label, value }: MovieInfoProps) => (
-  <View className="flex-col items-start justify-center mt-5">
-    <Text className="text-light-200 font-normal text-sm">{label}</Text>
-    <Text className="text-light-100 font-bold gap-x-2 text-sm mt-2">
-      {value || "N/A"}
-    </Text>
-  </View>
-);
+export const MovieInfo = ({ label, value, notAvailable }: MovieInfoProps) => {
+  const content = value || notAvailable;
+
+  return (
+    <View className="flex-col items-start justify-center mt-5">
+      <Text className="text-light-200 font-normal text-sm">{label}</Text>
+
+      {React.isValidElement(content) ? (
+        <View className="mt-2">{content}</View>
+      ) : (
+        <Text className="text-light-100 font-bold gap-x-2 text-sm mt-2">
+          {content}
+        </Text>
+      )}
+    </View>
+  );
+};
+
+const getPosterUrl = (posterPath?: string | null) => {
+  if (!posterPath) {
+    return "https://placehold.co/600x400/1a1a1a/ffffff.png";
+  }
+
+  if (posterPath.startsWith("http")) {
+    return posterPath;
+  }
+
+  return `https://image.tmdb.org/t/p/w500${posterPath}`;
+};
 
 const MovieDetails = () => {
+  const { t, i18n } = useTranslation();
+
   const { id } = useLocalSearchParams();
   const [isClicked, setIsClicked] = useState(false);
 
-  const { data: movie, loading } = useFetch(() =>
-    fetchMovieDetails(id as string)
-  );
+  const {
+    data: movie,
+    loading,
+    refetch,
+  } = useFetch(() => fetchMovieDetails(id as string));
+
+  useEffect(() => {
+    refetch();
+  }, [i18n.language]);
 
   const handleToggleSave = async () => {
     if (!movie) return;
@@ -66,13 +104,38 @@ const MovieDetails = () => {
     checkIfFavorited();
   }, [movie?.id]);
 
+  const notAvailable = t("movie.notAvailable");
+
   const formattedDate = movie?.release_date
     ? `${new Date(movie.release_date).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
         year: "numeric",
-      })} (Worldwide)`
-    : "N/A";
+      })} (${t("movie.worldwide")})`
+    : notAvailable;
+
+  const runtimeLabel = movie?.runtime
+    ? `${Math.floor(movie.runtime / 60)}h${
+        movie.runtime % 60 ? ` ${movie.runtime % 60}m` : ""
+      }`
+    : notAvailable;
+
+  const formatMoney = (amount?: number) => {
+    if (!amount || amount <= 0) {
+      return notAvailable;
+    }
+
+    return `$${(amount / 1_000_000).toFixed(1)} ${t("movie.million")}`;
+  };
+
+  if (loading) {
+    return (
+      <View className="bg-primary flex-1 items-center justify-center">
+        <ActivityIndicator size="large" color="#B954F5" />
+      </View>
+    );
+  }
+
   return (
     <View className="bg-primary flex-1 ">
       <ScrollView
@@ -83,30 +146,26 @@ const MovieDetails = () => {
         <View>
           <Image
             source={{
-              uri: `https://image.tmdb.org/t/p/w500/${movie?.poster_path}`,
+              uri: getPosterUrl(movie?.poster_path),
             }}
             className="w-full h-[550px]"
             resizeMode="stretch"
           />
         </View>
         <View className="flex-col item-start justify-center mt-5 px-5">
-          <Text className="text-white font-bold text-xl">{movie?.title}</Text>
+          <Text className="text-white font-bold text-xl">
+            {movie?.title || t("movie.noTitleAvailable")}
+          </Text>
           <View className="flex-row item-center mt-2">
             <Text className="text-light-200 text-sm">
-              {movie?.release_date?.split("-")[0]}
+              {movie?.release_date?.split("-")[0] || t("movie.unknownYear")}
             </Text>
             <Text className="text-light-200 text-sm mx-2">•</Text>
             <Text className="text-light-200 text-sm">
-              {getMovieCertification(movie, "US")}
+              {movie ? getMovieCertification(movie, "US") : notAvailable}
             </Text>
             <Text className="text-light-200 text-sm mx-2">•</Text>
-            <Text className="text-light-200 text-sm">
-              {movie?.runtime
-                ? `${Math.floor(movie.runtime / 60)}h${
-                    movie.runtime % 60 ? ` ${movie.runtime % 60}m` : ""
-                  }`
-                : "N/A"}
-            </Text>
+            <Text className="text-light-200 text-sm">{runtimeLabel}</Text>
           </View>
           <View className="flex-row gap-4 items-center">
             <View className="flex-row item-center bg-dark-100 rounded-md px-2 py-1 gap-x-1 mt-2">
@@ -115,9 +174,11 @@ const MovieDetails = () => {
                 {Math.round(movie?.vote_average ?? 0)}/10
               </Text>
               <Text className="text-light-200 text-sm">
-                ({movie?.vote_count} votes)
+                {t("movie.voteCount", {
+                  count: movie?.vote_count ?? 0,
+                })}
               </Text>
-            </View> 
+            </View>
             <TouchableOpacity
               onPress={handleToggleSave}
               disabled={!movie}
@@ -130,57 +191,83 @@ const MovieDetails = () => {
               />
             </TouchableOpacity>
           </View>
-          <MovieInfo label="Overview" value={movie?.overview} />
-          <View className="flex flex-row gap-[50px] ">
-            <MovieInfo label="Release date" value={formattedDate} />
-            <MovieInfo label="Status" value={movie?.status} />
-          </View>
           <MovieInfo
-            label="Genres"
+            label={t("movie.overview")}
+            value={movie?.overview || notAvailable}
+            notAvailable={notAvailable}
+          />
+          <View className="flex flex-row gap-[50px]">
+            <MovieInfo
+              label={t("movie.releaseDate")}
+              value={formattedDate}
+              notAvailable={notAvailable}
+            />
+
+            <MovieInfo
+              label={t("movie.status")}
+              value={movie?.status || notAvailable}
+              notAvailable={notAvailable}
+            />
+          </View>
+
+          <MovieInfo
+            label={t("movie.genres")}
+            notAvailable={notAvailable}
             value={
               movie?.genres?.length ? (
                 <View className="flex-row flex-wrap gap-2">
-                  {movie.genres.map((g) => (
+                  {movie.genres.map((genre) => (
                     <View
                       className="bg-dark-100 px-3 py-1 rounded-md"
-                      key={g.id}
+                      key={genre.id}
                     >
-                      <Text className="text-light-100 font-bold">{g.name}</Text>
+                      <Text className="text-light-100 font-bold">
+                        {genre.name}
+                      </Text>
                     </View>
                   ))}
                 </View>
               ) : (
-                "N/A"
+                notAvailable
               )
             }
           />
           <MovieInfo
-            label="Countries"
+            label={t("movie.countries")}
             value={
-              movie?.production_countries?.map((c) => c.name).join(" • ") ||
-              "N/A"
+              movie?.production_countries
+                ?.map((country) => country.name)
+                .join(" • ") || notAvailable
             }
+            notAvailable={notAvailable}
           />
+
           <MovieInfo
-            label="Tagline"
-            value={movie?.tagline || "No tagline available"}
+            label={t("movie.tagline")}
+            value={movie?.tagline || t("movie.noTaglineAvailable")}
+            notAvailable={notAvailable}
           />
-          <View className="flex flex-row gap-[50px] ">
+          <View className="flex flex-row gap-[50px]">
             <MovieInfo
-              label="Budget"
-              value={`$${movie?.budget / 1_000_000}million`}
+              label={t("movie.budget")}
+              value={formatMoney(movie?.budget)}
+              notAvailable={notAvailable}
             />
+
             <MovieInfo
-              label="Revenue"
-              value={`$${Math.round(movie?.revenue) / 1_000_000}million`}
+              label={t("movie.revenue")}
+              value={formatMoney(movie?.revenue)}
+              notAvailable={notAvailable}
             />
           </View>
           <MovieInfo
-            label="Production Companies"
+            label={t("movie.productionCompanies")}
             value={
-              movie?.production_companies?.map((c) => c.name).join(" • ") ||
-              "N/A"
+              movie?.production_companies
+                ?.map((company) => company.name)
+                .join(" • ") || notAvailable
             }
+            notAvailable={notAvailable}
           />
         </View>
       </ScrollView>
@@ -193,7 +280,10 @@ const MovieDetails = () => {
           className="size-5 mr-1 mt-0.5 rotate-180"
           tintColor="#fff"
         />
-        <Text className="text-white font-semibold text-base">Go back</Text>
+        <Text className="text-white font-semibold text-base">
+          {" "}
+          {t("movie.goBack")}
+        </Text>
       </TouchableOpacity>
     </View>
   );
