@@ -89,5 +89,11 @@
     "watching": "보는 중",
     "completed": "완료",
     "planToWatch": "볼 예정"
+  },
+  "search": {
+    "placeholder": "온라인에서 300개 이상의 영화를 검색하세요",
+    "resultFor": "검색 결과:",
+    "noMoviesFound": "영화를 찾을 수 없습니다",
+    "searchForMovie": "영화를 검색하세요"
   }
 }

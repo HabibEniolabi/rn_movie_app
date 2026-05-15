@@ -89,5 +89,11 @@
     "watching": "Assistindo",
     "completed": "Concluídos",
     "planToWatch": "Para assistir"
+  },
+  "search": {
+    "placeholder": "Pesquise entre mais de 300 filmes online",
+    "resultFor": "Resultado da busca por",
+    "noMoviesFound": "Nenhum filme encontrado",
+    "searchForMovie": "Pesquise um filme"
   }
 }

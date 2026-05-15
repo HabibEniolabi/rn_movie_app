@@ -89,5 +89,11 @@
     "watching": "Aktuell",
     "completed": "Abgeschlossen",
     "planToWatch": "Geplant"
+  },
+  "search": {
+    "placeholder": "Durchsuche über 300 Filme online",
+    "resultFor": "Suchergebnis für",
+    "noMoviesFound": "Keine Filme gefunden",
+    "searchForMovie": "Nach einem Film suchen"
   }
 }

@@ -89,5 +89,11 @@
     "watching": "Viendo",
     "completed": "Completadas",
     "planToWatch": "Por ver"
+  },
+  "search": {
+    "placeholder": "Busca entre más de 300 películas en línea",
+    "resultFor": "Resultado de búsqueda para",
+    "noMoviesFound": "No se encontraron películas",
+    "searchForMovie": "Busca una película"
   }
 }

@@ -89,5 +89,11 @@
     "watching": "En cours",
     "completed": "Terminés",
     "planToWatch": "À regarder"
+  },
+  "search": {
+    "placeholder": "Rechercher parmi plus de 300 films en ligne",
+    "resultFor": "Résultat de recherche pour",
+    "noMoviesFound": "Aucun film trouvé",
+    "searchForMovie": "Rechercher un film"
   }
 }

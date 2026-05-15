@@ -89,5 +89,11 @@
     "watching": "Watching",
     "completed": "Completed",
     "planToWatch": "Plan to Watch"
+  },
+  "search": {
+    "placeholder": "Search through 300+ movies online",
+    "resultFor": "Search result for",
+    "noMoviesFound": "No movies found",
+    "searchForMovie": "Search for a movie"
   }
 }

@@ -89,5 +89,11 @@
     "watching": "قيد المشاهدة",
     "completed": "مكتملة",
     "planToWatch": "أخطط للمشاهدة"
+  },
+  "search": {
+    "placeholder": "ابحث في أكثر من 300 فيلم عبر الإنترنت",
+    "resultFor": "نتيجة البحث عن",
+    "noMoviesFound": "لم يتم العثور على أفلام",
+    "searchForMovie": "ابحث عن فيلم"
   }
 }
