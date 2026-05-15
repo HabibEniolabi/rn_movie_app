@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import Feather from "react-native-vector-icons/Feather";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const LanguageCard = ({
   item,
@@ -17,6 +18,8 @@ const LanguageCard = ({
   selected: boolean;
   onPress: () => void;
 }) => {
+  const { t } = useTranslation();
+
   return (
     <TouchableOpacity activeOpacity={0.85} onPress={onPress} className="mb-3">
       <LinearGradient
@@ -38,7 +41,7 @@ const LanguageCard = ({
 
             <View className="flex-1">
               <Text className="text-white text-[22px] font-bold">
-                {item.name}
+                {t(item.name)}
               </Text>
 
               <Text className="text-[#7A7699] text-[18px] font-semibold mt-1">

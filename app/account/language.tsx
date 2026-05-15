@@ -5,6 +5,8 @@ import {
   Alert,
   TextInput,
   FlatList,
+  Modal,
+  Pressable,
 } from "react-native";
 import React, { useMemo, useState } from "react";
 import { router } from "expo-router";
@@ -12,17 +14,31 @@ import Feather from "react-native-vector-icons/Feather";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
 
-import i18n, { changeAppLanguage } from "@/interfaces/i18n";
+import i18n, {
+  changeAppLanguage,
+  getValidLanguage,
+  supportedLanguages,
+} from "@/interfaces/i18n";
 import { LANGUAGES } from "@/services/languages";
 import LanguageCard from "@/components/LanguageCard";
 
 const Language = () => {
   const { t } = useTranslation();
 
-  const currentLanguage = i18n.language || "en";
+  const currentLanguage = getValidLanguage(i18n.language);
 
   const [search, setSearch] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage);
+
+  const [customAlert, setCustomAlert] = useState<{
+      visible: boolean;
+      title: string;
+      message: string;
+    }>({
+      visible: false,
+      title: "",
+      message: "",
+    });
 
   const currentLanguageData = LANGUAGES.find(
     (item) => item.code === currentLanguage
@@ -34,15 +50,19 @@ const Language = () => {
     const searchValue = search.trim().toLowerCase();
 
     return LANGUAGES.filter((item) => {
+      const isSupported = supportedLanguages.includes(item.code);
       const isNotCurrent = item.code !== currentLanguage;
 
-      const matchesSearch =
-        item.name.toLowerCase().includes(searchValue) ||
-        item.nativeName.toLowerCase().includes(searchValue);
+      const translatedName = t(item.name).toLowerCase();
+      const nativeName = item.nativeName.toLowerCase();
 
-      return isNotCurrent && matchesSearch;
+      const matchesSearch =
+        translatedName.includes(searchValue) ||
+        nativeName.includes(searchValue);
+
+      return isSupported && isNotCurrent && matchesSearch;
     });
-  }, [search, currentLanguage]);
+  }, [search, currentLanguage, t]);
 
   const handleApplyLanguage = async () => {
     if (!hasLanguageChanged) {
@@ -53,10 +73,18 @@ const Language = () => {
     try {
       await changeAppLanguage(selectedLanguage);
 
-      Alert.alert("Success", "Language updated successfully");
-      router.back();
-    } catch {
-      Alert.alert("Error", "Could not update language. Please try again.");
+      setCustomAlert({
+        visible: true,
+        title: t("done"),
+        message: t("languageUpdated"),
+      });
+    } catch (error) {
+      console.log("Language change error:", error);
+      setCustomAlert({
+        visible: true,
+        title: "Error",
+        message: t("couldNotUpdateLanguage"),
+      });
     }
   };
 
@@ -122,7 +150,7 @@ const Language = () => {
         )}
         ListEmptyComponent={
           <Text className="text-[#8B88A8] text-[16px] text-center mt-8">
-            No language found
+            {t("noLanguageFound")}
           </Text>
         }
         contentContainerStyle={{
@@ -149,11 +177,40 @@ const Language = () => {
             }}
           >
             <Text className="text-white text-[24px] font-bold">
-              {hasLanguageChanged ? t("applyLanguage") : "Done"}
+              {hasLanguageChanged ? t("applyLanguage") : t("done")}
             </Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
+      <Modal
+        visible={customAlert.visible}
+        transparent
+        animationType="fade"
+        onRequestClose={() =>
+          setCustomAlert((prev) => ({ ...prev, visible: false }))
+        }
+      >
+        <View className="flex-1 bg-black/60 items-center justify-center px-6">
+          <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
+            <Text className="text-white text-2xl font-bold text-center">
+              {customAlert.title}
+            </Text>
+
+            <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
+              {customAlert.message}
+            </Text>
+
+            <Pressable
+              onPress={() =>
+                setCustomAlert((prev) => ({ ...prev, visible: false }))
+              }
+              className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
+            >
+              <Text className="text-white font-bold text-lg">Okay</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

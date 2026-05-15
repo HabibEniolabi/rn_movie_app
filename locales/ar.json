@@ -1,0 +1,20 @@
+{
+  "language": "اللغة",
+  "searchLanguage": "ابحث عن اللغة...",
+  "current": "الحالية",
+  "allLanguages": "كل اللغات",
+  "applyLanguage": "تطبيق اللغة",
+  "done": "تم",
+  "noLanguageFound": "لم يتم العثور على لغة",
+  "languageUpdated": "تم تحديث اللغة بنجاح",
+  "couldNotUpdateLanguage": "تعذر تحديث اللغة. يرجى المحاولة مرة أخرى.",
+
+  "english": "الإنجليزية",
+  "french": "الفرنسية",
+  "spanish": "الإسبانية",
+  "german": "الألمانية",
+  "portuguese": "البرتغالية",
+  "japanese": "اليابانية",
+  "korean": "الكورية",
+  "arabic": "العربية"
+}

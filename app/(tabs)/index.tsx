@@ -16,8 +16,10 @@ import MovieCard from "@/components/MovieCard";
 import { getTrendingMovies } from "@/services/appwrite";
 import TrendingCard from "@/components/TrendingCard";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useTranslation } from "react-i18next";
 
 export default function Index() {
+  const { t } = useTranslation();
   const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -58,7 +60,7 @@ export default function Index() {
             {trendingMovies && (
               <View className="mt-10">
                 <Text className="text-lg text-white font-bold mt-5 mb-3">
-                  Trending Movies
+                  {t("trendingMovies")}
                 </Text>
                 <FlatList
                   className="mb-4 mt-3"
@@ -76,7 +78,7 @@ export default function Index() {
 
             <>
               <Text className="text-lg text-white font-bold mt-5 mb-3">
-                Latest movies
+                {t("latestMovies")}
               </Text>
               <FlatList
                 data={movies}

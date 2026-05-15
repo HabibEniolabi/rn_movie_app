@@ -1,0 +1,20 @@
+{
+  "language": "Sprache",
+  "searchLanguage": "Sprache suchen...",
+  "current": "Aktuell",
+  "allLanguages": "Alle Sprachen",
+  "applyLanguage": "Sprache anwenden",
+  "done": "Fertig",
+  "noLanguageFound": "Keine Sprache gefunden",
+  "languageUpdated": "Sprache erfolgreich aktualisiert",
+  "couldNotUpdateLanguage": "Sprache konnte nicht aktualisiert werden. Bitte versuche es erneut.",
+
+  "english": "Englisch",
+  "french": "Französisch",
+  "spanish": "Spanisch",
+  "german": "Deutsch",
+  "portuguese": "Portugiesisch",
+  "japanese": "Japanisch",
+  "korean": "Koreanisch",
+  "arabic": "Arabisch"
+}

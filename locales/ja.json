@@ -1,0 +1,20 @@
+{
+  "language": "言語",
+  "searchLanguage": "言語を検索...",
+  "current": "現在",
+  "allLanguages": "すべての言語",
+  "applyLanguage": "言語を適用",
+  "done": "完了",
+  "noLanguageFound": "言語が見つかりません",
+  "languageUpdated": "言語が正常に更新されました",
+  "couldNotUpdateLanguage": "言語を更新できませんでした。もう一度お試しください。",
+
+  "english": "英語",
+  "french": "フランス語",
+  "spanish": "スペイン語",
+  "german": "ドイツ語",
+  "portuguese": "ポルトガル語",
+  "japanese": "日本語",
+  "korean": "韓国語",
+  "arabic": "アラビア語"
+}

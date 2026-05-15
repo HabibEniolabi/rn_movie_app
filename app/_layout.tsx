@@ -1,13 +1,24 @@
 import { Stack } from "expo-router";
 import "./globals.css";
-import { loadSavedLanguage } from '../interfaces/i18n';
-import { useEffect } from "react";
-
+import { loadSavedLanguage } from "../interfaces/i18n";
+import { useEffect, useState } from "react";
 
 export default function RootLayout() {
+  const [languageReady, setLanguageReady] = useState(false);
+  
   useEffect(() => {
-    loadSavedLanguage();
+    const setupLanguage = async () => {
+      await loadSavedLanguage();
+      setLanguageReady(true);
+    };
+
+    setupLanguage();
   }, []);
+
+  if (!languageReady) {
+    return null;
+  }
+
   return (
     <>
       <Stack>
