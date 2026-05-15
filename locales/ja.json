@@ -95,5 +95,11 @@
     "resultFor": "検索結果:",
     "noMoviesFound": "映画が見つかりません",
     "searchForMovie": "映画を検索"
+  },
+  "movie": {
+    "notAvailable": "該当なし",
+    "reviewCount": "({{count}}件のレビュー)",
+    "noTitleAvailable": "タイトルがありません",
+    "unknownYear": "不明な年"
   }
 }

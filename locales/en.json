@@ -95,5 +95,11 @@
     "resultFor": "Search result for",
     "noMoviesFound": "No movies found",
     "searchForMovie": "Search for a movie"
-  }
+  },
+  "movie": {
+  "notAvailable": "N/A",
+  "reviewCount": "({{count}} reviews)",
+  "noTitleAvailable": "No title available",
+  "unknownYear": "Unknown year"
+}
 }

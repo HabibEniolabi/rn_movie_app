@@ -1,7 +1,7 @@
 import GenreTabs from "@/components/GenreTabs";
 import { icons } from "@/constants/icons";
 import { getSavedMovies, SavedMovie } from "@/services/appwrite";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -13,6 +13,9 @@ import Octicons from "react-native-vector-icons/Octicons";
 import SaveCard from "@/components/SaveCard";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
+import i18n from "@/interfaces/i18n";
+import { useFocusEffect } from "expo-router";
+import { fetchMovieDetails } from "@/services/api";
 
 const Saved = () => {
   const { t } = useTranslation();
@@ -24,25 +27,60 @@ const Saved = () => {
 
   const tabBarHeight = useBottomTabBarHeight();
 
-  useEffect(() => {
-    fetchSavedMovies();
-  }, []);
+  // useEffect(() => {
+  //   fetchSavedMovies();
+  // }, [i18n.language]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchSavedMovies();
+    }, [i18n.language])
+  );
 
   const fetchSavedMovies = async () => {
     try {
-      const movies = await getSavedMovies();
-      setSavedMovies(movies);
+      setLoading(true);
 
-      // Split into recent (last 7 days) and older
+      const saved = await getSavedMovies();
+
+      const localizedMovies = await Promise.all(
+        saved.map(async (movie) => {
+          try {
+            const details = await fetchMovieDetails(movie.movieId);
+
+            return {
+              ...movie,
+              title: details.title || movie.title,
+              posterPath: details.poster_path || movie.posterPath,
+              releaseDate: details.release_date || movie.releaseDate,
+              voteAverage: details.vote_average ?? movie.voteAverage,
+              overview: details.overview || movie.overview,
+              runtime: details.runtime
+                ? `${details.runtime} mins`
+                : movie.runtime,
+              reviewCount: details.vote_count
+                ? `${details.vote_count} reviews`
+                : movie.reviewCount,
+              genres: details.genres?.length
+                ? details.genres.map((genre) => genre.name).join(",")
+                : movie.genres,
+            };
+          } catch (error) {
+            return movie;
+          }
+        })
+      );
+
+      setSavedMovies(localizedMovies);
+
       const now = new Date();
       const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-      const recent = movies.filter((movie) => {
+      const recent = localizedMovies.filter((movie) => {
         const createdDate = new Date(movie.$createdAt);
         return createdDate > sevenDaysAgo;
       });
 
-      const older = movies.filter((movie) => {
+      const older = localizedMovies.filter((movie) => {
         const createdDate = new Date(movie.$createdAt);
         return createdDate <= sevenDaysAgo;
       });
@@ -50,6 +88,7 @@ const Saved = () => {
       setRecentMovies(recent);
       setOlderMovies(older);
     } catch (error) {
+      console.log("Failed to fetch saved movies:", error);
     } finally {
       setLoading(false);
     }

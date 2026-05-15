@@ -95,5 +95,11 @@
     "resultFor": "نتيجة البحث عن",
     "noMoviesFound": "لم يتم العثور على أفلام",
     "searchForMovie": "ابحث عن فيلم"
+  },
+  "movie": {
+    "notAvailable": "غير متاح",
+    "reviewCount": "({{count}} مراجعة)",
+    "noTitleAvailable": "لا يوجد عنوان متاح",
+    "unknownYear": "سنة غير معروفة"
   }
 }

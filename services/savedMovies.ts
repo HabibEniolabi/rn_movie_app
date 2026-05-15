@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import i18n from "@/interfaces/i18n";
 
 const SAVED_MOVIES_KEY = "savedMovies";
 

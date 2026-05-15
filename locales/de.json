@@ -95,5 +95,11 @@
     "resultFor": "Suchergebnis für",
     "noMoviesFound": "Keine Filme gefunden",
     "searchForMovie": "Nach einem Film suchen"
+  },
+  "movie": {
+    "notAvailable": "Nicht verfügbar",
+    "reviewCount": "({{count}} Bewertungen)",
+    "noTitleAvailable": "Kein Titel verfügbar",
+    "unknownYear": "Unbekanntes Jahr"
   }
 }

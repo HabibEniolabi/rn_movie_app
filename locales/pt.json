@@ -95,5 +95,11 @@
     "resultFor": "Resultado da busca por",
     "noMoviesFound": "Nenhum filme encontrado",
     "searchForMovie": "Pesquise um filme"
+  },
+  "movie": {
+    "notAvailable": "N/D",
+    "reviewCount": "({{count}} avaliações)",
+    "noTitleAvailable": "Nenhum título disponível",
+    "unknownYear": "Ano desconhecido"
   }
 }

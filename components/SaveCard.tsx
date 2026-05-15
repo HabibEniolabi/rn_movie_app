@@ -4,6 +4,7 @@ import { SavedMovie } from "@/services/appwrite";
 import { removeFavorite } from "@/services/appwrite";
 import { icons } from "@/constants/icons";
 import Entypo from "react-native-vector-icons/Entypo";
+import { useTranslation } from "react-i18next";
 
 interface SaveCardProps {
   movie: SavedMovie;
@@ -21,6 +22,8 @@ const formatReviewCount = (count: number): string => {
 };
 
 const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
+  const { t } = useTranslation();
+
   const [isClicked, setIsClicked] = useState(true);
   const handleRemove = async () => {
     try {
@@ -50,6 +53,13 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
     ? parseInt(movie.reviewCount.replace(/[^0-9]/g, "")) || 0
     : 0;
 
+    const runtimeLabel =
+    runtimeMinutes > 0
+      ? `${Math.floor(runtimeMinutes / 60)}h${
+          runtimeMinutes % 60 ? ` ${runtimeMinutes % 60}m` : ""
+        }`
+      : t("movie.notAvailable");
+
   return (
     <View className="flex-row gap-1 bg-dark-300 rounded-[22px] p-3 mb-4 items-center justify-center border-dark-400 border">
       <Image
@@ -60,18 +70,14 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
         resizeMode="contain"
       />
       <View className="flex-1">
-        <Text className="font-bold text-lg text-white">{movie.title}</Text>
-        <View className="flex-row item-center mt-2">
+        <Text className="font-bold text-lg text-white">{movie.title || t("movie.noTitleAvailable")}</Text>
+        <View className="flex-row items-center mt-2">
           <Text className="text-light-200 text-sm">
-            {movie?.releaseDate?.split("-")[0]}
+            {movie.releaseDate?.split("-")[0] || t("movie.unknownYear")}
           </Text>
           <Text className="text-light-200 text-sm mx-2">•</Text>
           <Text className="text-light-200 text-sm">
-            {runtimeMinutes > 0
-              ? `${Math.floor(runtimeMinutes / 60)}h${
-                  runtimeMinutes % 60 ? ` ${runtimeMinutes % 60}m` : ""
-                }`
-              : "N/A"}
+            {runtimeLabel}
           </Text>
         </View>
         <View className="flex-row item-center gap-x-1 mt-2">
@@ -80,7 +86,9 @@ const SaveCard = ({ movie, onRemove }: SaveCardProps) => {
             {(movie?.voteAverage ?? 0).toFixed(1)}/10
           </Text>
           <Text className="text-light-200 text-sm">
-            ({formatReviewCount(reviewCountNumber)} reviews)
+            {t("movie.reviewCount", {
+              count: formatReviewCount(reviewCountNumber),
+            })}
           </Text>
         </View>
         {genreList.length > 0 && (

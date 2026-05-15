@@ -96,27 +96,20 @@ export const getExistingFavorite = async (movieId: number | string) => {
 
 export const saveFavorite = async (movie: Movie | MovieDetails) => {
   try {
-    console.log("🟡 Starting saveFavorite for:", movie.title);
-    
     const firebaseUser = FIREBASE_AUTH.currentUser;
-    
-    console.log("🟡 Firebase user:", firebaseUser?.uid);
-    
+
     if (!firebaseUser) {
       console.log("❌ No Firebase user found");
       throw new Error("User not authenticated");
     }
 
     const existingFavorite = await getExistingFavorite(movie.id);
-    console.log("🟡 Existing favorite:", existingFavorite);
 
     if (existingFavorite) {
       console.log("✅ Already favorited");
       return existingFavorite;
     }
 
-    console.log("🟡 Creating document in Appwrite...");
-    
     const result = await database.createDocument(
       DATABASE_ID,
       FAVORITES_COLLECTION_ID,
@@ -129,16 +122,20 @@ export const saveFavorite = async (movie: Movie | MovieDetails) => {
         releaseDate: movie.release_date ?? "",
         voteAverage: movie.vote_average ?? 0,
         overview: movie.overview ?? "",
-        runtime: "runtime" in movie ? `${movie.runtime} mins` : "",
+        runtime:
+          "runtime" in movie && movie.runtime
+            ? `${movie.runtime} mins`
+            : "",
         reviewCount: movie.vote_count ? `${movie.vote_count} reviews` : "",
-        genres: 
-          "genres" in movie
+        genres:
+          "genres" in movie && Array.isArray(movie.genres)
             ? movie.genres.map((genre) => genre.name).join(",")
             : "",
       }
     );
 
     console.log("✅ Favorite saved:", result);
+
     return result as unknown as SavedMovie;
   } catch (error) {
     console.error("❌ Error saving favorite:", error);
