@@ -50,5 +50,30 @@
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
     "arabicNative": "العربية"
+  },
+  "profile": {
+    "title": "Profil",
+    "favouriteGenres": "Lieblingsgenres",
+    "account": "Konto",
+    "editProfile": "Profil bearbeiten",
+    "editProfileSubtitle": "Aktualisiere deinen Namen und Avatar",
+    "subscription": "Abonnement",
+    "subscriptionSubtitle": "Pro-Plan · Verlängert sich im Januar 2026",
+    "notifications": "Benachrichtigungen",
+    "notificationsSubtitle": "Neue Veröffentlichungen und Erinnerungen",
+    "language": "Sprache",
+    "languageSubtitle": "Deutsch",
+    "signOut": "Abmelden",
+    "signOutFailed": "Abmeldung fehlgeschlagen",
+    "defaultFullName": "Benutzer",
+    "defaultUsername": "benutzer"
+  },
+  "genres": {
+    "action": "Action",
+    "sciFi": "Science-Fiction",
+    "thriller": "Thriller",
+    "animation": "Animation",
+    "drama": "Drama",
+    "horror": "Horror"
   }
 }

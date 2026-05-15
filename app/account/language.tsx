@@ -75,7 +75,7 @@ const Language = () => {
 
       setCustomAlert({
         visible: true,
-        title: t("done"),
+        title: t("common.done"),
         message: t("languageUpdated"),
       });
       router.back();
@@ -83,7 +83,7 @@ const Language = () => {
       console.log("Language change error:", error);
       setCustomAlert({
         visible: true,
-        title: "Error",
+        title: t("common.error"),
         message: t("couldNotUpdateLanguage"),
       });
     }
@@ -207,7 +207,7 @@ const Language = () => {
               }
               className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
             >
-              <Text className="text-white font-bold text-lg">Okay</Text>
+              <Text className="text-white font-bold text-lg">{t("common.okay")}</Text>
             </Pressable>
           </View>
         </View>

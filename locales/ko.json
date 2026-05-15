@@ -50,5 +50,30 @@
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
     "arabicNative": "العربية"
+  },
+  "profile": {
+    "title": "프로필",
+    "favouriteGenres": "좋아하는 장르",
+    "account": "계정",
+    "editProfile": "프로필 수정",
+    "editProfileSubtitle": "이름과 아바타를 업데이트하세요",
+    "subscription": "구독",
+    "subscriptionSubtitle": "Pro 플랜 · 2026년 1월 갱신",
+    "notifications": "알림",
+    "notificationsSubtitle": "신작 및 알림",
+    "language": "언어",
+    "languageSubtitle": "한국어",
+    "signOut": "로그아웃",
+    "signOutFailed": "로그아웃 실패",
+    "defaultFullName": "사용자",
+    "defaultUsername": "user"
+  },
+  "genres": {
+    "action": "액션",
+    "sciFi": "SF",
+    "thriller": "스릴러",
+    "animation": "애니메이션",
+    "drama": "드라마",
+    "horror": "공포"
   }
 }

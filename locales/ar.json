@@ -50,5 +50,30 @@
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
     "arabicNative": "العربية"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "favouriteGenres": "الأنواع المفضلة",
+    "account": "الحساب",
+    "editProfile": "تعديل الملف الشخصي",
+    "editProfileSubtitle": "حدّث اسمك وصورتك الشخصية",
+    "subscription": "الاشتراك",
+    "subscriptionSubtitle": "خطة Pro · تتجدد في يناير 2026",
+    "notifications": "الإشعارات",
+    "notificationsSubtitle": "الإصدارات الجديدة والتذكيرات",
+    "language": "اللغة",
+    "languageSubtitle": "العربية",
+    "signOut": "تسجيل الخروج",
+    "signOutFailed": "فشل تسجيل الخروج",
+    "defaultFullName": "مستخدم",
+    "defaultUsername": "user"
+  },
+  "genres": {
+    "action": "أكشن",
+    "sciFi": "خيال علمي",
+    "thriller": "إثارة",
+    "animation": "رسوم متحركة",
+    "drama": "دراما",
+    "horror": "رعب"
   }
 }

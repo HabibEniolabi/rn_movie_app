@@ -50,5 +50,30 @@
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
     "arabicNative": "العربية"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "favouriteGenres": "お気に入りジャンル",
+    "account": "アカウント",
+    "editProfile": "プロフィールを編集",
+    "editProfileSubtitle": "名前とアバターを更新",
+    "subscription": "サブスクリプション",
+    "subscriptionSubtitle": "Proプラン · 2026年1月に更新",
+    "notifications": "通知",
+    "notificationsSubtitle": "新作とリマインダー",
+    "language": "言語",
+    "languageSubtitle": "日本語",
+    "signOut": "サインアウト",
+    "signOutFailed": "サインアウトに失敗しました",
+    "defaultFullName": "ユーザー",
+    "defaultUsername": "user"
+  },
+  "genres": {
+    "action": "アクション",
+    "sciFi": "SF",
+    "thriller": "スリラー",
+    "animation": "アニメーション",
+    "drama": "ドラマ",
+    "horror": "ホラー"
   }
 }

@@ -50,5 +50,30 @@
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
     "arabicNative": "العربية"
+  },
+  "profile": {
+    "title": "Perfil",
+    "favouriteGenres": "Gêneros favoritos",
+    "account": "Conta",
+    "editProfile": "Editar perfil",
+    "editProfileSubtitle": "Atualize seu nome e avatar",
+    "subscription": "Assinatura",
+    "subscriptionSubtitle": "Plano Pro · Renova em janeiro de 2026",
+    "notifications": "Notificações",
+    "notificationsSubtitle": "Novos lançamentos e lembretes",
+    "language": "Idioma",
+    "languageSubtitle": "Português",
+    "signOut": "Sair",
+    "signOutFailed": "Falha ao sair",
+    "defaultFullName": "Usuário",
+    "defaultUsername": "usuario"
+  },
+  "genres": {
+    "action": "Ação",
+    "sciFi": "Ficção científica",
+    "thriller": "Suspense",
+    "animation": "Animação",
+    "drama": "Drama",
+    "horror": "Terror"
   }
 }

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import { images } from "@/constants/images";
@@ -20,56 +20,19 @@ import { FIREBASE_AUTH, FIREBASE_DB } from "@/FirebaseConfig";
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { useTranslation } from "react-i18next";
 
 const favouriteGenres = [
-  { id: 1, name: "Action" },
-  { id: 2, name: "Sci-Fi" },
-  { id: 3, name: "Thriller" },
-  { id: 4, name: "Animation" },
-  { id: 5, name: "Drama" },
-  { id: 6, name: "Horror" },
-];
-
-const profileItems = [
-  {
-    id: 1,
-    icon: <Image source={images.user} className="w-[22px] h-[22px]" />,
-    iconBgClass: "#281E43",
-    title: "edit profile",
-    subtitle: "Update your name & avatar",
-    rightType: "chevron" as const,
-    onPress: () => {}
-  },
-  {
-    id: 2,
-    icon: <Image source={images.diamond} className="w-[22px] h-[22px]" />,
-    iconBgClass: "#321A37",
-    title: "subscription",
-    subtitle: "Pro Plan · Renews Jan 2026",
-    rightType: "chevron" as const,
-    onPress: () => router.push("/onboarding/plan-comparison")
-  },
-  {
-    id: 3,
-    icon: <Image source={images.bell} className="w-[22px] h-[22px]" />,
-    iconBgClass: "#352E2B",
-    title: "notifications",
-    subtitle: "New releases & reminders",
-    rightType: "toggle" as const,
-    onPress: () => {}
-  },
-  {
-    id: 4,
-    icon: <Image source={images.internet} className="w-[22px] h-[22px]" />,
-    iconBgClass: "#172731",
-    title: "language",
-    subtitle: "English (US)",
-    rightType: "chevron" as const,
-    onPress: () => router.push("/account/language")
-  },
+  { id: 1, name: "genres.action" },
+  { id: 2, name: "genres.sciFi" },
+  { id: 3, name: "genres.thriller" },
+  { id: 4, name: "genres.animation" },
+  { id: 5, name: "genres.drama" },
+  { id: 6, name: "genres.horror" },
 ];
 
 const Profile = () => {
+  const { t } = useTranslation();
   const tabBarHeight = useBottomTabBarHeight();
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
@@ -84,27 +47,86 @@ const Profile = () => {
     message: "",
   });
 
+  const translatedFavouriteGenres = useMemo(() => {
+    return favouriteGenres.map((genre) => ({
+      id: genre.id,
+      name: t(genre.name),
+    }));
+  }, [t]);
+
+  const profileItems = useMemo(
+    () => [
+      {
+        id: 1,
+        icon: <Image source={images.user} className="w-[22px] h-[22px]" />,
+        iconBgClass: "#281E43",
+        title: t("profile.editProfile"),
+        subtitle: t("profile.editProfileSubtitle"),
+        rightType: "chevron" as const,
+        onPress: () => {},
+      },
+      {
+        id: 2,
+        icon: <Image source={images.diamond} className="w-[22px] h-[22px]" />,
+        iconBgClass: "#321A37",
+        title: t("profile.subscription"),
+        subtitle: t("profile.subscriptionSubtitle"),
+        rightType: "chevron" as const,
+        onPress: () => router.push("/onboarding/plan-comparison"),
+      },
+      {
+        id: 3,
+        icon: <Image source={images.bell} className="w-[22px] h-[22px]" />,
+        iconBgClass: "#352E2B",
+        title: t("profile.notifications"),
+        subtitle: t("profile.notificationsSubtitle"),
+        rightType: "toggle" as const,
+        onPress: () => {},
+      },
+      {
+        id: 4,
+        icon: <Image source={images.internet} className="w-[22px] h-[22px]" />,
+        iconBgClass: "#172731",
+        title: t("profile.language"),
+        subtitle: t("profile.languageSubtitle"),
+        rightType: "chevron" as const,
+        onPress: () => router.push("/account/language"),
+      },
+    ],
+    [t]
+  );
+
   useEffect(() => {
     const fetchProfile = async () => {
-    const user = FIREBASE_AUTH.currentUser;
+      const user = FIREBASE_AUTH.currentUser;
 
-    if (!user) return;
+      if (!user) return;
 
-    const userDoc = await getDoc(doc(FIREBASE_DB, "users", user.uid));
+      const userDoc = await getDoc(doc(FIREBASE_DB, "users", user.uid));
 
-    if (userDoc.exists()) {
-      const data = userDoc.data();
+      if (userDoc.exists()) {
+        const data = userDoc.data();
 
-      setFullName(data.fullName || user.displayName || "User");
-      setUsername(`@${data.firstName?.toLowerCase() || "user"}_movies`);
-    } else {
-      setFullName(user.displayName || "User");
-      setUsername(`@${user.email?.split("@")[0] || "user"}`);
-    }
-  };
+        setFullName(
+          data.fullName || user.displayName || t("profile.defaultFullName")
+        );
 
-  fetchProfile();
-  }, []);
+        setUsername(
+          `@${
+            data.firstName?.toLowerCase() || t("profile.defaultUsername")
+          }_movies`
+        );
+      } else {
+        setFullName(user.displayName || t("profile.defaultFullName"));
+
+        setUsername(
+          `@${user.email?.split("@")[0] || t("profile.defaultUsername")}`
+        );
+      }
+    };
+
+    fetchProfile();
+  }, [t]);
 
   const handleSignOut = async () => {
     try {
@@ -113,10 +135,11 @@ const Profile = () => {
       router.replace("/login");
     } catch (error: any) {
       console.log("Sign out error:", error);
+
       setCustomAlert({
         visible: true,
-        title: "Sign out failed",
-        message: error?.message || "Something went wrong. Please try again.",
+        title: t("profile.signOutFailed"),
+        message: error?.message || t("common.somethingWentWrong"),
       });
     }
   };
@@ -124,7 +147,9 @@ const Profile = () => {
   return (
     <View className="bg-primary flex-1 px-10">
       <View className="flex justify-between mt-16 mb-2 items-center flex-row">
-        <Text className="text-white font-bold text-[24px]">Profile</Text>
+        <Text className="text-white font-bold text-[24px]">
+          {t("profile.title")}
+        </Text>
         <View className="flex items-center bg-dark-300 border-dark-400 border p-3 rounded-md">
           <TouchableOpacity>
             <Octicons name={"gear"} size={18} color="#8B88A8" />
@@ -155,12 +180,14 @@ const Profile = () => {
       >
         <View className="flex flex-col mt-6">
           <Text className="text-dark-500 font-bold uppercase">
-            Favourite Genres
+            {t("profile.favouriteGenres")}
           </Text>
-          <Genre genres={favouriteGenres} />
+          <Genre genres={translatedFavouriteGenres} />
         </View>
         <View className="flex flex-col gap-6 mt-6">
-          <Text className="text-dark-500 font-bold uppercase">Account</Text>
+          <Text className="text-dark-500 font-bold uppercase">
+            {t("profile.account")}
+          </Text>
           <View className="gap-1">
             {profileItems.map((item) => (
               <ProfileCardNavigation
@@ -186,7 +213,9 @@ const Profile = () => {
           </View>
           <TouchableOpacity activeOpacity={0.8} onPress={handleSignOut}>
             <View className="border border-[#7A1B68] bg-[#2B1230] justify-center items-center rounded-[14px]">
-              <Text className="text-[#F07CD6] font-bold p-5">Sign Out</Text>
+              <Text className="text-[#F07CD6] font-bold p-5">
+                {t("profile.signOut")}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -215,7 +244,7 @@ const Profile = () => {
               }
               className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
             >
-              <Text className="text-white font-bold text-lg">Okay</Text>
+              <Text className="text-white font-bold text-lg">{t("common.okay")}</Text>
             </Pressable>
           </View>
         </View>

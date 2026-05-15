@@ -50,5 +50,30 @@
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
     "arabicNative": "العربية"
+  },
+  "profile": {
+    "title": "Profile",
+    "favouriteGenres": "Favourite Genres",
+    "account": "Account",
+    "editProfile": "Edit Profile",
+    "editProfileSubtitle": "Update your name & avatar",
+    "subscription": "Subscription",
+    "subscriptionSubtitle": "Pro Plan · Renews Jan 2026",
+    "notifications": "Notifications",
+    "notificationsSubtitle": "New releases & reminders",
+    "language": "Language",
+    "languageSubtitle": "English (US)",
+    "signOut": "Sign Out",
+    "signOutFailed": "Sign out failed",
+    "defaultFullName": "User",
+    "defaultUsername": "user"
+  },
+  "genres": {
+    "action": "Action",
+    "sciFi": "Sci-Fi",
+    "thriller": "Thriller",
+    "animation": "Animation",
+    "drama": "Drama",
+    "horror": "Horror"
   }
 }

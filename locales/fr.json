@@ -50,5 +50,30 @@
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
     "arabicNative": "العربية"
+  },
+  "profile": {
+    "title": "Profil",
+    "favouriteGenres": "Genres favoris",
+    "account": "Compte",
+    "editProfile": "Modifier le profil",
+    "editProfileSubtitle": "Mettez à jour votre nom et votre avatar",
+    "subscription": "Abonnement",
+    "subscriptionSubtitle": "Forfait Pro · Renouvellement en janvier 2026",
+    "notifications": "Notifications",
+    "notificationsSubtitle": "Nouveautés et rappels",
+    "language": "Langue",
+    "languageSubtitle": "Français",
+    "signOut": "Se déconnecter",
+    "signOutFailed": "Échec de la déconnexion",
+    "defaultFullName": "Utilisateur",
+    "defaultUsername": "utilisateur"
+  },
+  "genres": {
+    "action": "Action",
+    "sciFi": "Science-fiction",
+    "thriller": "Thriller",
+    "animation": "Animation",
+    "drama": "Drame",
+    "horror": "Horreur"
   }
 }
