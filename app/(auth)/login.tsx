@@ -21,6 +21,7 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 const socialButton = [
   {
@@ -34,6 +35,7 @@ const socialButton = [
 ];
 
 const Login = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -52,19 +54,25 @@ const Login = () => {
   const getLoginErrorMessage = (errorCode?: string) => {
     switch (errorCode) {
       case "auth/invalid-email":
-        return "Please enter a valid email address.";
+        return t("auth.invalidEmail");
+
       case "auth/user-not-found":
-        return "No account found with this email.";
+        return t("auth.noAccountFound");
+
       case "auth/wrong-password":
-        return "Incorrect password. Please try again.";
+        return t("auth.incorrectPassword");
+
       case "auth/invalid-credential":
-        return "Invalid email or password. Please try again.";
+        return t("auth.invalidEmailOrPassword");
+
       case "auth/too-many-requests":
-        return "Too many attempts. Please try again later.";
+        return t("auth.tooManyAttempts");
+
       case "auth/user-disabled":
-        return "This account has been disabled.";
+        return t("auth.accountDisabled");
+
       default:
-        return "Something went wrong. Please try again.";
+        return t("common.somethingWentWrong");
     }
   };
 
@@ -72,8 +80,8 @@ const Login = () => {
     if (!email || !password) {
       setCustomAlert({
         visible: true,
-        title: "Missing details",
-        message: "Please enter your email and password.",
+        title: t("auth.missingDetails"),
+        message: t("auth.enterEmailAndPassword"),
       });
       return;
     }
@@ -88,7 +96,7 @@ const Login = () => {
     } catch (error: any) {
       setCustomAlert({
         visible: true,
-        title: "Login failed",
+        title: t("auth.loginFailed"),
         message: getLoginErrorMessage(error?.code),
       });
     }
@@ -105,7 +113,7 @@ const Login = () => {
         <View className="absolute top-14 right-10 z-20">
           <LanguageSwitcher />
         </View>
-        
+
         <KeyboardAwareScrollView
           className="flex-1 px-10"
           showsVerticalScrollIndicator={false}
@@ -125,22 +133,24 @@ const Login = () => {
             <Text className="text-white font-bold text-[24px] mb-2">
               MovieFlix
             </Text>
-            <Text className="text-dark-500 text-sm">300+ movies online</Text>
+            <Text className="text-dark-500 text-sm">
+              {t("home.searchMovies")}
+            </Text>
           </View>
 
           <View className="mt-6">
             <Text className="text-white font-bold md-3 text-4xl">
-              Welcome back 👋🏽
+              {t("auth.loginTitle")}👋🏽
             </Text>
 
             <Text className="text-[#6A6880] font-bold text-lg">
-              Sign in to continue watching
+              {t("auth.loginSubtitle")}
             </Text>
 
             <View className="mt-10 flex flex-col gap-6">
               <View className="flex flex-col gap-2">
                 <Text className="text-md text-[#6A6880] font-bold">
-                  Email address
+                  {t("auth.email")}
                 </Text>
 
                 <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
@@ -149,7 +159,7 @@ const Login = () => {
                   <TextInput
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="alex@example.com"
+                    placeholder={t("auth.emailPlaceholder")}
                     placeholderTextColor="#3A3858"
                     keyboardType="email-address"
                     autoCapitalize="none"
@@ -162,7 +172,7 @@ const Login = () => {
 
               <View className="flex flex-col gap-2">
                 <Text className="text-md text-[#6A6880] font-bold">
-                  Password
+                  {t("auth.password")}
                 </Text>
 
                 <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
@@ -171,7 +181,7 @@ const Login = () => {
                   <TextInput
                     value={password}
                     onChangeText={setPassword}
-                    placeholder="Enter password"
+                    placeholder={t("auth.enterPassword")}
                     secureTextEntry={!showPassword}
                     placeholderTextColor="#3A3858"
                     autoCapitalize="none"
@@ -198,18 +208,20 @@ const Login = () => {
                 className="self-end"
               >
                 <Text className="text-[#9B59F5] font-semibold">
-                  Forgot Password?
+                  {t("auth.forgotPassword")}
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View className="mt-6">
-              <Button title="Sign In" onPress={handleLogin} />
+              <Button title={t("auth.signIn")} onPress={handleLogin} />
             </View>
 
             <View className="flex-row items-center my-3 gap-2">
               <View className="flex-1 h-[1px] bg-[#2A2845]" />
-              <Text className="text-dark-500 text-sm">or continue with</Text>
+              <Text className="text-dark-500 text-sm">
+                {t("auth.orContinueWith")}
+              </Text>
               <View className="flex-1 h-[1px] bg-[#2A2845]" />
             </View>
 
@@ -226,7 +238,7 @@ const Login = () => {
 
             <View className="flex-row gap-2 items-center justify-center mt-8">
               <Text className="font-bold text-dark-500 text-md">
-                Don&apos;t have an account?
+                {t("auth.dontHaveAccount")}
               </Text>
 
               <TouchableOpacity
@@ -234,7 +246,7 @@ const Login = () => {
                 activeOpacity={0.85}
               >
                 <Text className="text-[#E040A0] font-bold text-[20px]">
-                  Sign Up
+                  {t("auth.signUp")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -265,7 +277,9 @@ const Login = () => {
                 }
                 className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
               >
-                <Text className="text-white font-bold text-lg">Okay</Text>
+                <Text className="text-white font-bold text-lg">
+                  {t("common.okay")}
+                </Text>
               </Pressable>
             </View>
           </View>
