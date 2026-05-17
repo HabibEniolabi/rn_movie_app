@@ -165,7 +165,35 @@
     "incorrectPassword": "パスワードが正しくありません。もう一度お試しください。",
     "invalidEmailOrPassword": "メールアドレスまたはパスワードが正しくありません。もう一度お試しください。",
     "tooManyAttempts": "試行回数が多すぎます。しばらくしてから再試行してください。",
-    "accountDisabled": "このアカウントは無効になっています。"
+    "accountDisabled": "このアカウントは無効になっています。",
+    "emailAddress": "メールアドレス",
+    "firstNamePlaceholder": "Alex",
+    "lastNamePlaceholder": "Okonkwo",
+    "completeAllFields": "すべての項目を入力してください。",
+    "weakPassword": "弱いパスワード",
+    "passwordAtLeast6": "パスワードは6文字以上である必要があります。",
+    "termsRequired": "規約への同意が必要です",
+    "agreeTermsAndPrivacy": "利用規約とプライバシーポリシーに同意してください。",
+    "emailAlreadyRegistered": "このメールアドレスはすでに登録されています。ログインしてください。",
+    "signupNotEnabled": "Firebaseでメール/パスワード登録が有効になっていません。",
+    "firestorePermissionDenied": "Firestoreの権限が拒否されました。Firestoreルールを確認してください。",
+    "creatingAccount": "アカウント作成中...",
+    "createAccount": "アカウント作成",
+    "termsPrefix": "MovieStreamの",
+    "termsOfService": "利用規約",
+    "and": "および",
+    "privacyPolicy": "プライバシーポリシー",
+    "termsSuffix": "に同意します",
+    "passwordStrength": {
+      "weak": "弱い",
+      "fair": "普通",
+      "good": "良い",
+      "strong": "強い",
+      "addMoreCharacters": "— 文字数を増やしてください",
+      "addNumbers": "— 数字を追加すると強くなります",
+      "almostThere": "— もう少しです",
+      "passwordLooksGood": "— 良いパスワードです"
+    }
   },
   "onboarding": {
     "planTitle": "プランを選択 🎬",
@@ -174,7 +202,8 @@
     "continueWithPro": "Proで続行",
     "startWithFree": "無料で始める",
     "seeFull": "詳しく見る",
-    "planComparison": "プラン比較"
+    "planComparison": "プラン比較",
+    "stepProgress": "{{totalSteps}}ステップ中{{step}}"
   },
   "plans": {
     "free": {

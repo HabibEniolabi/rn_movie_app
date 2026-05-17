@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
+import { useTranslation } from "react-i18next";
 
 type OnboardingHeaderProps = {
   step: number;
@@ -9,6 +10,8 @@ type OnboardingHeaderProps = {
 };
 
 const OnboardingHeader = ({ step, totalSteps = 3 }: OnboardingHeaderProps) => {
+  const { t } = useTranslation();
+
   return (
     <View className="flex-row items-center justify-between w-full">
       <TouchableOpacity
@@ -37,7 +40,10 @@ const OnboardingHeader = ({ step, totalSteps = 3 }: OnboardingHeaderProps) => {
 
       {/* Step Text */}
       <Text className="text-[#8B88A8] font-semibold text-base">
-        Step {step} of {totalSteps}
+        {t("onboarding.stepProgress", {
+          step,
+          totalSteps,
+        })}
       </Text>
     </View>
   );

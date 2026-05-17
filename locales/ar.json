@@ -165,7 +165,35 @@
     "incorrectPassword": "كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
     "invalidEmailOrPassword": "البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
     "tooManyAttempts": "محاولات كثيرة جدًا. يرجى المحاولة لاحقًا.",
-    "accountDisabled": "تم تعطيل هذا الحساب."
+    "accountDisabled": "تم تعطيل هذا الحساب.",
+    "emailAddress": "عنوان البريد الإلكتروني",
+    "firstNamePlaceholder": "Alex",
+    "lastNamePlaceholder": "Okonkwo",
+    "completeAllFields": "يرجى إكمال جميع الحقول.",
+    "weakPassword": "كلمة مرور ضعيفة",
+    "passwordAtLeast6": "يجب أن تكون كلمة المرور 6 أحرف على الأقل.",
+    "termsRequired": "الموافقة على الشروط مطلوبة",
+    "agreeTermsAndPrivacy": "يرجى الموافقة على شروط الخدمة وسياسة الخصوصية.",
+    "emailAlreadyRegistered": "هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول بدلاً من ذلك.",
+    "signupNotEnabled": "التسجيل بالبريد الإلكتروني وكلمة المرور غير مفعّل في Firebase.",
+    "firestorePermissionDenied": "تم رفض إذن Firestore. يرجى التحقق من قواعد Firestore.",
+    "creatingAccount": "جارٍ إنشاء الحساب...",
+    "createAccount": "إنشاء حساب",
+    "termsPrefix": "أوافق على",
+    "termsOfService": "شروط الخدمة",
+    "and": "و",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsSuffix": "الخاصة بـ MovieStream",
+    "passwordStrength": {
+      "weak": "ضعيفة",
+      "fair": "متوسطة",
+      "good": "جيدة",
+      "strong": "قوية",
+      "addMoreCharacters": "— أضف المزيد من الأحرف",
+      "addNumbers": "— أضف أرقامًا لتقويتها",
+      "almostThere": "— أوشكت على الانتهاء",
+      "passwordLooksGood": "— كلمة المرور تبدو جيدة"
+    }
   },
   "onboarding": {
     "planTitle": "اختر خطتك 🎬",
@@ -174,7 +202,8 @@
     "continueWithPro": "المتابعة مع Pro",
     "startWithFree": "ابدأ مجانًا",
     "seeFull": "عرض",
-    "planComparison": "مقارنة الخطط"
+    "planComparison": "مقارنة الخطط",
+    "stepProgress": "الخطوة {{step}} من {{totalSteps}}"
   },
   "plans": {
     "free": {

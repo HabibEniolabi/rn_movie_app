@@ -165,7 +165,35 @@
     "incorrectPassword": "Incorrect password. Please try again.",
     "invalidEmailOrPassword": "Invalid email or password. Please try again.",
     "tooManyAttempts": "Too many attempts. Please try again later.",
-    "accountDisabled": "This account has been disabled."
+    "accountDisabled": "This account has been disabled.",
+    "emailAddress": "Email address",
+    "firstNamePlaceholder": "Alex",
+    "lastNamePlaceholder": "Okonkwo",
+    "completeAllFields": "Please complete all fields.",
+    "weakPassword": "Weak password",
+    "passwordAtLeast6": "Password must be at least 6 characters.",
+    "termsRequired": "Terms required",
+    "agreeTermsAndPrivacy": "Please agree to the Terms of Service and Privacy Policy.",
+    "emailAlreadyRegistered": "This email is already registered. Please sign in instead.",
+    "signupNotEnabled": "Email/password signup is not enabled in Firebase.",
+    "firestorePermissionDenied": "Firestore permission denied. Please check your Firestore rules.",
+    "creatingAccount": "Creating account...",
+    "createAccount": "Create Account",
+    "termsPrefix": "I agree to the",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "termsSuffix": "of MovieStream",
+    "passwordStrength": {
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong",
+      "addMoreCharacters": "— add more characters",
+      "addNumbers": "— add numbers to strengthen",
+      "almostThere": "— almost there",
+      "passwordLooksGood": "— password looks good"
+    }
   },
   "onboarding": {
     "planTitle": "Choose your plan 🎬",
@@ -174,7 +202,8 @@
     "continueWithPro": "Continue with Pro",
     "startWithFree": "Start with Free",
     "seeFull": "see full",
-    "planComparison": "plan comparison"
+    "planComparison": "plan comparison",
+    "stepProgress": "Step {{step}} of {{totalSteps}}"
   },
   "plans": {
     "free": {

@@ -165,7 +165,35 @@
     "incorrectPassword": "Contraseña incorrecta. Inténtalo de nuevo.",
     "invalidEmailOrPassword": "Correo o contraseña inválidos. Inténtalo de nuevo.",
     "tooManyAttempts": "Demasiados intentos. Inténtalo más tarde.",
-    "accountDisabled": "Esta cuenta ha sido deshabilitada."
+    "accountDisabled": "Esta cuenta ha sido deshabilitada.",
+    "emailAddress": "Correo electrónico",
+    "firstNamePlaceholder": "Alex",
+    "lastNamePlaceholder": "Okonkwo",
+    "completeAllFields": "Completa todos los campos.",
+    "weakPassword": "Contraseña débil",
+    "passwordAtLeast6": "La contraseña debe tener al menos 6 caracteres.",
+    "termsRequired": "Términos requeridos",
+    "agreeTermsAndPrivacy": "Acepta los Términos de servicio y la Política de privacidad.",
+    "emailAlreadyRegistered": "Este correo ya está registrado. Inicia sesión en su lugar.",
+    "signupNotEnabled": "El registro con correo/contraseña no está habilitado en Firebase.",
+    "firestorePermissionDenied": "Permiso de Firestore denegado. Revisa tus reglas de Firestore.",
+    "creatingAccount": "Creando cuenta...",
+    "createAccount": "Crear cuenta",
+    "termsPrefix": "Acepto los",
+    "termsOfService": "Términos de servicio",
+    "and": "y",
+    "privacyPolicy": "Política de privacidad",
+    "termsSuffix": "de MovieStream",
+    "passwordStrength": {
+      "weak": "Débil",
+      "fair": "Aceptable",
+      "good": "Buena",
+      "strong": "Fuerte",
+      "addMoreCharacters": "— añade más caracteres",
+      "addNumbers": "— añade números para reforzarla",
+      "almostThere": "— casi listo",
+      "passwordLooksGood": "— la contraseña se ve bien"
+    }
   },
   "onboarding": {
     "planTitle": "Elige tu plan 🎬",
@@ -174,7 +202,8 @@
     "continueWithPro": "Continuar con Pro",
     "startWithFree": "Empezar gratis",
     "seeFull": "ver",
-    "planComparison": "comparación de planes"
+    "planComparison": "comparación de planes",
+    "stepProgress": "Paso {{step}} de {{totalSteps}}"
   },
   "plans": {
     "free": {

@@ -23,6 +23,7 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import Button from "@/components/Button";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const socialButton = [
   {
@@ -36,6 +37,8 @@ const socialButton = [
 ];
 
 const Profile = () => {
+  const { t } = useTranslation();
+
   const auth = FIREBASE_AUTH;
 
   const [firstName, setFirstName] = useState("");
@@ -66,8 +69,8 @@ const Profile = () => {
     if (score <= 1) {
       return {
         score,
-        label: "Weak",
-        message: "— add more characters",
+        label: t("auth.passwordStrength.weak"),
+        message: t("auth.passwordStrength.addMoreCharacters"),
         color: "#E040A0",
       };
     }
@@ -75,8 +78,8 @@ const Profile = () => {
     if (score === 2) {
       return {
         score,
-        label: "Fair",
-        message: "— add numbers to strengthen",
+        label: t("auth.passwordStrength.fair"),
+        message: t("auth.passwordStrength.addNumbers"),
         color: "#FFD84D",
       };
     }
@@ -84,16 +87,16 @@ const Profile = () => {
     if (score === 3) {
       return {
         score,
-        label: "Good",
-        message: "— almost there",
+        label: t("auth.passwordStrength.good"),
+        message: t("auth.passwordStrength.almostThere"),
         color: "#9B59F5",
       };
     }
 
     return {
       score,
-      label: "Strong",
-      message: "— password looks good",
+      label: t("auth.passwordStrength.strong"),
+      message: t("auth.passwordStrength.passwordLooksGood"),
       color: "#45E0B8",
     };
   };
@@ -102,22 +105,22 @@ const Profile = () => {
   const getSignupErrorMessage = (errorCode?: string) => {
     switch (errorCode) {
       case "auth/email-already-in-use":
-        return "This email is already registered. Please sign in instead.";
+        return t("auth.emailAlreadyRegistered");
 
       case "auth/invalid-email":
-        return "Please enter a valid email address.";
+        return t("auth.invalidEmail");
 
       case "auth/weak-password":
-        return "Password should be at least 6 characters.";
+        return t("auth.passwordAtLeast6");
 
       case "auth/operation-not-allowed":
-        return "Email/password signup is not enabled in Firebase.";
+        return t("auth.signupNotEnabled");
 
       case "permission-denied":
-        return "Firestore permission denied. Please check your Firestore rules.";
+        return t("auth.firestorePermissionDenied");
 
       default:
-        return "Something went wrong. Please try again.";
+        return t("common.somethingWentWrong");
     }
   };
 
@@ -137,8 +140,8 @@ const Profile = () => {
     if (!firstName.trim() || !lastName.trim() || !email.trim() || !password) {
       setCustomAlert({
         visible: true,
-        title: "Missing details",
-        message: "Please complete all fields.",
+        title: t("auth.missingDetails"),
+        message: t("auth.completeAllFields"),
       });
       return;
     }
@@ -146,8 +149,8 @@ const Profile = () => {
     if (password.length < 6) {
       setCustomAlert({
         visible: true,
-        title: "Weak password",
-        message: "Password must be at least 6 characters.",
+        title: t("auth.weakPassword"),
+        message: t("auth.passwordAtLeast6"),
       });
       return;
     }
@@ -155,8 +158,8 @@ const Profile = () => {
     if (!agreed) {
       setCustomAlert({
         visible: true,
-        title: "Terms required",
-        message: "Please agree to the Terms of Service and Privacy Policy.",
+        title: t("auth.termsRequired"),
+        message: t("auth.agreeTermsAndPrivacy"),
       });
       return;
     }
@@ -196,7 +199,7 @@ const Profile = () => {
 
       setCustomAlert({
         visible: true,
-        title: "Signup failed",
+        title: t("auth.signupFailed"),
         message: getSignupErrorMessage(error?.code),
       });
     } finally {
@@ -221,14 +224,14 @@ const Profile = () => {
             contentContainerStyle={{ paddingBottom: 100 }}
           >
             <OnboardingHeaderInfo
-              title="Create account ✨"
-              subtitle="Join 50,000+ movie lovers today"
+              title={t("auth.signupTitle")}
+              subtitle={t("auth.signupSubtitle")}
             />
             <View className="mt-10 flex flex-col gap-6">
               <View className="flex-row gap-4">
                 <View className="flex-1 flex-col gap-2">
                   <Text className="text-md text-[#6A6880] font-bold">
-                    First name
+                    {t("auth.firstName")}
                   </Text>
                   <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
                     <Image
@@ -240,7 +243,7 @@ const Profile = () => {
                     <TextInput
                       value={firstName}
                       onChangeText={setFirstName}
-                      placeholder="Alex"
+                      placeholder={t("auth.firstNamePlaceholder")}
                       placeholderTextColor="#3A3858"
                       autoCapitalize="words"
                       className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
@@ -249,13 +252,13 @@ const Profile = () => {
                 </View>
                 <View className="flex-1 flex-col gap-2">
                   <Text className="text-md text-[#6A6880] font-bold">
-                    Last name
+                    {t("auth.lastName")}
                   </Text>
                   <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
                     <TextInput
                       value={lastName}
                       onChangeText={setLastName}
-                      placeholder="Okonkwo"
+                      placeholder={t("auth.lastNamePlaceholder")}
                       placeholderTextColor="#3A3858"
                       autoCapitalize="words"
                       className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
@@ -265,7 +268,7 @@ const Profile = () => {
               </View>
               <View className="flex flex-col gap-2">
                 <Text className="text-md text-[#6A6880] font-bold">
-                  Email address
+                  {t("auth.emailAddress")}
                 </Text>
                 <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
                   <Feather name="mail" size={18} color="#3A3858" />
@@ -273,7 +276,7 @@ const Profile = () => {
                   <TextInput
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="your@example.com"
+                    placeholder={t("auth.emailPlaceholder")}
                     placeholderTextColor="#3A3858"
                     keyboardType="email-address"
                     autoCapitalize="none"
@@ -284,7 +287,7 @@ const Profile = () => {
               </View>
               <View className="flex flex-col gap-2">
                 <Text className="text-md text-[#8B88A8] font-bold">
-                  Password
+                  {t("auth.password")}
                 </Text>
 
                 <View className="flex-row items-center rounded-[18px] border border-[#2A2845] bg-[#141325] px-6 h-[64px]">
@@ -293,7 +296,7 @@ const Profile = () => {
                   <TextInput
                     value={password}
                     onChangeText={setPassword}
-                    placeholder="Enter password"
+                    placeholder={t("auth.enterPassword")}
                     placeholderTextColor="#3A3858"
                     secureTextEntry={!showPassword}
                     autoCapitalize="none"
@@ -371,27 +374,33 @@ const Profile = () => {
                 </TouchableOpacity>
 
                 <Text className="flex-1 text-[#8B88A8] text-base leading-6">
-                  I agree to the{" "}
+                  {t("auth.termsPrefix")}{" "}
                   <Text className="text-[#B15CFF] font-bold">
-                    Terms of Service
+                    {t("auth.termsOfService")}
                   </Text>{" "}
-                  and{" "}
+                  {t("auth.and")}{" "}
                   <Text className="text-[#B15CFF] font-bold">
-                    Privacy Policy
+                    {t("auth.privacyPolicy")}
                   </Text>{" "}
-                  of MovieStream
+                  {t("auth.termsSuffix")}
                 </Text>
               </View>
             </View>
             <View className="mt-6">
               <Button
-                title={isSubmitting ? "Creating account..." : "Create Account"}
+                title={
+                  isSubmitting
+                    ? t("auth.creatingAccount")
+                    : t("auth.createAccount")
+                }
                 onPress={handleCreateAccount}
               />
             </View>
             <View className="flex-row items-center my-3 gap-2">
               <View className="flex-1 h-[1px] bg-[#2A2845]" />
-              <Text className="text-dark-500 text-sm">or continue with</Text>
+              <Text className="text-dark-500 text-sm">
+                {t("auth.orContinueWith")}
+              </Text>
               <View className="flex-1 h-[1px] bg-[#2A2845]" />
             </View>
             <View className="gap-2 flex-row mt-4">
@@ -406,14 +415,14 @@ const Profile = () => {
             </View>
             <View className="flex-row gap-2 items-center justify-center mt-8">
               <Text className="font-bold text-dark-500 text-md">
-                Already have an account?
+                {t("auth.alreadyHaveAccount")}
               </Text>
               <TouchableOpacity
                 onPress={() => router.push("/(auth)/login")}
                 activeOpacity={0.85}
               >
                 <Text className="text-[#E040A0] font-bold text-[20px]">
-                  Sign In
+                  {t("auth.signIn")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -443,7 +452,9 @@ const Profile = () => {
                 }
                 className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
               >
-                <Text className="text-white font-bold text-lg">Okay</Text>
+                <Text className="text-white font-bold text-lg">
+                  {t("common.okay")}
+                </Text>
               </Pressable>
             </View>
           </View>

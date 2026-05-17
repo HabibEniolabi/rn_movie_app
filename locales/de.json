@@ -165,7 +165,35 @@
     "incorrectPassword": "Falsches Passwort. Bitte versuche es erneut.",
     "invalidEmailOrPassword": "Ungültige E-Mail oder ungültiges Passwort. Bitte versuche es erneut.",
     "tooManyAttempts": "Zu viele Versuche. Bitte versuche es später erneut.",
-    "accountDisabled": "Dieses Konto wurde deaktiviert."
+    "accountDisabled": "Dieses Konto wurde deaktiviert.",
+    "emailAddress": "E-Mail-Adresse",
+    "firstNamePlaceholder": "Alex",
+    "lastNamePlaceholder": "Okonkwo",
+    "completeAllFields": "Bitte fülle alle Felder aus.",
+    "weakPassword": "Schwaches Passwort",
+    "passwordAtLeast6": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    "termsRequired": "Bedingungen erforderlich",
+    "agreeTermsAndPrivacy": "Bitte akzeptiere die Nutzungsbedingungen und die Datenschutzrichtlinie.",
+    "emailAlreadyRegistered": "Diese E-Mail ist bereits registriert. Bitte melde dich stattdessen an.",
+    "signupNotEnabled": "E-Mail/Passwort-Registrierung ist in Firebase nicht aktiviert.",
+    "firestorePermissionDenied": "Firestore-Berechtigung verweigert. Bitte überprüfe deine Firestore-Regeln.",
+    "creatingAccount": "Konto wird erstellt...",
+    "createAccount": "Konto erstellen",
+    "termsPrefix": "Ich akzeptiere die",
+    "termsOfService": "Nutzungsbedingungen",
+    "and": "und",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "termsSuffix": "von MovieStream",
+    "passwordStrength": {
+      "weak": "Schwach",
+      "fair": "Okay",
+      "good": "Gut",
+      "strong": "Stark",
+      "addMoreCharacters": "— füge mehr Zeichen hinzu",
+      "addNumbers": "— füge Zahlen hinzu, um es zu stärken",
+      "almostThere": "— fast geschafft",
+      "passwordLooksGood": "— das Passwort sieht gut aus"
+    }
   },
   "onboarding": {
     "planTitle": "Wähle deinen Plan 🎬",
@@ -174,7 +202,8 @@
     "continueWithPro": "Mit Pro fortfahren",
     "startWithFree": "Kostenlos starten",
     "seeFull": "vollständigen",
-    "planComparison": "Planvergleich ansehen"
+    "planComparison": "Planvergleich ansehen",
+    "stepProgress": "Schritt {{step}} von {{totalSteps}}"
   },
   "plans": {
     "free": {

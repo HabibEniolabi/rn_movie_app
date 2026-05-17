@@ -165,7 +165,35 @@
     "incorrectPassword": "Mot de passe incorrect. Veuillez réessayer.",
     "invalidEmailOrPassword": "E-mail ou mot de passe invalide. Veuillez réessayer.",
     "tooManyAttempts": "Trop de tentatives. Veuillez réessayer plus tard.",
-    "accountDisabled": "Ce compte a été désactivé."
+    "accountDisabled": "Ce compte a été désactivé.",
+    "emailAddress": "Adresse e-mail",
+    "firstNamePlaceholder": "Alex",
+    "lastNamePlaceholder": "Okonkwo",
+    "completeAllFields": "Veuillez remplir tous les champs.",
+    "weakPassword": "Mot de passe faible",
+    "passwordAtLeast6": "Le mot de passe doit contenir au moins 6 caractères.",
+    "termsRequired": "Conditions requises",
+    "agreeTermsAndPrivacy": "Veuillez accepter les Conditions d’utilisation et la Politique de confidentialité.",
+    "emailAlreadyRegistered": "Cet e-mail est déjà enregistré. Veuillez vous connecter à la place.",
+    "signupNotEnabled": "L’inscription par e-mail/mot de passe n’est pas activée dans Firebase.",
+    "firestorePermissionDenied": "Autorisation Firestore refusée. Veuillez vérifier vos règles Firestore.",
+    "creatingAccount": "Création du compte...",
+    "createAccount": "Créer un compte",
+    "termsPrefix": "J’accepte les",
+    "termsOfService": "Conditions d’utilisation",
+    "and": "et",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsSuffix": "de MovieStream",
+    "passwordStrength": {
+      "weak": "Faible",
+      "fair": "Moyen",
+      "good": "Bon",
+      "strong": "Fort",
+      "addMoreCharacters": "— ajoutez plus de caractères",
+      "addNumbers": "— ajoutez des chiffres pour renforcer",
+      "almostThere": "— presque parfait",
+      "passwordLooksGood": "— le mot de passe est bon"
+    }
   },
   "onboarding": {
     "planTitle": "Choisissez votre forfait 🎬",
@@ -174,7 +202,8 @@
     "continueWithPro": "Continuer avec Pro",
     "startWithFree": "Commencer gratuitement",
     "seeFull": "voir la",
-    "planComparison": "comparaison des forfaits"
+    "planComparison": "comparaison des forfaits",
+    "stepProgress": "Étape {{step}} sur {{totalSteps}}"
   },
   "plans": {
     "free": {
