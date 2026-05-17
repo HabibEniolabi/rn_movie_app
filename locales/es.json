@@ -200,5 +200,90 @@
         "offlineDownloads": "Descargas offline"
       }
     }
+  },
+  "planComparison": {
+    "title": "Elige un plan",
+    "subtitle": "Mejora o cancela cuando quieras",
+    "free": {
+      "title": "Gratis",
+      "subtitle": "Ideal para espectadores ocasionales",
+      "period": "gratis para siempre",
+      "buttonTitle": "Empezar gratis",
+      "features": {
+        "freeMovies": "100+ películas gratis",
+        "streaming": "Streaming hasta 720p",
+        "screen": "1 pantalla a la vez",
+        "ads": "Anuncios entre películas",
+        "downloads": "Sin descargas offline"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "Para verdaderos amantes del cine",
+      "period": "por mes, facturado anualmente",
+      "badge": "MÁS POPULAR",
+      "buttonTitle": "Obtener Pro — $5.99/mes",
+      "highlights": {
+        "adFree": "sin anuncios",
+        "offline": "offline"
+      },
+      "features": {
+        "hdMovies": "300+ películas HD + estrenos",
+        "streaming": "Streaming en 1080p completo",
+        "screens": "2 pantallas simultáneamente",
+        "adFree": "Completamente sin anuncios",
+        "downloads": "Descarga hasta 10 títulos",
+        "profiles": "3 perfiles de usuario + modo infantil",
+        "personalisedFeed": "Feed de géneros personalizado"
+      }
+    },
+    "ultra": {
+      "title": "Ultra",
+      "subtitle": "La experiencia definitiva",
+      "period": "por mes, facturado anualmente",
+      "buttonTitle": "Obtener Ultra — $9.99/mes",
+      "highlights": {
+        "unlimited": "Ilimitado",
+        "access": "acceso",
+        "priority": "Prioritario"
+      },
+      "features": {
+        "exclusives": "500+ películas incl. exclusivas",
+        "streaming": "Impresionante 4K HDR + Dolby Atmos",
+        "screens": "4 pantallas a la vez",
+        "downloads": "Descargas offline ilimitadas",
+        "profiles": "6 perfiles + bloqueo infantil avanzado",
+        "premiereAccess": "Acceso anticipado a estrenos",
+        "prioritySupport": "Soporte prioritario 24/7"
+      }
+    },
+    "trialTitle": "Prueba gratis de 7 días en todos los planes pagos",
+    "trialSubtitle": "Prueba Pro o Ultra gratis durante una semana. Cancela antes de que termine la prueba y no se te cobrará.",
+    "termsPrefix": "Al suscribirte aceptas nuestros",
+    "terms": "Términos",
+    "and": "y",
+    "privacyPolicy": "Política de privacidad",
+    "pricesNote": "Los precios se muestran en USD. Cancela cuando quieras.",
+    "termsTitle": "Términos",
+    "termsMessage": "Acepto los términos y condiciones de MovieFlix.",
+    "privacyTitle": "Política de privacidad",
+    "privacyMessage": "Acepto la Política de privacidad de MovieFlix.",
+    "billing": {
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "save40": "AHORRA 40 %"
+    },
+    "quickComparison": {
+      "title": "COMPARACIÓN RÁPIDA",
+      "rows": {
+        "movies": "Películas",
+        "quality": "Calidad",
+        "screens": "Pantallas",
+        "adFree": "Sin anuncios",
+        "downloads": "Descargas",
+        "profiles": "Perfiles",
+        "exclusives": "Exclusivos"
+      }
+    }
   }
 }

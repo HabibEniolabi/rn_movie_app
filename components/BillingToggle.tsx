@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 type BillingType = "monthly" | "yearly";
 
@@ -10,6 +11,8 @@ interface BillingToggleProps {
 }
 
 const BillingToggle = ({ value, onChange }: BillingToggleProps) => {
+  const { t } = useTranslation();
+
   const isYearly = value === "yearly";
   const isMonthly = value === "monthly";
 
@@ -31,7 +34,6 @@ const BillingToggle = ({ value, onChange }: BillingToggleProps) => {
 
   return (
     <View className="h-[64px] rounded-[24px] border border-[#2A2845] bg-[#141325] p-2 flex-row items-center">
-      {/* Monthly */}
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={() => onChange("monthly")}
@@ -39,16 +41,19 @@ const BillingToggle = ({ value, onChange }: BillingToggleProps) => {
       >
         {isMonthly ? (
           <ActiveBg>
-            <Text className="text-lg font-bold text-white">Monthly</Text>
+            <Text className="text-lg font-bold text-white">
+              {t("planComparison.billing.monthly")}
+            </Text>
           </ActiveBg>
         ) : (
           <View className="flex-1 items-center justify-center rounded-[18px]">
-            <Text className="text-lg font-bold text-[#6A6880]">Monthly</Text>
+            <Text className="text-lg font-bold text-[#6A6880]">
+              {t("planComparison.billing.monthly")}
+            </Text>
           </View>
         )}
       </TouchableOpacity>
 
-      {/* Yearly */}
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={() => onChange("yearly")}
@@ -57,22 +62,26 @@ const BillingToggle = ({ value, onChange }: BillingToggleProps) => {
         {isYearly ? (
           <ActiveBg>
             <View className="flex-row items-center justify-center gap-3">
-              <Text className="text-lg font-bold text-white">Yearly</Text>
+              <Text className="text-lg font-bold text-white">
+                {t("planComparison.billing.yearly")}
+              </Text>
 
               <View className="px-3 py-1 rounded-full border border-[#F2B84B] bg-white/10">
                 <Text className="text-sm font-extrabold text-[#FFD84D]">
-                  SAVE 40%
+                  {t("planComparison.billing.save40")}
                 </Text>
               </View>
             </View>
           </ActiveBg>
         ) : (
           <View className="flex-1 flex-row items-center justify-center gap-3 rounded-[18px]">
-            <Text className="text-lg font-bold text-[#6A6880]">Yearly</Text>
+            <Text className="text-lg font-bold text-[#6A6880]">
+              {t("planComparison.billing.yearly")}
+            </Text>
 
             <View className="px-3 py-1 rounded-full border border-[#2A2845] bg-transparent">
               <Text className="text-sm font-extrabold text-[#6A6880]">
-                SAVE 40%
+                {t("planComparison.billing.save40")}
               </Text>
             </View>
           </View>

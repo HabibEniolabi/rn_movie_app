@@ -200,5 +200,90 @@
         "offlineDownloads": "تنزيلات بدون إنترنت"
       }
     }
+  },
+  "planComparison": {
+    "title": "اختر خطة",
+    "subtitle": "يمكنك الترقية أو الإلغاء في أي وقت",
+    "free": {
+      "title": "مجاني",
+      "subtitle": "مناسب للمشاهدة الخفيفة",
+      "period": "مجاني للأبد",
+      "buttonTitle": "ابدأ مجانًا",
+      "features": {
+        "freeMovies": "أكثر من 100 فيلم مجاني",
+        "streaming": "بث حتى 720p",
+        "screen": "شاشة واحدة في كل مرة",
+        "ads": "تظهر الإعلانات بين الأفلام",
+        "downloads": "لا توجد تنزيلات بدون إنترنت"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "لعشاق الأفلام الحقيقيين",
+      "period": "شهريًا، يتم الدفع سنويًا",
+      "badge": "الأكثر شعبية",
+      "buttonTitle": "احصل على Pro — 5.99$/شهر",
+      "highlights": {
+        "adFree": "بدون إعلانات",
+        "offline": "بدون إنترنت"
+      },
+      "features": {
+        "hdMovies": "أكثر من 300 فيلم HD + إصدارات جديدة",
+        "streaming": "بث كامل بدقة 1080p",
+        "screens": "شاشتان في نفس الوقت",
+        "adFree": "تجربة بدون إعلانات بالكامل",
+        "downloads": "تنزيل ما يصل إلى 10 عناوين",
+        "profiles": "3 ملفات مستخدم + وضع الأطفال",
+        "personalisedFeed": "موجز أنواع مخصص"
+      }
+    },
+    "ultra": {
+      "title": "Ultra",
+      "subtitle": "التجربة النهائية",
+      "period": "شهريًا، يتم الدفع سنويًا",
+      "buttonTitle": "احصل على Ultra — 9.99$/شهر",
+      "highlights": {
+        "unlimited": "غير محدود",
+        "access": "وصول",
+        "priority": "أولوية"
+      },
+      "features": {
+        "exclusives": "أكثر من 500 فيلم بما في ذلك الحصريات",
+        "streaming": "جودة مذهلة 4K HDR + Dolby Atmos",
+        "screens": "4 شاشات في نفس الوقت",
+        "downloads": "تنزيلات غير محدودة بدون إنترنت",
+        "profiles": "6 ملفات شخصية + قفل أطفال متقدم",
+        "premiereAccess": "وصول مبكر للعروض الأولى",
+        "prioritySupport": "دعم ذو أولوية 24/7"
+      }
+    },
+    "trialTitle": "تجربة مجانية لمدة 7 أيام على جميع الخطط المدفوعة",
+    "trialSubtitle": "جرّب Pro أو Ultra مجانًا لمدة أسبوع. قم بالإلغاء قبل انتهاء الفترة التجريبية ولن يتم تحصيل أي رسوم.",
+    "termsPrefix": "بالاشتراك، فإنك توافق على",
+    "terms": "الشروط",
+    "and": "و",
+    "privacyPolicy": "سياسة الخصوصية",
+    "pricesNote": "الأسعار معروضة بالدولار الأمريكي. يمكنك الإلغاء في أي وقت.",
+    "termsTitle": "الشروط",
+    "termsMessage": "أوافق على شروط وأحكام MovieFlix.",
+    "privacyTitle": "سياسة الخصوصية",
+    "privacyMessage": "أوافق على سياسة الخصوصية الخاصة بـ MovieFlix.",
+    "billing": {
+      "monthly": "شهري",
+      "yearly": "سنوي",
+      "save40": "وفّر 40٪"
+    },
+    "quickComparison": {
+      "title": "مقارنة سريعة",
+      "rows": {
+        "movies": "الأفلام",
+        "quality": "الجودة",
+        "screens": "الشاشات",
+        "adFree": "بدون إعلانات",
+        "downloads": "التنزيلات",
+        "profiles": "الملفات الشخصية",
+        "exclusives": "الحصريات"
+      }
+    }
   }
 }

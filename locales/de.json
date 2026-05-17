@@ -200,5 +200,90 @@
         "offlineDownloads": "Offline-Downloads"
       }
     }
+  },
+  "planComparison": {
+    "title": "Wähle einen Plan",
+    "subtitle": "Jederzeit upgraden oder kündigen",
+    "free": {
+      "title": "Kostenlos",
+      "subtitle": "Ideal für gelegentliche Zuschauer",
+      "period": "für immer kostenlos",
+      "buttonTitle": "Kostenlos starten",
+      "features": {
+        "freeMovies": "100+ kostenlose Filme",
+        "streaming": "Streaming bis zu 720p",
+        "screen": "1 Bildschirm gleichzeitig",
+        "ads": "Werbung zwischen Filmen",
+        "downloads": "Keine Offline-Downloads"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "Für echte Filmliebhaber",
+      "period": "pro Monat, jährlich abgerechnet",
+      "badge": "BELIEBT",
+      "buttonTitle": "Pro holen — 5,99 $/Monat",
+      "highlights": {
+        "adFree": "werbefrei",
+        "offline": "offline"
+      },
+      "features": {
+        "hdMovies": "300+ HD-Filme + Neuerscheinungen",
+        "streaming": "Streaming in vollem 1080p",
+        "screens": "2 Bildschirme gleichzeitig",
+        "adFree": "Komplett werbefrei",
+        "downloads": "Bis zu 10 Titel herunterladen",
+        "profiles": "3 Benutzerprofile + Kindermodus",
+        "personalisedFeed": "Personalisierter Genre-Feed"
+      }
+    },
+    "ultra": {
+      "title": "Ultra",
+      "subtitle": "Das ultimative Erlebnis",
+      "period": "pro Monat, jährlich abgerechnet",
+      "buttonTitle": "Ultra holen — 9,99 $/Monat",
+      "highlights": {
+        "unlimited": "Unbegrenzt",
+        "access": "Zugang",
+        "priority": "Priorität"
+      },
+      "features": {
+        "exclusives": "500+ Filme inkl. Exklusivtitel",
+        "streaming": "Beeindruckendes 4K HDR + Dolby Atmos",
+        "screens": "4 Bildschirme gleichzeitig",
+        "downloads": "Unbegrenzte Offline-Downloads",
+        "profiles": "6 Profile + erweiterte Kindersicherung",
+        "premiereAccess": "Früher Zugang zu Premieren",
+        "prioritySupport": "Priorisierter 24/7-Support"
+      }
+    },
+    "trialTitle": "7 Tage kostenlos testen bei allen kostenpflichtigen Plänen",
+    "trialSubtitle": "Teste Pro oder Ultra eine Woche kostenlos. Kündige vor Ablauf der Testphase und dir wird nichts berechnet.",
+    "termsPrefix": "Mit dem Abonnement akzeptierst du unsere",
+    "terms": "Bedingungen",
+    "and": "und",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "pricesNote": "Preise werden in USD angezeigt. Jederzeit kündbar.",
+    "termsTitle": "Bedingungen",
+    "termsMessage": "Ich akzeptiere die Geschäftsbedingungen von MovieFlix.",
+    "privacyTitle": "Datenschutzrichtlinie",
+    "privacyMessage": "Ich akzeptiere die Datenschutzrichtlinie von MovieFlix.",
+    "billing": {
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "save40": "40 % SPAREN"
+    },
+    "quickComparison": {
+      "title": "SCHNELLVERGLEICH",
+      "rows": {
+        "movies": "Filme",
+        "quality": "Qualität",
+        "screens": "Bildschirme",
+        "adFree": "Werbefrei",
+        "downloads": "Downloads",
+        "profiles": "Profile",
+        "exclusives": "Exklusivtitel"
+      }
+    }
   }
 }

@@ -200,5 +200,90 @@
         "offlineDownloads": "Offline downloads"
       }
     }
+  },
+  "planComparison": {
+    "title": "Choose a Plan",
+    "subtitle": "Upgrade or cancel anytime",
+    "free": {
+      "title": "Free",
+      "subtitle": "Great for casual viewers",
+      "period": "forever free",
+      "buttonTitle": "Start Free",
+      "features": {
+        "freeMovies": "100+ free movies",
+        "streaming": "Stream up to 720p",
+        "screen": "1 screen at a time",
+        "ads": "Ads shown between films",
+        "downloads": "No offline downloads"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "For real movie lovers",
+      "period": "per month, billed yearly",
+      "badge": "MOST POPULAR",
+      "buttonTitle": "Get Pro — $5.99/mo",
+      "highlights": {
+        "adFree": "ad-free",
+        "offline": "offline"
+      },
+      "features": {
+        "hdMovies": "300+ HD movies + new releases",
+        "streaming": "Stream in full 1080p",
+        "screens": "2 screens simultaneously",
+        "adFree": "Completely ad-free",
+        "downloads": "Download up to 10 titles",
+        "profiles": "3 user profiles + kids mode",
+        "personalisedFeed": "Personalised genre feed"
+      }
+    },
+    "ultra": {
+      "title": "Ultra",
+      "subtitle": "The ultimate experience",
+      "period": "per month, billed yearly",
+      "buttonTitle": "Get Ultra — $9.99/mo",
+      "highlights": {
+        "unlimited": "Unlimited",
+        "access": "access",
+        "priority": "Priority"
+      },
+      "features": {
+        "exclusives": "500+ movies incl. exclusives",
+        "streaming": "Stunning 4K HDR + Dolby Atmos",
+        "screens": "4 screens at once",
+        "downloads": "Unlimited offline downloads",
+        "profiles": "6 profiles + advanced kids lock",
+        "premiereAccess": "Early premiere access",
+        "prioritySupport": "Priority 24/7 support"
+      }
+    },
+    "trialTitle": "7-day free trial on all paid plans",
+    "trialSubtitle": "Try Pro or Ultra free for a week. Cancel before the trial ends and you won’t be charged.",
+    "termsPrefix": "By subscribing you agree to our",
+    "terms": "Terms",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "pricesNote": "Prices shown in USD. Cancel anytime.",
+    "termsTitle": "Terms",
+    "termsMessage": "I agree to the terms and conditions of MovieFlix.",
+    "privacyTitle": "Privacy Policy",
+    "privacyMessage": "I agree to the Privacy Policy of MovieFlix.",
+    "billing": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save40": "SAVE 40%"
+    },
+    "quickComparison": {
+      "title": "QUICK COMPARISON",
+      "rows": {
+        "movies": "Movies",
+        "quality": "Quality",
+        "screens": "Screens",
+        "adFree": "Ad-free",
+        "downloads": "Downloads",
+        "profiles": "Profiles",
+        "exclusives": "Exclusives"
+      }
+    }
   }
 }

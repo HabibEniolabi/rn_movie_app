@@ -200,5 +200,90 @@
         "offlineDownloads": "오프라인 다운로드"
       }
     }
+  },
+  "planComparison": {
+    "title": "요금제 선택",
+    "subtitle": "언제든 업그레이드하거나 취소할 수 있습니다",
+    "free": {
+      "title": "무료",
+      "subtitle": "가볍게 보는 사용자에게 좋아요",
+      "period": "영구 무료",
+      "buttonTitle": "무료로 시작하기",
+      "features": {
+        "freeMovies": "100개 이상의 무료 영화",
+        "streaming": "최대 720p 스트리밍",
+        "screen": "한 번에 1개 화면",
+        "ads": "영화 사이에 광고 표시",
+        "downloads": "오프라인 다운로드 없음"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "진짜 영화 애호가를 위해",
+      "period": "월 요금, 연간 청구",
+      "badge": "가장 인기",
+      "buttonTitle": "Pro 이용 — 월 $5.99",
+      "highlights": {
+        "adFree": "광고 없음",
+        "offline": "오프라인"
+      },
+      "features": {
+        "hdMovies": "300개 이상의 HD 영화 + 신작",
+        "streaming": "풀 1080p 스트리밍",
+        "screens": "2개 화면 동시 시청",
+        "adFree": "완전히 광고 없는 환경",
+        "downloads": "최대 10개 타이틀 다운로드",
+        "profiles": "사용자 프로필 3개 + 키즈 모드",
+        "personalisedFeed": "개인화된 장르 피드"
+      }
+    },
+    "ultra": {
+      "title": "Ultra",
+      "subtitle": "최고의 경험",
+      "period": "월 요금, 연간 청구",
+      "buttonTitle": "Ultra 이용 — 월 $9.99",
+      "highlights": {
+        "unlimited": "무제한",
+        "access": "접근",
+        "priority": "우선"
+      },
+      "features": {
+        "exclusives": "독점작 포함 500개 이상의 영화",
+        "streaming": "놀라운 4K HDR + Dolby Atmos",
+        "screens": "4개 화면 동시 시청",
+        "downloads": "무제한 오프라인 다운로드",
+        "profiles": "6개 프로필 + 고급 키즈 잠금",
+        "premiereAccess": "프리미어 조기 접근",
+        "prioritySupport": "24/7 우선 지원"
+      }
+    },
+    "trialTitle": "모든 유료 요금제 7일 무료 체험",
+    "trialSubtitle": "Pro 또는 Ultra를 일주일 동안 무료로 체험하세요. 체험 종료 전에 취소하면 요금이 청구되지 않습니다.",
+    "termsPrefix": "구독하면 다음에 동의하게 됩니다:",
+    "terms": "이용 약관",
+    "and": "및",
+    "privacyPolicy": "개인정보 처리방침",
+    "pricesNote": "가격은 USD로 표시됩니다. 언제든 취소할 수 있습니다.",
+    "termsTitle": "이용 약관",
+    "termsMessage": "MovieFlix의 이용 약관에 동의합니다.",
+    "privacyTitle": "개인정보 처리방침",
+    "privacyMessage": "MovieFlix의 개인정보 처리방침에 동의합니다.",
+    "billing": {
+      "monthly": "월간",
+      "yearly": "연간",
+      "save40": "40% 절약"
+    },
+    "quickComparison": {
+      "title": "빠른 비교",
+      "rows": {
+        "movies": "영화",
+        "quality": "화질",
+        "screens": "화면",
+        "adFree": "광고 없음",
+        "downloads": "다운로드",
+        "profiles": "프로필",
+        "exclusives": "독점 콘텐츠"
+      }
+    }
   }
 }

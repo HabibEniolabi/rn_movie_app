@@ -200,5 +200,90 @@
         "offlineDownloads": "オフラインダウンロード"
       }
     }
+  },
+  "planComparison": {
+    "title": "プランを選択",
+    "subtitle": "いつでもアップグレード・キャンセルできます",
+    "free": {
+      "title": "無料",
+      "subtitle": "気軽に楽しみたい方向け",
+      "period": "ずっと無料",
+      "buttonTitle": "無料で始める",
+      "features": {
+        "freeMovies": "100本以上の無料映画",
+        "streaming": "最大720pでストリーミング",
+        "screen": "同時視聴は1画面",
+        "ads": "映画の間に広告が表示されます",
+        "downloads": "オフラインダウンロードなし"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "本格的な映画好き向け",
+      "period": "月額・年払い",
+      "badge": "一番人気",
+      "buttonTitle": "Proを利用 — 月額$5.99",
+      "highlights": {
+        "adFree": "広告なし",
+        "offline": "オフライン"
+      },
+      "features": {
+        "hdMovies": "300本以上のHD映画 + 新作",
+        "streaming": "フル1080pでストリーミング",
+        "screens": "2画面で同時視聴",
+        "adFree": "完全広告なし",
+        "downloads": "最大10作品をダウンロード",
+        "profiles": "3つのユーザープロフィール + キッズモード",
+        "personalisedFeed": "パーソナライズされたジャンルフィード"
+      }
+    },
+    "ultra": {
+      "title": "Ultra",
+      "subtitle": "究極の体験",
+      "period": "月額・年払い",
+      "buttonTitle": "Ultraを利用 — 月額$9.99",
+      "highlights": {
+        "unlimited": "無制限",
+        "access": "アクセス",
+        "priority": "優先"
+      },
+      "features": {
+        "exclusives": "独占作品を含む500本以上の映画",
+        "streaming": "美しい4K HDR + Dolby Atmos",
+        "screens": "4画面で同時視聴",
+        "downloads": "無制限のオフラインダウンロード",
+        "profiles": "6プロフィール + 高度なキッズロック",
+        "premiereAccess": "プレミア作品への早期アクセス",
+        "prioritySupport": "24時間365日の優先サポート"
+      }
+    },
+    "trialTitle": "すべての有料プランで7日間無料トライアル",
+    "trialSubtitle": "ProまたはUltraを1週間無料でお試しください。トライアル終了前にキャンセルすれば請求されません。",
+    "termsPrefix": "登録すると、以下に同意したものとみなされます:",
+    "terms": "利用規約",
+    "and": "および",
+    "privacyPolicy": "プライバシーポリシー",
+    "pricesNote": "価格はUSDで表示されています。いつでもキャンセルできます。",
+    "termsTitle": "利用規約",
+    "termsMessage": "MovieFlixの利用規約に同意します。",
+    "privacyTitle": "プライバシーポリシー",
+    "privacyMessage": "MovieFlixのプライバシーポリシーに同意します。",
+    "billing": {
+      "monthly": "月払い",
+      "yearly": "年払い",
+      "save40": "40%お得"
+    },
+    "quickComparison": {
+      "title": "クイック比較",
+      "rows": {
+        "movies": "映画",
+        "quality": "画質",
+        "screens": "画面数",
+        "adFree": "広告なし",
+        "downloads": "ダウンロード",
+        "profiles": "プロフィール",
+        "exclusives": "独占作品"
+      }
+    }
   }
 }
