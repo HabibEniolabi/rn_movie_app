@@ -4,6 +4,7 @@
     "done": "تم",
     "okay": "حسنًا",
     "loading": "جارٍ التحميل...",
+    "cancel": "إلغاء",
     "somethingWentWrong": "حدث خطأ ما. حاول مرة أخرى."
   },
   "tabs": {
@@ -49,7 +50,8 @@
     "portugueseNative": "Português",
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
-    "arabicNative": "العربية"
+    "arabicNative": "العربية",
+    "chooseLanguage": "اختر اللغة"
   },
   "profile": {
     "title": "الملف الشخصي",

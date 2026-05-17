@@ -4,6 +4,7 @@
     "done": "Concluído",
     "okay": "OK",
     "loading": "Carregando...",
+    "cancel": "Cancelar",
     "somethingWentWrong": "Algo deu errado. Tente novamente."
   },
   "tabs": {
@@ -49,7 +50,8 @@
     "portugueseNative": "Português",
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
-    "arabicNative": "العربية"
+    "arabicNative": "العربية",
+    "chooseLanguage": "Escolher idioma"
   },
   "profile": {
     "title": "Perfil",

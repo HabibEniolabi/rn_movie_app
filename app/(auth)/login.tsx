@@ -20,6 +20,7 @@ import SocialButton from "@/components/SocialButton";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const socialButton = [
   {
@@ -101,6 +102,10 @@ const Login = () => {
       <View className="bg-primary flex-1">
         <Image source={images.bg} className="absolute z-0 w-full" />
 
+        <View className="absolute top-14 right-10 z-20">
+          <LanguageSwitcher />
+        </View>
+        
         <KeyboardAwareScrollView
           className="flex-1 px-10"
           showsVerticalScrollIndicator={false}
@@ -221,7 +226,7 @@ const Login = () => {
 
             <View className="flex-row gap-2 items-center justify-center mt-8">
               <Text className="font-bold text-dark-500 text-md">
-                Don't have an account?
+                Don&apos;t have an account?
               </Text>
 
               <TouchableOpacity

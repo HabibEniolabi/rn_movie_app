@@ -4,6 +4,7 @@
     "done": "완료",
     "okay": "확인",
     "loading": "로딩 중...",
+    "cancel": "취소",
     "somethingWentWrong": "문제가 발생했습니다. 다시 시도해 주세요."
   },
   "tabs": {
@@ -49,7 +50,8 @@
     "portugueseNative": "Português",
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
-    "arabicNative": "العربية"
+    "arabicNative": "العربية",
+    "chooseLanguage": "언어 선택"
   },
   "profile": {
     "title": "프로필",

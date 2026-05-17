@@ -4,6 +4,7 @@
     "done": "完了",
     "okay": "OK",
     "loading": "読み込み中...",
+    "cancel": "キャンセル",
     "somethingWentWrong": "問題が発生しました。もう一度お試しください。"
   },
   "tabs": {
@@ -49,7 +50,8 @@
     "portugueseNative": "Português",
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
-    "arabicNative": "العربية"
+    "arabicNative": "العربية",
+    "chooseLanguage": "言語を選択"
   },
   "profile": {
     "title": "プロフィール",

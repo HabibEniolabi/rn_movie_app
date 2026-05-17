@@ -4,6 +4,7 @@
     "done": "Fertig",
     "okay": "OK",
     "loading": "Wird geladen...",
+    "cancel": "Abbrechen",
     "somethingWentWrong": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
   },
   "tabs": {
@@ -49,7 +50,8 @@
     "portugueseNative": "Português",
     "japaneseNative": "日本語",
     "koreanNative": "한국어",
-    "arabicNative": "العربية"
+    "arabicNative": "العربية",
+    "chooseLanguage": "Sprache auswählen"
   },
   "profile": {
     "title": "Profil",
