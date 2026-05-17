@@ -68,7 +68,8 @@
     "signOut": "Se déconnecter",
     "signOutFailed": "Échec de la déconnexion",
     "defaultFullName": "Utilisateur",
-    "defaultUsername": "utilisateur"
+    "defaultUsername": "utilisateur",
+    "noFavouriteGenres": "Aucun genre favori sélectionné pour le moment"
   },
   "genres": {
     "action": "Action",
@@ -193,7 +194,9 @@
       "addNumbers": "— ajoutez des chiffres pour renforcer",
       "almostThere": "— presque parfait",
       "passwordLooksGood": "— le mot de passe est bon"
-    }
+    },
+    "authError": "Erreur d’authentification",
+    "noLoggedInUser": "Aucun utilisateur connecté trouvé."
   },
   "onboarding": {
     "planTitle": "Choisissez votre forfait 🎬",
@@ -203,7 +206,20 @@
     "startWithFree": "Commencer gratuitement",
     "seeFull": "voir la",
     "planComparison": "comparaison des forfaits",
-    "stepProgress": "Étape {{step}} sur {{totalSteps}}"
+    "stepProgress": "Étape {{step}} sur {{totalSteps}}",
+    "genres": {
+      "title": "Qu’aimez-vous ? ❤️",
+      "subtitle": "Choisissez au moins {{count}} genres pour personnaliser votre fil.",
+      "minimumSelected": "{{selected}} sur {{count}} minimum sélectionnés",
+      "selectMoreTitle": "Sélectionnez plus de genres",
+      "selectMoreMessage": "Veuillez sélectionner au moins {{count}} genres.",
+      "saveError": "Impossible d’enregistrer vos genres. Veuillez réessayer.",
+      "greatPicks": "🎉 Super choix ! Votre fil est presque prêt.",
+      "startWatching": "Commencer à regarder",
+      "selectGenres": "Sélectionnez {{count}} genres",
+      "notSureYet": "Pas encore sûr ?",
+      "skipForNow": "Passer pour le moment"
+    }
   },
   "plans": {
     "free": {

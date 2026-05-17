@@ -68,7 +68,8 @@
     "signOut": "Cerrar sesión",
     "signOutFailed": "No se pudo cerrar sesión",
     "defaultFullName": "Usuario",
-    "defaultUsername": "usuario"
+    "defaultUsername": "usuario",
+    "noFavouriteGenres": "Aún no has seleccionado géneros favoritos"
   },
   "genres": {
     "action": "Acción",
@@ -193,7 +194,9 @@
       "addNumbers": "— añade números para reforzarla",
       "almostThere": "— casi listo",
       "passwordLooksGood": "— la contraseña se ve bien"
-    }
+    },
+    "authError": "Error de autenticación",
+    "noLoggedInUser": "No se encontró ningún usuario conectado."
   },
   "onboarding": {
     "planTitle": "Elige tu plan 🎬",
@@ -203,7 +206,20 @@
     "startWithFree": "Empezar gratis",
     "seeFull": "ver",
     "planComparison": "comparación de planes",
-    "stepProgress": "Paso {{step}} de {{totalSteps}}"
+    "stepProgress": "Paso {{step}} de {{totalSteps}}",
+    "genres": {
+      "title": "¿Qué te gusta? ❤️",
+      "subtitle": "Elige al menos {{count}} géneros para personalizar tu feed.",
+      "minimumSelected": "{{selected}} de {{count}} mínimo seleccionados",
+      "selectMoreTitle": "Selecciona más géneros",
+      "selectMoreMessage": "Selecciona al menos {{count}} géneros.",
+      "saveError": "No se pudieron guardar tus géneros. Inténtalo de nuevo.",
+      "greatPicks": "🎉 ¡Buenas elecciones! Tu feed está casi listo.",
+      "startWatching": "Empezar a ver",
+      "selectGenres": "Selecciona {{count}} géneros",
+      "notSureYet": "¿Aún no estás seguro?",
+      "skipForNow": "Omitir por ahora"
+    }
   },
   "plans": {
     "free": {

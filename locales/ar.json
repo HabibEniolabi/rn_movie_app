@@ -68,7 +68,8 @@
     "signOut": "تسجيل الخروج",
     "signOutFailed": "فشل تسجيل الخروج",
     "defaultFullName": "مستخدم",
-    "defaultUsername": "user"
+    "defaultUsername": "user",
+    "noFavouriteGenres": "لم يتم اختيار أي أنواع مفضلة بعد"
   },
   "genres": {
     "action": "أكشن",
@@ -193,7 +194,9 @@
       "addNumbers": "— أضف أرقامًا لتقويتها",
       "almostThere": "— أوشكت على الانتهاء",
       "passwordLooksGood": "— كلمة المرور تبدو جيدة"
-    }
+    },
+    "authError": "خطأ في المصادقة",
+    "noLoggedInUser": "لم يتم العثور على مستخدم مسجل الدخول."
   },
   "onboarding": {
     "planTitle": "اختر خطتك 🎬",
@@ -203,7 +206,20 @@
     "startWithFree": "ابدأ مجانًا",
     "seeFull": "عرض",
     "planComparison": "مقارنة الخطط",
-    "stepProgress": "الخطوة {{step}} من {{totalSteps}}"
+    "stepProgress": "الخطوة {{step}} من {{totalSteps}}",
+    "genres": {
+      "title": "ماذا تحب؟ ❤️",
+      "subtitle": "اختر {{count}} أنواع على الأقل حتى نتمكن من تخصيص موجزك.",
+      "minimumSelected": "تم اختيار {{selected}} من أصل {{count}} كحد أدنى",
+      "selectMoreTitle": "اختر المزيد من الأنواع",
+      "selectMoreMessage": "يرجى اختيار {{count}} أنواع على الأقل.",
+      "saveError": "تعذر حفظ الأنواع الخاصة بك. يرجى المحاولة مرة أخرى.",
+      "greatPicks": "🎉 اختيارات رائعة! موجزك على وشك أن يكون جاهزًا.",
+      "startWatching": "ابدأ المشاهدة",
+      "selectGenres": "اختر {{count}} أنواع",
+      "notSureYet": "لست متأكدًا بعد؟",
+      "skipForNow": "تخطي الآن"
+    }
   },
   "plans": {
     "free": {

@@ -68,7 +68,8 @@
     "signOut": "Abmelden",
     "signOutFailed": "Abmeldung fehlgeschlagen",
     "defaultFullName": "Benutzer",
-    "defaultUsername": "benutzer"
+    "defaultUsername": "benutzer",
+    "noFavouriteGenres": "Noch keine Lieblingsgenres ausgewählt"
   },
   "genres": {
     "action": "Action",
@@ -193,7 +194,9 @@
       "addNumbers": "— füge Zahlen hinzu, um es zu stärken",
       "almostThere": "— fast geschafft",
       "passwordLooksGood": "— das Passwort sieht gut aus"
-    }
+    },
+    "authError": "Authentifizierungsfehler",
+    "noLoggedInUser": "Kein angemeldeter Benutzer gefunden."
   },
   "onboarding": {
     "planTitle": "Wähle deinen Plan 🎬",
@@ -203,7 +206,20 @@
     "startWithFree": "Kostenlos starten",
     "seeFull": "vollständigen",
     "planComparison": "Planvergleich ansehen",
-    "stepProgress": "Schritt {{step}} von {{totalSteps}}"
+    "stepProgress": "Schritt {{step}} von {{totalSteps}}",
+    "genres": {
+      "title": "Was liebst du? ❤️",
+      "subtitle": "Wähle mindestens {{count}} Genres aus, damit wir deinen Feed personalisieren können.",
+      "minimumSelected": "{{selected}} von {{count}} mindestens ausgewählt",
+      "selectMoreTitle": "Wähle mehr Genres",
+      "selectMoreMessage": "Bitte wähle mindestens {{count}} Genres aus.",
+      "saveError": "Deine Genres konnten nicht gespeichert werden. Bitte versuche es erneut.",
+      "greatPicks": "🎉 Gute Auswahl! Dein Feed ist fast bereit.",
+      "startWatching": "Ansehen starten",
+      "selectGenres": "Wähle {{count}} Genres",
+      "notSureYet": "Noch unsicher?",
+      "skipForNow": "Erstmal überspringen"
+    }
   },
   "plans": {
     "free": {

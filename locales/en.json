@@ -68,7 +68,8 @@
     "signOut": "Sign Out",
     "signOutFailed": "Sign out failed",
     "defaultFullName": "User",
-    "defaultUsername": "user"
+    "defaultUsername": "user",
+    "noFavouriteGenres": "No favourite genres selected yet"
   },
   "genres": {
     "action": "Action",
@@ -193,7 +194,9 @@
       "addNumbers": "— add numbers to strengthen",
       "almostThere": "— almost there",
       "passwordLooksGood": "— password looks good"
-    }
+    },
+    "authError": "Auth error",
+    "noLoggedInUser": "No logged-in user found."
   },
   "onboarding": {
     "planTitle": "Choose your plan 🎬",
@@ -203,7 +206,20 @@
     "startWithFree": "Start with Free",
     "seeFull": "see full",
     "planComparison": "plan comparison",
-    "stepProgress": "Step {{step}} of {{totalSteps}}"
+    "stepProgress": "Step {{step}} of {{totalSteps}}",
+    "genres": {
+      "title": "What do you love? ❤️",
+      "subtitle": "Pick at least {{count}} genres so we can personalise your feed.",
+      "minimumSelected": "{{selected}} of {{count}} minimum selected",
+      "selectMoreTitle": "Select more genres",
+      "selectMoreMessage": "Please select at least {{count}} genres.",
+      "saveError": "Could not save your genres. Please try again.",
+      "greatPicks": "🎉 Great picks! Your feed is almost ready.",
+      "startWatching": "Start Watching",
+      "selectGenres": "Select {{count}} genres",
+      "notSureYet": "Not sure yet?",
+      "skipForNow": "Skip for now"
+    }
   },
   "plans": {
     "free": {

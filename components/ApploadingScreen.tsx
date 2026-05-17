@@ -6,6 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 const AppLoadingScreen = () => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -93,7 +94,30 @@ const AppLoadingScreen = () => {
   });
 
   return (
-    <View className="flex-1 bg-primary items-center justify-center px-8">
+    <LinearGradient
+      colors={["#030014", "#120A2A", "#24103F", "#030014"]}
+      locations={[0, 0.35, 0.7, 1]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      className="flex-1 items-center justify-center px-8"
+    >
+      {/* Background glow 1 */}
+      <View
+        className="absolute w-[260px] h-[260px] rounded-full top-[90px] -right-[90px]"
+        style={{
+          backgroundColor: "rgba(217, 70, 196, 0.18)",
+        }}
+      />
+
+      {/* Background glow 2 */}
+      <View
+        className="absolute w-[240px] h-[240px] rounded-full bottom-[120px] -left-[100px]"
+        style={{
+          backgroundColor: "rgba(155, 77, 255, 0.18)",
+        }}
+      />
+
+      {/* Logo */}
       <Animated.View
         style={{
           opacity: fadeAnim,
@@ -103,9 +127,16 @@ const AppLoadingScreen = () => {
             { translateY: bounceAnim },
           ],
         }}
-        className="w-28 h-28 rounded-[36px] bg-dark-300 border border-dark-400 items-center justify-center mb-6"
+        className="w-28 h-28 rounded-[36px] overflow-hidden mb-6"
       >
-        <Text className="text-white font-bold text-5xl">M</Text>
+        <LinearGradient
+          colors={["#D946C4", "#9B4DFF"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          className="flex-1 items-center justify-center border border-white/20"
+        >
+          <Text className="text-white font-bold text-5xl">M</Text>
+        </LinearGradient>
       </Animated.View>
 
       <Text className="text-white font-bold text-3xl mb-2">MovieFlix</Text>
@@ -114,10 +145,10 @@ const AppLoadingScreen = () => {
         Find your next favorite movie
       </Text>
 
-      <ActivityIndicator size="large" color="#B954F5" />
+      <ActivityIndicator size="large" color="#D946C4" />
 
       <Text className="text-light-200 text-sm mt-4">Loading movies...</Text>
-    </View>
+    </LinearGradient>
   );
 };
 

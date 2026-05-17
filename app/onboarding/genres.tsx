@@ -16,11 +16,14 @@ import OnboardingHeaderInfo from "@/components/OnboardingHeaderInfo";
 import { movieGenres } from "@/services/genres";
 import Button from "@/components/Button";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const MINIMUM_SELECTION = 3;
 const MAX_DOTS = 6;
 
 const Genres = () => {
+  const { t } = useTranslation();
+
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
 
   const [customAlert, setCustomAlert] = useState<{
@@ -37,8 +40,10 @@ const Genres = () => {
     if (selectedGenres.length < 3) {
       setCustomAlert({
         visible: true,
-        title: "Select more genres",
-        message: "Please select at least 3 genres.",
+        title: t("onboarding.genres.selectMoreTitle"),
+        message: t("onboarding.genres.selectMoreMessage", {
+          count: MINIMUM_SELECTION,
+        }),
       });
       return;
     }
@@ -48,8 +53,8 @@ const Genres = () => {
     if (!user) {
       setCustomAlert({
         visible: true,
-        title: "Auth error",
-        message: "No logged-in user found.",
+        title: t("auth.authError"),
+        message: t("auth.noLoggedInUser"),
       });
       return;
     }
@@ -72,9 +77,8 @@ const Genres = () => {
 
       setCustomAlert({
         visible: true,
-        title: "Error",
-        message:
-          error?.message || "Could not save your genres. Please try again.",
+        title: t("common.error"),
+        message: error?.message || t("onboarding.genres.saveError"),
       });
     }
   };
@@ -128,12 +132,17 @@ const Genres = () => {
           contentContainerStyle={{ paddingBottom: 80 }}
         >
           <OnboardingHeaderInfo
-            title={"What do you love? ❤️"}
-            subtitle={"Pick at least 3 genres so we can personalise your feed."}
+            title={t("onboarding.genres.title")}
+            subtitle={t("onboarding.genres.subtitle", {
+              count: MINIMUM_SELECTION,
+            })}
           />
           <View className="flex-row items-center justify-between mt-8">
             <Text className="text-[#8B88A8] font-semibold text-base">
-              {selectedGenres.length} of {MINIMUM_SELECTION} minimum selected
+              {t("onboarding.genres.minimumSelected", {
+                selected: selectedGenres.length,
+                count: MINIMUM_SELECTION,
+              })}
             </Text>
 
             <View className="flex-row items-center gap-2">
@@ -203,7 +212,7 @@ const Genres = () => {
           {selectedGenres.length >= 3 && (
             <View className="flex-row items-center justify-center mt-4 border border-[#1D9E75] bg-[#10201F] rounded-[18px] px-4 py-4">
               <Text className="text-[#4DCFA0] text-md font-bold">
-                🎉 Great picks! Your feed is almost ready.
+                {t("onboarding.genres.greatPicks")}
               </Text>
             </View>
           )}
@@ -217,8 +226,10 @@ const Genres = () => {
             <Button
               title={
                 canStartWatching
-                  ? "Start Watching"
-                  : `Select ${MINIMUM_SELECTION} genres`
+                  ? t("onboarding.genres.startWatching")
+                  : t("onboarding.genres.selectGenres", {
+                      count: MINIMUM_SELECTION,
+                    })
               }
               onPress={handleStartWatching}
               showArrow={canStartWatching}
@@ -228,12 +239,12 @@ const Genres = () => {
 
           <View className="flex-row items-center justify-center mt-8">
             <Text className="text-[#6A6880] text-lg font-semibold">
-              Not sure yet?{" "}
+              {t("onboarding.genres.notSureYet")}{" "}
             </Text>
 
             <TouchableOpacity activeOpacity={0.85} onPress={handleSkipGenres}>
               <Text className="text-[#9B59F5] text-xl font-bold">
-                Skip for now
+                {t("onboarding.genres.skipForNow")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -263,7 +274,9 @@ const Genres = () => {
               }
               className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
             >
-              <Text className="text-white font-bold text-lg">Okay</Text>
+              <Text className="text-white font-bold text-lg">
+                {t("common.okay")}
+              </Text>
             </Pressable>
           </View>
         </View>

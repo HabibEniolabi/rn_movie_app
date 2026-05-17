@@ -68,7 +68,8 @@
     "signOut": "サインアウト",
     "signOutFailed": "サインアウトに失敗しました",
     "defaultFullName": "ユーザー",
-    "defaultUsername": "user"
+    "defaultUsername": "user",
+    "noFavouriteGenres": "お気に入りジャンルはまだ選択されていません"
   },
   "genres": {
     "action": "アクション",
@@ -193,7 +194,9 @@
       "addNumbers": "— 数字を追加すると強くなります",
       "almostThere": "— もう少しです",
       "passwordLooksGood": "— 良いパスワードです"
-    }
+    },
+    "authError": "認証エラー",
+    "noLoggedInUser": "ログイン中のユーザーが見つかりません。"
   },
   "onboarding": {
     "planTitle": "プランを選択 🎬",
@@ -203,7 +206,20 @@
     "startWithFree": "無料で始める",
     "seeFull": "詳しく見る",
     "planComparison": "プラン比較",
-    "stepProgress": "{{totalSteps}}ステップ中{{step}}"
+    "stepProgress": "{{totalSteps}}ステップ中{{step}}",
+    "genres": {
+      "title": "何が好きですか？ ❤️",
+      "subtitle": "フィードをパーソナライズするために、少なくとも{{count}}つのジャンルを選んでください。",
+      "minimumSelected": "{{count}}つ中{{selected}}つ選択済み",
+      "selectMoreTitle": "ジャンルをさらに選択してください",
+      "selectMoreMessage": "少なくとも{{count}}つのジャンルを選択してください。",
+      "saveError": "ジャンルを保存できませんでした。もう一度お試しください。",
+      "greatPicks": "🎉 いい選択です！フィードの準備がもうすぐ完了します。",
+      "startWatching": "視聴を開始",
+      "selectGenres": "{{count}}つのジャンルを選択",
+      "notSureYet": "まだ迷っていますか？",
+      "skipForNow": "今はスキップ"
+    }
   },
   "plans": {
     "free": {

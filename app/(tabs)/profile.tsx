@@ -21,21 +21,14 @@ import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
-
-const favouriteGenres = [
-  { id: 1, name: "genres.action" },
-  { id: 2, name: "genres.sciFi" },
-  { id: 3, name: "genres.thriller" },
-  { id: 4, name: "genres.animation" },
-  { id: 5, name: "genres.drama" },
-  { id: 6, name: "genres.horror" },
-];
+import { movieGenres } from "@/services/genres";
 
 const Profile = () => {
   const { t } = useTranslation();
   const tabBarHeight = useBottomTabBarHeight();
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
+  const [favouriteGenreIds, setFavouriteGenreIds] = useState<string[]>([]);
 
   const [customAlert, setCustomAlert] = useState<{
     visible: boolean;
@@ -48,11 +41,15 @@ const Profile = () => {
   });
 
   const translatedFavouriteGenres = useMemo(() => {
-    return favouriteGenres.map((genre) => ({
-      id: genre.id,
-      name: t(genre.name),
-    }));
-  }, [t]);
+    return movieGenres
+      .filter((genre) => favouriteGenreIds.includes(genre.id))
+      .map((genre) => ({
+        id: genre.id,
+        name: t(`genres.${genre.id}`, {
+          defaultValue: genre.name,
+        }),
+      }));
+  }, [favouriteGenreIds, t]);
 
   const profileItems = useMemo(
     () => [
@@ -116,12 +113,18 @@ const Profile = () => {
             data.firstName?.toLowerCase() || t("profile.defaultUsername")
           }_movies`
         );
+
+        setFavouriteGenreIds(
+          Array.isArray(data.favouriteGenres) ? data.favouriteGenres : []
+        );
       } else {
         setFullName(user.displayName || t("profile.defaultFullName"));
 
         setUsername(
           `@${user.email?.split("@")[0] || t("profile.defaultUsername")}`
         );
+
+        setFavouriteGenreIds([]);
       }
     };
 
@@ -182,7 +185,13 @@ const Profile = () => {
           <Text className="text-dark-500 font-bold uppercase">
             {t("profile.favouriteGenres")}
           </Text>
-          <Genre genres={translatedFavouriteGenres} />
+          {translatedFavouriteGenres.length > 0 ? (
+            <Genre genres={translatedFavouriteGenres} />
+          ) : (
+            <Text className="text-[#8B88A8] text-base mt-3">
+              {t("profile.noFavouriteGenres")}
+            </Text>
+          )}
         </View>
         <View className="flex flex-col gap-6 mt-6">
           <Text className="text-dark-500 font-bold uppercase">

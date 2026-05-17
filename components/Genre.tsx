@@ -1,7 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import useFetch from "@/services/useFetch";
-import { fetchMovieDetails } from "@/services/api";
 
 const genreThemes = [
   {
@@ -37,7 +35,7 @@ const genreThemes = [
 ];
 
 type GenreItem = {
-  id: number;
+  id: string | number;
   name: string;
 };
 
@@ -46,6 +44,9 @@ interface GenreProps {
 }
 
 const Genre = ({ genres }: GenreProps) => {
+  if (!genres.length) {
+    return null;
+  }
   return (
     <View className="flex-row flex-wrap gap-3 mt-4">
       {genres.map((genre, index) => {
