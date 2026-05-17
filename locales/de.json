@@ -166,5 +166,39 @@
     "invalidEmailOrPassword": "Ungültige E-Mail oder ungültiges Passwort. Bitte versuche es erneut.",
     "tooManyAttempts": "Zu viele Versuche. Bitte versuche es später erneut.",
     "accountDisabled": "Dieses Konto wurde deaktiviert."
+  },
+  "onboarding": {
+    "planTitle": "Wähle deinen Plan 🎬",
+    "planSubtitle": "Wähle einen Plan, der zu dir passt. Du kannst jederzeit upgraden oder kündigen.",
+    "planWarning": "Spare 40 % mit jährlicher Abrechnung",
+    "continueWithPro": "Mit Pro fortfahren",
+    "startWithFree": "Kostenlos starten",
+    "seeFull": "vollständigen",
+    "planComparison": "Planvergleich ansehen"
+  },
+  "plans": {
+    "free": {
+      "title": "Kostenlos",
+      "subtitle": "Ideal für gelegentliche Zuschauer",
+      "period": "für immer",
+      "features": {
+        "freeMovies": "100+ kostenlose Filme",
+        "streaming": "720p-Streaming",
+        "adsRemoval": "Keine Werbeentfernung",
+        "offlineDownloads": "Keine Offline-Downloads"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "Am besten für Filmliebhaber",
+      "period": "/ Monat",
+      "badge": "BELIEBT",
+      "features": {
+        "hdMovies": "300+ HD-Filme",
+        "streaming": "4K + HDR-Streaming",
+        "adFree": "Werbefreies Erlebnis",
+        "offlineDownloads": "Offline-Downloads"
+      }
+    }
   }
 }

@@ -166,5 +166,39 @@
     "invalidEmailOrPassword": "البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
     "tooManyAttempts": "محاولات كثيرة جدًا. يرجى المحاولة لاحقًا.",
     "accountDisabled": "تم تعطيل هذا الحساب."
+  },
+  "onboarding": {
+    "planTitle": "اختر خطتك 🎬",
+    "planSubtitle": "اختر الخطة المناسبة لك. يمكنك الترقية أو الإلغاء في أي وقت.",
+    "planWarning": "وفّر 40٪ مع الدفع السنوي",
+    "continueWithPro": "المتابعة مع Pro",
+    "startWithFree": "ابدأ مجانًا",
+    "seeFull": "عرض",
+    "planComparison": "مقارنة الخطط"
+  },
+  "plans": {
+    "free": {
+      "title": "مجاني",
+      "subtitle": "مناسب للمشاهدة الخفيفة",
+      "period": "إلى الأبد",
+      "features": {
+        "freeMovies": "أكثر من 100 فيلم مجاني",
+        "streaming": "بث بجودة 720p",
+        "adsRemoval": "لا توجد إزالة للإعلانات",
+        "offlineDownloads": "لا توجد تنزيلات بدون إنترنت"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "الأفضل لعشاق الأفلام",
+      "period": "/ شهر",
+      "badge": "الأكثر شعبية",
+      "features": {
+        "hdMovies": "أكثر من 300 فيلم HD",
+        "streaming": "بث 4K + HDR",
+        "adFree": "تجربة بدون إعلانات",
+        "offlineDownloads": "تنزيلات بدون إنترنت"
+      }
+    }
   }
 }

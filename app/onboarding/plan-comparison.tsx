@@ -15,8 +15,10 @@ import PlanComparisonCard from "@/components/PLanComparisonCard";
 import { images } from "@/constants/images";
 import BillingToggle from "@/components/BillingToggle";
 import QuickComparison from "@/components/QuickComparison";
+import { useTranslation } from "react-i18next";
 
 const PlanComparison = () => {
+  const { t } = useTranslation();
   const [billingType, setBillingType] = useState<"monthly" | "yearly">(
     "yearly"
   );
@@ -47,9 +49,11 @@ const PlanComparison = () => {
             <Feather name="chevron-left" size={24} color="#8B88A8" />
           </TouchableOpacity>
           <View className="flex flex-col gap-2">
-            <Text className="text-2xl text-white font-bold">Choose a Plan</Text>
+            <Text className="text-2xl text-white font-bold">
+              {t("planComparison.title")}
+            </Text>
             <Text className="text-md text-dark-500">
-              Upgrade or cancel anytime
+              {t("planComparison.subtitle")}
             </Text>
           </View>
         </View>
@@ -63,34 +67,34 @@ const PlanComparison = () => {
             <PlanComparisonCard
               variant="free"
               iconSource={images.film}
-              title="Free"
-              subtitle="Great for casual viewers"
+              title={t("planComparison.free.title")}
+              subtitle={t("planComparison.free.subtitle")}
               price="$0"
-              period="forever free"
-              buttonTitle="Start Free"
+              period={t("planComparison.free.period")}
+              buttonTitle={t("planComparison.free.buttonTitle")}
               onPress={() => choosePlan("free")}
               features={[
                 {
-                  label: "100+ free movies",
+                  label: t("planComparison.free.features.freeMovies"),
                   available: true,
                   highlight: "100+",
                 },
                 {
-                  label: "Stream up to 720p",
+                  label: t("planComparison.free.features.streaming"),
                   available: true,
                   highlight: "720p",
                 },
                 {
-                  label: "1 screen at a time",
+                  label: t("planComparison.free.features.screen"),
                   available: true,
                   highlight: "1",
                 },
                 {
-                  label: "Ads shown between films",
+                  label: t("planComparison.free.features.ads"),
                   available: false,
                 },
                 {
-                  label: "No offline downloads",
+                  label: t("planComparison.free.features.downloads"),
                   available: false,
                 },
               ]}
@@ -99,47 +103,47 @@ const PlanComparison = () => {
             <PlanComparisonCard
               variant="pro"
               iconSource={images.diamond}
-              title="Pro"
-              subtitle="For real movie lovers"
+              title={t("planComparison.pro.title")}
+              subtitle={t("planComparison.pro.subtitle")}
               price="$5.99"
-              period="per month, billed yearly"
-              badge="MOST POPULAR"
-              buttonTitle="Get Pro — $5.99/mo"
+              period={t("planComparison.pro.period")}
+              badge={t("planComparison.pro.badge")}
+              buttonTitle={t("planComparison.pro.buttonTitle")}
               onPress={() => choosePlan("pro")}
               features={[
                 {
-                  label: "300+ HD movies + new releases",
+                  label: t("planComparison.pro.features.hdMovies"),
                   available: true,
                   highlight: "300+",
                 },
                 {
-                  label: "Stream in full 1080p",
+                  label: t("planComparison.pro.features.streaming"),
                   available: true,
                   highlight: "1080p",
                 },
                 {
-                  label: "2 screens simultaneously",
+                  label: t("planComparison.pro.features.screens"),
                   available: true,
                   highlight: "2",
                 },
                 {
-                  label: "Completely ad-free",
+                  label: t("planComparison.pro.features.adFree"),
                   available: true,
-                  highlight: "ad-free",
+                  highlight: t("planComparison.pro.highlights.adFree"),
                 },
                 {
-                  label: "Download up to 10 titles",
+                  label: t("planComparison.pro.features.downloads"),
                   available: true,
                   highlight: "10",
-                  trailingText: "offline",
+                  trailingText: t("planComparison.pro.highlights.offline"),
                 },
                 {
-                  label: "3 user profiles + kids mode",
+                  label: t("planComparison.pro.features.profiles"),
                   available: true,
                   highlight: "3",
                 },
                 {
-                  label: "Personalised genre feed",
+                  label: t("planComparison.pro.features.personalisedFeed"),
                   available: true,
                 },
               ]}
@@ -148,48 +152,48 @@ const PlanComparison = () => {
             <PlanComparisonCard
               variant="ultra"
               iconSource={images.crown}
-              title="Ultra"
-              subtitle="The ultimate experience"
+              title={t("planComparison.ultra.title")}
+              subtitle={t("planComparison.ultra.subtitle")}
               oldPrice="$14.99/mo"
               price="$9.99"
-              period="per month, billed yearly"
-              buttonTitle="Get Ultra — $9.99/mo"
+              period={t("planComparison.ultra.period")}
+              buttonTitle={t("planComparison.ultra.buttonTitle")}
               onPress={() => choosePlan("ultra")}
               features={[
                 {
-                  label: "500+ movies incl. exclusives",
+                  label: t("planComparison.ultra.features.exclusives"),
                   iconType: "star",
                   highlight: "500+",
                 },
                 {
-                  label: "Stunning 4K HDR + Dolby Atmos",
+                  label: t("planComparison.ultra.features.streaming"),
                   iconType: "star",
                   highlight: "4K HDR",
                 },
                 {
-                  label: "4 screens at once",
+                  label: t("planComparison.ultra.features.screens"),
                   iconType: "star",
                   highlight: "4",
                 },
                 {
-                  label: "Unlimited offline downloads",
+                  label: t("planComparison.ultra.features.downloads"),
                   iconType: "star",
-                  highlight: "Unlimited",
+                  highlight: t("planComparison.ultra.highlights.unlimited"),
                 },
                 {
-                  label: "6 profiles + advanced kids lock",
+                  label: t("planComparison.ultra.features.profiles"),
                   iconType: "star",
                   highlight: "6",
                 },
                 {
-                  label: "Early premiere access",
+                  label: t("planComparison.ultra.features.premiereAccess"),
                   iconType: "star",
-                  highlight: "access",
+                  highlight: t("planComparison.ultra.highlights.access"),
                 },
                 {
-                  label: "Priority 24/7 support",
+                  label: t("planComparison.ultra.features.prioritySupport"),
                   iconType: "star",
-                  highlight: "Priority",
+                  highlight: t("planComparison.ultra.highlights.priority"),
                 },
               ]}
             />
@@ -206,49 +210,48 @@ const PlanComparison = () => {
 
             <View className="flex-1">
               <Text className="text-[#4DCFA0] font-bold text-lg mb-2">
-                7-day free trial on all paid plans
+                {t("planComparison.trialTitle")}
               </Text>
 
               <Text className="text-[#8B88A8] text-base leading-6">
-                Try Pro or Ultra free for a week. Cancel before the trial ends
-                and you won&apos;t be charged.
+                {t("planComparison.trialSubtitle")}
               </Text>
             </View>
           </View>
 
           <View className="mt-8 px-2">
             <Text className="text-dark-500 text-sm text-center leading-7">
-              By subscribing you agree to our{" "}
+              {t("planComparison.termsPrefix")}{" "}
               <Text
                 onPress={() => {
                   setCustomAlert({
                     visible: true,
-                    title: "Terms",
-                    message: "I agree to the terms and conditions of MovieFlix.",
+                    title: t("planComparison.termsTitle"),
+                    message: t("planComparison.termsMessage"),
                   });
                 }}
                 className="text-[#B15CFF] font-bold"
               >
-                Terms
+                {t("planComparison.terms")}
               </Text>{" "}
-              and{" "}
+              {t("planComparison.and")}{" "}
               <Text
                 onPress={() => {
                   setCustomAlert({
                     visible: true,
-                    title: "Privacy Policy",
-                    message: "I agree to the Privacy Policy of MovieFlix.",
+                    title: t("planComparison.privacyTitle"),
+                    message: t("planComparison.privacyMessage"),
                   });
                 }}
                 className="text-[#B15CFF] font-bold"
               >
-                Privacy Policy
+                {t("planComparison.privacyPolicy")}
               </Text>
               .
             </Text>
 
             <Text className="text-dark-500 text-sm text-center leading-7 mt-1">
-              Prices shown in USD. Cancel anytime.
+              {t("planComparison.pricesNote")}
             </Text>
           </View>
         </ScrollView>
@@ -276,7 +279,9 @@ const PlanComparison = () => {
                 }
                 className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
               >
-                <Text className="text-white font-bold text-lg">Okay</Text>
+                <Text className="text-white font-bold text-lg">
+                  {t("common.okay")}
+                </Text>
               </Pressable>
             </View>
           </View>

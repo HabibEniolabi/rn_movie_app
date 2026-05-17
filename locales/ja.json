@@ -166,5 +166,39 @@
     "invalidEmailOrPassword": "メールアドレスまたはパスワードが正しくありません。もう一度お試しください。",
     "tooManyAttempts": "試行回数が多すぎます。しばらくしてから再試行してください。",
     "accountDisabled": "このアカウントは無効になっています。"
+  },
+  "onboarding": {
+    "planTitle": "プランを選択 🎬",
+    "planSubtitle": "自分に合ったプランを選びましょう。いつでもアップグレードやキャンセルができます。",
+    "planWarning": "年払いで40%お得",
+    "continueWithPro": "Proで続行",
+    "startWithFree": "無料で始める",
+    "seeFull": "詳しく見る",
+    "planComparison": "プラン比較"
+  },
+  "plans": {
+    "free": {
+      "title": "無料",
+      "subtitle": "気軽に楽しみたい方向け",
+      "period": "ずっと無料",
+      "features": {
+        "freeMovies": "100本以上の無料映画",
+        "streaming": "720pストリーミング",
+        "adsRemoval": "広告非表示なし",
+        "offlineDownloads": "オフラインダウンロードなし"
+      }
+    },
+    "pro": {
+      "title": "Pro",
+      "subtitle": "映画好きに最適",
+      "period": "/ 月",
+      "badge": "一番人気",
+      "features": {
+        "hdMovies": "300本以上のHD映画",
+        "streaming": "4K + HDRストリーミング",
+        "adFree": "広告なし体験",
+        "offlineDownloads": "オフラインダウンロード"
+      }
+    }
   }
 }
