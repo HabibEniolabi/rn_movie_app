@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Modal,
   Pressable,
@@ -21,14 +22,16 @@ import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
-import { movieGenres } from "@/services/genres";
+import { getMovieGenres, MovieGenre } from "@/services/genres";
 
 const Profile = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const tabBarHeight = useBottomTabBarHeight();
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [favouriteGenreIds, setFavouriteGenreIds] = useState<string[]>([]);
+  const [availableGenres, setAvailableGenres] = useState<MovieGenre[]>([]);
+  const [loadingGenres, setLoadingGenres] = useState(true);
 
   const [customAlert, setCustomAlert] = useState<{
     visible: boolean;
@@ -41,15 +44,13 @@ const Profile = () => {
   });
 
   const translatedFavouriteGenres = useMemo(() => {
-    return movieGenres
+    return availableGenres
       .filter((genre) => favouriteGenreIds.includes(genre.id))
       .map((genre) => ({
         id: genre.id,
-        name: t(`genres.${genre.id}`, {
-          defaultValue: genre.name,
-        }),
+        name: genre.name,
       }));
-  }, [favouriteGenreIds, t]);
+  }, [availableGenres, favouriteGenreIds]);
 
   const profileItems = useMemo(
     () => [
@@ -92,6 +93,24 @@ const Profile = () => {
     ],
     [t]
   );
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        setLoadingGenres(true);
+
+        const genres = await getMovieGenres(i18n.language);
+
+        setAvailableGenres(genres);
+      } catch (error) {
+        console.log("Fetch profile genres error:", error);
+      } finally {
+        setLoadingGenres(false);
+      }
+    };
+
+    fetchGenres();
+  }, [i18n.language]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -185,7 +204,11 @@ const Profile = () => {
           <Text className="text-dark-500 font-bold uppercase">
             {t("profile.favouriteGenres")}
           </Text>
-          {translatedFavouriteGenres.length > 0 ? (
+          {loadingGenres ? (
+            <View className="items-start mt-4">
+              <ActivityIndicator size="small" color="#B954F5" />
+            </View>
+          ) : translatedFavouriteGenres.length > 0 ? (
             <Genre genres={translatedFavouriteGenres} />
           ) : (
             <Text className="text-[#8B88A8] text-base mt-3">
@@ -253,7 +276,9 @@ const Profile = () => {
               }
               className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
             >
-              <Text className="text-white font-bold text-lg">{t("common.okay")}</Text>
+              <Text className="text-white font-bold text-lg">
+                {t("common.okay")}
+              </Text>
             </Pressable>
           </View>
         </View>

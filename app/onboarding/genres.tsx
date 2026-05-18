@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Pressable,
@@ -13,17 +13,20 @@ import { doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "@/FirebaseConfig";
 import OnboardingHeader from "@/components/OnboardingHeader";
 import OnboardingHeaderInfo from "@/components/OnboardingHeaderInfo";
-import { movieGenres } from "@/services/genres";
+import { getMovieGenres, MovieGenre } from "@/services/genres";
 import Button from "@/components/Button";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+import { ActivityIndicator } from "react-native";
 
 const MINIMUM_SELECTION = 3;
 const MAX_DOTS = 6;
 
 const Genres = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
+  const [movieGenres, setMovieGenres] = useState<MovieGenre[]>([]);
+  const [loadingGenres, setLoadingGenres] = useState(true);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
 
   const [customAlert, setCustomAlert] = useState<{
@@ -36,8 +39,34 @@ const Genres = () => {
     message: "",
   });
 
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        setLoadingGenres(true);
+
+        const genres = await getMovieGenres(i18n.language);
+
+        setMovieGenres(genres);
+      } catch (error) {
+        console.log("Fetch genres error:", error);
+
+        setCustomAlert({
+          visible: true,
+          title: t("common.error"),
+          message: t("onboarding.genres.fetchError", {
+            defaultValue: "Could not load genres. Please try again.",
+          }),
+        });
+      } finally {
+        setLoadingGenres(false);
+      }
+    };
+
+    fetchGenres();
+  }, [i18n.language, t]);
+
   const handleStartWatching = async () => {
-    if (selectedGenres.length < 3) {
+    if (selectedGenres.length < MINIMUM_SELECTION) {
       setCustomAlert({
         visible: true,
         title: t("onboarding.genres.selectMoreTitle"),
@@ -161,54 +190,66 @@ const Genres = () => {
               })}
             </View>
           </View>
-          <View className="flex-row flex-wrap justify-between mt-6">
-            {movieGenres.map((genre) => {
-              const isSelected = selectedGenres.includes(genre.id);
+          {loadingGenres ? (
+            <View className="items-center justify-center mt-14">
+              <ActivityIndicator size="large" color="#B954F5" />
 
-              return (
-                <TouchableOpacity
-                  key={genre.id}
-                  activeOpacity={0.85}
-                  onPress={() => toggleGenre(genre.id)}
-                  className={`w-[48%] h-[132px] rounded-[22px] border mb-5 items-center justify-center relative ${
-                    isSelected
-                      ? "border-[#A855F7] bg-[#21102F]"
-                      : "border-[#2A2845] bg-[#141325]"
-                  }`}
-                >
-                  {isSelected && (
-                    <LinearGradient
-                      colors={["#D946C4", "#9B4DFF"]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={{
-                        position: "absolute",
-                        top: 16,
-                        right: 16,
-                        width: 36,
-                        height: 36,
-                        borderRadius: 999,
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Feather name="check" size={22} color="#FFFFFF" />
-                    </LinearGradient>
-                  )}
+              <Text className="text-[#8B88A8] font-semibold mt-4">
+                {t("onboarding.genres.loading", {
+                  defaultValue: "Loading genres...",
+                })}
+              </Text>
+            </View>
+          ) : (
+            <View className="flex-row flex-wrap justify-between mt-6">
+              {movieGenres.map((genre) => {
+                const isSelected = selectedGenres.includes(genre.id);
 
-                  <Text className="text-[34px] mb-4">{genre.icon}</Text>
-
-                  <Text
-                    className={`text-lg font-bold ${
-                      isSelected ? "text-[#EDEAF8]" : "text-[#8B88A8]"
+                return (
+                  <TouchableOpacity
+                    key={genre.id}
+                    activeOpacity={0.85}
+                    onPress={() => toggleGenre(genre.id)}
+                    className={`w-[48%] h-[132px] rounded-[22px] border mb-5 items-center justify-center relative ${
+                      isSelected
+                        ? "border-[#A855F7] bg-[#21102F]"
+                        : "border-[#2A2845] bg-[#141325]"
                     }`}
                   >
-                    {genre.name}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+                    {isSelected && (
+                      <LinearGradient
+                        colors={["#D946C4", "#9B4DFF"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={{
+                          position: "absolute",
+                          top: 16,
+                          right: 16,
+                          width: 36,
+                          height: 36,
+                          borderRadius: 999,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Feather name="check" size={22} color="#FFFFFF" />
+                      </LinearGradient>
+                    )}
+
+                    <Text className="text-[34px] mb-4">{genre.icon}</Text>
+
+                    <Text
+                      className={`text-lg font-bold ${
+                        isSelected ? "text-[#EDEAF8]" : "text-[#8B88A8]"
+                      }`}
+                    >
+                      {genre.name}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
           {selectedGenres.length >= 3 && (
             <View className="flex-row items-center justify-center mt-4 border border-[#1D9E75] bg-[#10201F] rounded-[18px] px-4 py-4">
               <Text className="text-[#4DCFA0] text-md font-bold">
