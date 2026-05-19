@@ -85,8 +85,14 @@ export const getMovieGenres = async (
         sortOrder: genre.sortOrder,
       };
     });
-  } catch (error) {
-    console.log("Error fetching genres:", error);
+  } catch (error: any) {
+    console.log("Error fetching genres:", {
+      message: error?.message,
+      code: error?.code,
+      type: error?.type,
+      response: error?.response,
+    });
+
     return [];
   }
 };

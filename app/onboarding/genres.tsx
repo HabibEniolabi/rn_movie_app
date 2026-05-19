@@ -45,6 +45,7 @@ const Genres = () => {
         setLoadingGenres(true);
 
         const genres = await getMovieGenres(i18n.language);
+         console.log("Fetched genres:", genres);
 
         setMovieGenres(genres);
       } catch (error) {
