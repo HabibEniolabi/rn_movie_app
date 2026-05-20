@@ -18,6 +18,7 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundImage": "./assets/images/logo.png"
       },
+      "softwareKeyboardLayoutMode": "resize",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.sudohabib.mobile_movie_app"
