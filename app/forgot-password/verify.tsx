@@ -1,13 +1,3 @@
-/**
- * Verify Screen
- * Confirmation screen after reset email is sent
- *
- * Separation:
- * - UI: Imported reusable components only
- * - Logic: Navigation handlers
- * - Style: All styling via theme tokens
- */
-
 import {
   BackButton,
   Description,
@@ -25,27 +15,12 @@ import {
   Platform,
   ScrollView,
   TouchableWithoutFeedback,
-  View
+  View,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
-// ============================================================================
-// CONSTANTS
-// ============================================================================
-
-const EMAIL_PLACEHOLDER = "your email";
-const INSTRUCTIONS = "Click the link in your email to create a new password. After that, come back and sign in with your new password.";
-
-// ============================================================================
-// LOGIC: Navigation Handler
-// ============================================================================
-
-interface NavigationActions {
-  handleBackToSignIn: () => void;
-  handleGoBack: () => void;
-  handleSendAgain: () => void;
-}
-
-const useNavigationActions = (): NavigationActions => ({
+const useNavigationActions = () => ({
   handleBackToSignIn: () => {
     router.replace("/login");
   },
@@ -57,16 +32,15 @@ const useNavigationActions = (): NavigationActions => ({
   },
 });
 
-// ============================================================================
-// SCREEN COMPONENT
-// ============================================================================
-
 export const Verify: React.FC = () => {
-  // Extract params
-  const { email } = useLocalSearchParams();
-  const displayEmail = (email as string) || EMAIL_PLACEHOLDER;
+  const { t } = useTranslation();
 
-  // Setup hooks
+  const { email } = useLocalSearchParams();
+
+  const displayEmail =
+    (typeof email === "string" ? email : email?.[0]) ||
+    t("auth.emailPlaceholder");
+
   const navigation = useNavigationActions();
 
   return (
@@ -76,69 +50,81 @@ export const Verify: React.FC = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView
-          className="flex-1 mt-16"
-          style={{ backgroundColor: COLORS.primary }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: SPACING.xxl,
-            paddingTop: SPACING.md,
-            paddingBottom: SPACING.lg * 2 + SPACING.md,
-          }}
+        <LinearGradient
+          colors={["#030014", "#10071F", "#21103D", "#030014"]}
+          locations={[0, 0.38, 0.75, 1]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ flex: 1 }}
         >
-          {/* Header: Back Button */}
-          <BackButton onPress={navigation.handleGoBack} />
-
-          {/* Main Content - Centered */}
           <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              marginTop: SPACING.xxxl,
-              gap: SPACING.xl,
+            className="absolute w-[280px] h-[280px] rounded-full -top-24 -right-24"
+            style={{ backgroundColor: "rgba(217, 70, 196, 0.14)" }}
+          />
+
+          <View
+            className="absolute w-[260px] h-[260px] rounded-full bottom-10 -left-28"
+            style={{ backgroundColor: "rgba(155, 77, 255, 0.16)" }}
+          />
+
+          <ScrollView
+            className="flex-1 mt-16"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              flexGrow: 1,
+              paddingHorizontal: SPACING.xxl,
+              paddingTop: SPACING.md,
+              paddingBottom: SPACING.lg * 2 + SPACING.md,
             }}
           >
-            {/* Icon Circle */}
-            <IconCircle 
-              iconName="mail" 
-              iconSize={56}
-              iconColor={COLORS.text.primary}
-            />
+            <BackButton onPress={navigation.handleGoBack} />
 
-            {/* Heading with Email */}
-            <HeadingWithEmail
-              mainText="Almost done 📩"
-              labelText="We sent the reset link to"
-              email={displayEmail}
-              emailColor="#9B59F5"
-            />
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: SPACING.xxxl,
+                gap: SPACING.xl,
+              }}
+            >
+              <IconCircle
+                iconName="mail"
+                iconSize={56}
+                iconColor={COLORS.text.primary}
+              />
 
-            {/* Instructions */}
-            <Description
-              text={INSTRUCTIONS}
-              color={COLORS.text.muted}
-              style={{ marginTop: SPACING.md }}
-            />
-          </View>
+              <HeadingWithEmail
+                mainText={t("auth.almostDoneTitle")}
+                labelText={t("auth.resetLinkSentTo")}
+                email={displayEmail}
+                emailColor="#9B59F5"
+              />
 
-          {/* Actions - Bottom */}
-          <View style={{ marginTop: SPACING.lg }}>
-            {/* Primary Button */}
-            <GradientButton
-              label="Back to Sign In"
-              onPress={navigation.handleBackToSignIn}
-              colors={["#E040A0", "#D946C4"]}
-            />
+              <Description
+                text={t("auth.resetInstructions")}
+                color={COLORS.text.muted}
+                style={{ marginTop: SPACING.md }}
+              />
+            </View>
 
-            {/* Secondary Action */}
-            <FooterAction
-              label="Didn't receive it?"
-              actionText="Send again"
-              onPress={navigation.handleSendAgain}
-              actionColor="#E040A0"
-            />
-          </View>
-        </ScrollView>
+            <View style={{ flex: 1, minHeight: SPACING.xxxl }} />
+
+            <View style={{ marginTop: SPACING.lg }}>
+              <GradientButton
+                label={t("auth.backToSignIn")}
+                onPress={navigation.handleBackToSignIn}
+                colors={["#E040A0", "#D946C4"]}
+              />
+
+              <FooterAction
+                label={t("auth.didNotReceiveIt")}
+                actionText={t("auth.sendAgain")}
+                onPress={navigation.handleSendAgain}
+                actionColor="#E040A0"
+              />
+            </View>
+          </ScrollView>
+        </LinearGradient>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
