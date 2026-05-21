@@ -63,7 +63,7 @@ export default function Index() {
             className="mt-10 self-center"
           />
         ) : moviesError || trendingError ? (
-          <Text>
+          <Text className="text-dark-500">
             {t("common.error")}:{" "}
             {moviesError?.message ||
               trendingError?.message ||

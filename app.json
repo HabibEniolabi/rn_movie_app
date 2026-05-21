@@ -39,6 +39,13 @@
           }
         }
       ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow MovieFlix to access your photos so you can choose a profile picture.",
+          "cameraPermission": "Allow MovieFlix to use your camera so you can take a profile picture."
+        }
+      ],
       "expo-localization",
       "expo-web-browser"
     ],

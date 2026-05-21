@@ -61,7 +61,7 @@ const Profile = () => {
         title: t("profile.editProfile"),
         subtitle: t("profile.editProfileSubtitle"),
         rightType: "chevron" as const,
-        onPress: () => {},
+        onPress: () => router.push("/account/edit-profile"),
       },
       {
         id: 2,
