@@ -32,5 +32,17 @@ export const images = {
   crown,
   gift,
   lock,
-  email
+  email,
+
+  profileGalleryPopcorn: require("@/assets/images/profile-gallery/boy.png"),
+  profileGalleryCinema: require("@/assets/images/profile-gallery/guy.png"),
+  profileGallerySuperhero: require("@/assets/images/profile-gallery/preview.png"),
+  profileGalleryTom: require("@/assets/images/profile-gallery/tom.png"),
+  profileGalleryVerify: require("@/assets/images/profile-gallery/verify.png"),
+
+  memojiOne: require("@/assets/images/memoji/angry.png"),
+  memojiTwo: require("@/assets/images/memoji/boy.png"),
+  memojiThree: require("@/assets/images/memoji/girl.png"),
+  memojiFour: require("@/assets/images/memoji/guy.png"),
+  memojiFive: require("@/assets/images/memoji/man.png"),
 };
