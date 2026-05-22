@@ -359,6 +359,7 @@ const EditProfile = () => {
               colors={[avatarBackgroundColor, "#9B4DFF"]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
+              style={{ borderRadius: "100%" }}
               className="w-[150px] h-[150px] rounded-full items-center justify-center"
             >
               <Text className="text-white text-[44px] font-extrabold">

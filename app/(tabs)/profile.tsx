@@ -185,7 +185,10 @@ const Profile = () => {
             className="w-[140px] h-[140px] rounded-full"
             resizeMode="cover"
           />
-          <TouchableOpacity className="w-[35px] h-[35px] bg-orange rounded-full justify-center items-center -mt-7 ml-24">
+          <TouchableOpacity
+            onPress={() => router.push("/account/edit-profile")}
+            className="w-[35px] h-[35px] bg-orange rounded-full justify-center items-center -mt-7 ml-24"
+          >
             <Feather name={"edit-3"} size={18} color="#ffffff" />
           </TouchableOpacity>
         </View>
