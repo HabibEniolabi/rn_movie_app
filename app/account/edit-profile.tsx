@@ -8,6 +8,7 @@ import {
   Modal,
   Pressable,
   Image,
+  ScrollView,
   Platform,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
@@ -169,12 +170,12 @@ const EditProfile = () => {
     return existingDoc.id === user.uid;
   };
 
-const handleSelectAvatar = (avatar: ProfileAvatarOption) => {
-  setAvatarType(avatar.type);
-  setAvatarKey(avatar.key);
-  setAvatarBackgroundColor(avatar.backgroundColor);
-  setAvatarModalVisible(false);
-};
+  const handleSelectAvatar = (avatar: ProfileAvatarOption) => {
+    setAvatarType(avatar.type);
+    setAvatarKey(avatar.key);
+    setAvatarBackgroundColor(avatar.backgroundColor || "#C044D8");
+    setAvatarModalVisible(false);
+  };
 
   const handleUseInitials = () => {
     setAvatarType("initials");
@@ -355,25 +356,39 @@ const handleSelectAvatar = (avatar: ProfileAvatarOption) => {
 
         <View className="w-full items-center justify-center mt-10">
           <View className="relative mb-3">
-            {avatarType !== "initials" && selectedAvatar?.image ? (
-              <LinearGradient
-                colors={[avatarBackgroundColor, "#9B4DFF"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                className="w-[150px] h-[150px] rounded-full items-center justify-center"
+            {avatarType === "gallery" && selectedAvatar?.image ? (
+              <View
+                className="w-[150px] h-[150px] rounded-full overflow-hidden"
+                style={{ borderRadius: 999 }}
               >
                 <Image
                   source={selectedAvatar.image}
-                  className="w-[118px] h-[118px]"
+                  className="w-full h-full"
+                  resizeMode="cover"
+                  style={{ borderRadius: 999 }}
+                />
+              </View>
+            ) : avatarType === "memoji" && selectedAvatar?.image ? (
+              <View
+                className="w-[150px] h-[150px] rounded-full overflow-hidden items-center justify-center"
+                style={{
+                  borderRadius: 999,
+                  backgroundColor: avatarBackgroundColor,
+                }}
+              >
+                <Image
+                  source={selectedAvatar.image}
+                  className="w-[125px] h-[125px]"
                   resizeMode="contain"
                 />
-              </LinearGradient>
+              </View>
             ) : (
               <LinearGradient
                 colors={[avatarBackgroundColor, "#9B4DFF"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 className="w-[150px] h-[150px] rounded-full items-center justify-center"
+                style={{ borderRadius: 999 }}
               >
                 <Text className="text-white text-[44px] font-extrabold">
                   {initials}
@@ -508,63 +523,74 @@ const handleSelectAvatar = (avatar: ProfileAvatarOption) => {
               </Pressable>
             </View>
 
-            <Text className="text-[#8B88A8] font-bold uppercase mb-4">
-              {t("editProfile.initials")}
-            </Text>
-
-            <TouchableOpacity
-              activeOpacity={0.85}
-              onPress={handleUseInitials}
-              className="w-[74px] h-[74px] rounded-full bg-[#C044D8] items-center justify-center mb-6"
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingBottom: 24,
+              }}
             >
-              <Text className="text-white text-[24px] font-bold">
-                {initials}
+              <Text className="text-[#8B88A8] font-bold uppercase mb-4">
+                {t("editProfile.initials")}
               </Text>
-            </TouchableOpacity>
 
-            <Text className="text-[#8B88A8] font-bold uppercase mb-4">
-              {t("editProfile.gallery")}
-            </Text>
+              <TouchableOpacity
+                activeOpacity={0.85}
+                onPress={handleUseInitials}
+                className="w-[74px] h-[74px] rounded-full bg-[#C044D8] items-center justify-center mb-6"
+              >
+                <Text className="text-white text-[24px] font-bold">
+                  {initials}
+                </Text>
+              </TouchableOpacity>
 
-            <View className="flex-row flex-wrap gap-4 mb-6">
-              {GALLERY_AVATARS.map((avatar) => (
-                <TouchableOpacity
-                  key={avatar.key}
-                  activeOpacity={0.85}
-                  onPress={() => handleSelectAvatar(avatar)}
-                  className="w-[74px] h-[74px] rounded-full items-center justify-center"
-                  style={{ backgroundColor: avatar.backgroundColor }}
-                >
-                  <Image
-                    source={avatar.image}
-                    className="w-[58px] h-[58px]"
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
+              <Text className="text-[#8B88A8] font-bold uppercase mb-4">
+                {t("editProfile.gallery")}
+              </Text>
 
-            <Text className="text-[#8B88A8] font-bold uppercase mb-4">
-              {t("editProfile.memoji")}
-            </Text>
+              <View className="flex-row flex-wrap gap-4 mb-6">
+                {GALLERY_AVATARS.map((avatar) => (
+                  <TouchableOpacity
+                    key={avatar.key}
+                    activeOpacity={0.85}
+                    onPress={() => handleSelectAvatar(avatar)}
+                    className="w-[74px] h-[74px] rounded-full overflow-hidden border border-[#2A2845]"
+                    style={{ borderRadius: 999 }}
+                  >
+                    <Image
+                      source={avatar.image}
+                      className="w-full h-full"
+                      resizeMode="cover"
+                      style={{ borderRadius: 999 }}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
 
-            <View className="flex-row flex-wrap gap-4">
-              {MEMOJI_AVATARS.map((avatar) => (
-                <TouchableOpacity
-                  key={avatar.key}
-                  activeOpacity={0.85}
-                  onPress={() => handleSelectAvatar(avatar)}
-                  className="w-[74px] h-[74px] rounded-full items-center justify-center"
-                  style={{ backgroundColor: avatar.backgroundColor }}
-                >
-                  <Image
-                    source={avatar.image}
-                    className="w-[62px] h-[62px]"
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
+              <Text className="text-[#8B88A8] font-bold uppercase mb-4">
+                {t("editProfile.memoji")}
+              </Text>
+
+              <View className="flex-row flex-wrap gap-4">
+                {MEMOJI_AVATARS.map((avatar) => (
+                  <TouchableOpacity
+                    key={avatar.key}
+                    activeOpacity={0.85}
+                    onPress={() => handleSelectAvatar(avatar)}
+                    className="w-[74px] h-[74px] rounded-full overflow-hidden items-center justify-center"
+                    style={{
+                      borderRadius: 999,
+                      backgroundColor: avatar.backgroundColor || "#E9DDFF",
+                    }}
+                  >
+                    <Image
+                      source={avatar.image}
+                      className="w-[62px] h-[62px]"
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
           </View>
         </View>
       </Modal>

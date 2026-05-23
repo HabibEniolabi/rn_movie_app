@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import { images } from "@/constants/images";
@@ -18,17 +18,45 @@ import Genre from "@/components/Genre";
 import ProfileCardNavigation from "@/components/ProfileCardNavigation";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { FIREBASE_AUTH, FIREBASE_DB } from "@/FirebaseConfig";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
 import { getMovieGenres, MovieGenre } from "@/services/genres";
+import { LinearGradient } from "expo-linear-gradient";
+import {
+  getProfileAvatarByKey,
+  type AvatarType,
+} from "@/constants/profileAvatars";
+
+const getInitials = (fullName: string, fallback = "U") => {
+  const parts = fullName.trim().split(" ").filter(Boolean);
+
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  return fallback.slice(0, 2).toUpperCase();
+};
+
+const isValidAvatarType = (value: unknown): value is AvatarType => {
+  return value === "initials" || value === "gallery" || value === "memoji";
+};
 
 const Profile = () => {
   const { t, i18n } = useTranslation();
   const tabBarHeight = useBottomTabBarHeight();
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
+
+  const [avatarType, setAvatarType] = useState<AvatarType>("initials");
+  const [avatarKey, setAvatarKey] = useState<string | null>(null);
+  const [avatarBackgroundColor, setAvatarBackgroundColor] = useState("#C044D8");
+
   const [favouriteGenreIds, setFavouriteGenreIds] = useState<string[]>([]);
   const [availableGenres, setAvailableGenres] = useState<MovieGenre[]>([]);
   const [loadingGenres, setLoadingGenres] = useState(true);
@@ -42,6 +70,17 @@ const Profile = () => {
     title: "",
     message: "",
   });
+
+  const selectedAvatar = getProfileAvatarByKey(avatarKey);
+
+  const initials = useMemo(() => {
+    const user = FIREBASE_AUTH.currentUser;
+
+    return getInitials(
+      fullName,
+      user?.email?.split("@")[0] || t("profile.defaultUsername")
+    );
+  }, [fullName, t]);
 
   const translatedFavouriteGenres = useMemo(() => {
     return availableGenres
@@ -112,26 +151,39 @@ const Profile = () => {
     fetchGenres();
   }, [i18n.language]);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const user = FIREBASE_AUTH.currentUser;
+  const fetchProfile = useCallback(async () => {
+    const user = FIREBASE_AUTH.currentUser;
 
-      if (!user) return;
+    if (!user) return;
 
+    try {
       const userDoc = await getDoc(doc(FIREBASE_DB, "users", user.uid));
 
       if (userDoc.exists()) {
         const data = userDoc.data();
 
-        setFullName(
-          data.fullName || user.displayName || t("profile.defaultFullName")
-        );
+        const savedFullName =
+          data.fullName ||
+          `${data.firstName || ""} ${data.lastName || ""}`.trim() ||
+          user.displayName ||
+          t("profile.defaultFullName");
 
-        setUsername(
-          `@${
-            data.firstName?.toLowerCase() || t("profile.defaultUsername")
-          }_movies`
-        );
+        const savedUsername =
+          data.username ||
+          data.firstName?.toLowerCase() ||
+          user.email?.split("@")[0] ||
+          t("profile.defaultUsername");
+
+        const savedAvatarType = isValidAvatarType(data.avatarType)
+          ? data.avatarType
+          : "initials";
+
+        setFullName(savedFullName);
+        setUsername(`@${savedUsername}`);
+
+        setAvatarType(savedAvatarType);
+        setAvatarKey(data.avatarKey || null);
+        setAvatarBackgroundColor(data.avatarBackgroundColor || "#C044D8");
 
         setFavouriteGenreIds(
           Array.isArray(data.favouriteGenres) ? data.favouriteGenres : []
@@ -143,12 +195,21 @@ const Profile = () => {
           `@${user.email?.split("@")[0] || t("profile.defaultUsername")}`
         );
 
+        setAvatarType("initials");
+        setAvatarKey(null);
+        setAvatarBackgroundColor("#C044D8");
         setFavouriteGenreIds([]);
       }
-    };
-
-    fetchProfile();
+    } catch (error) {
+      console.log("Fetch profile error:", error);
+    }
   }, [t]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfile();
+    }, [fetchProfile])
+  );
 
   const handleSignOut = async () => {
     try {
@@ -166,6 +227,55 @@ const Profile = () => {
     }
   };
 
+  const renderProfileAvatar = () => {
+    if (avatarType === "gallery" && selectedAvatar?.image) {
+      return (
+        <View
+          className="w-[140px] h-[140px] rounded-full overflow-hidden bg-[#0F0D23]"
+          style={{ borderRadius: 999 }}
+        >
+          <Image
+            source={selectedAvatar.image}
+            className="w-full h-full"
+            resizeMode="cover"
+            style={{ borderRadius: 999 }}
+          />
+        </View>
+      );
+    }
+
+    if (avatarType === "memoji" && selectedAvatar?.image) {
+      return (
+        <View
+          className="w-[140px] h-[140px] rounded-full overflow-hidden items-center justify-center"
+          style={{
+            borderRadius: 999,
+            backgroundColor: avatarBackgroundColor,
+          }}
+        >
+          <Image
+            source={selectedAvatar.image}
+            className="w-[118px] h-[118px]"
+            resizeMode="contain"
+          />
+        </View>
+      );
+    }
+
+    return (
+      <LinearGradient
+        colors={[avatarBackgroundColor, "#9B4DFF"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="w-[140px] h-[140px] rounded-full items-center justify-center"
+        style={{ borderRadius: 999 }}
+      >
+        <Text className="text-white text-[40px] font-extrabold">
+          {initials}
+        </Text>
+      </LinearGradient>
+    );
+  };
   return (
     <View className="bg-primary flex-1 px-10">
       <View className="flex justify-between mt-16 mb-2 items-center flex-row">
@@ -180,11 +290,7 @@ const Profile = () => {
       </View>
       <View className="w-full items-center mt-3 mb-2">
         <View className="relative mb-2">
-          <Image
-            source={images.profile}
-            className="w-[140px] h-[140px] rounded-full"
-            resizeMode="cover"
-          />
+          {renderProfileAvatar()}
           <TouchableOpacity
             onPress={() => router.push("/account/edit-profile")}
             className="w-[35px] h-[35px] bg-orange rounded-full justify-center items-center -mt-7 ml-24"
