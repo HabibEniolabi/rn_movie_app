@@ -61,6 +61,8 @@ const Profile = () => {
   const [availableGenres, setAvailableGenres] = useState<MovieGenre[]>([]);
   const [loadingGenres, setLoadingGenres] = useState(true);
 
+  const [loading, setLoading] = useState(true);
+
   const [customAlert, setCustomAlert] = useState<{
     visible: boolean;
     title: string;
@@ -276,6 +278,16 @@ const Profile = () => {
       </LinearGradient>
     );
   };
+
+  // if (loading) {
+  //     return (
+  //       <View className="flex-1 bg-primary items-center justify-center">
+  //         <ActivityIndicator size="large" color="#B954F5" />
+  //       </View>
+  //     );
+  //   }
+  
+    
   return (
     <View className="bg-primary flex-1 px-10">
       <View className="flex justify-between mt-16 mb-2 items-center flex-row">

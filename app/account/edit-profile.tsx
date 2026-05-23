@@ -73,6 +73,9 @@ const EditProfile = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState(user?.email || "");
+
+  // const [isSending, setIsSending] = useState(false);
 
   const [avatarType, setAvatarType] = useState<AvatarType>("initials");
   const [avatarKey, setAvatarKey] = useState<string | null>(null);
@@ -80,6 +83,10 @@ const EditProfile = () => {
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
 
   const [originalUsername, setOriginalUsername] = useState("");
+
+  const [avatarPickerMode, setAvatarPickerMode] = useState<
+    "avatar" | "gallery"
+  >("avatar");
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -94,59 +101,17 @@ const EditProfile = () => {
     return getInitials(firstName, lastName, user?.email || "U");
   }, [firstName, lastName, user?.email]);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+  const isValidEmail = (value: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
-      try {
-        const userRef = doc(FIREBASE_DB, "users", user.uid);
-        const userSnap = await getDoc(userRef);
+  const buildUsernameSeed = (first: string, last: string) => {
+    const cleanFirst = cleanUsername(first);
+    const cleanLast = cleanUsername(last);
 
-        if (userSnap.exists()) {
-          const data = userSnap.data();
+    const nameBasedUsername = [cleanFirst, cleanLast].filter(Boolean).join("_");
 
-          setFirstName(data.firstName || "");
-          setLastName(data.lastName || "");
-
-          const savedUsername =
-            data.username || user.email?.split("@")[0] || "";
-
-          setUsername(savedUsername);
-          setOriginalUsername(savedUsername);
-
-          const savedAvatarType = isValidAvatarType(data.avatarType)
-            ? data.avatarType
-            : "initials";
-
-          setAvatarType(savedAvatarType);
-          setAvatarKey(data.avatarKey || null);
-          setAvatarBackgroundColor(data.avatarBackgroundColor || "#C044D8");
-        } else {
-          const fallbackUsername = user.email?.split("@")[0] || "";
-
-          setFirstName(user.displayName?.split(" ")?.[0] || "");
-          setLastName(user.displayName?.split(" ")?.slice(1).join(" ") || "");
-          setUsername(fallbackUsername);
-          setOriginalUsername(fallbackUsername);
-
-          setAvatarType("initials");
-          setAvatarKey(null);
-          setAvatarBackgroundColor("#C044D8");
-        }
-      } catch (error) {
-        console.log("Fetch edit profile error:", error);
-
-        Alert.alert(t("editProfile.errorTitle"), t("editProfile.loadFailed"));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [user, t]);
+    return nameBasedUsername || "movie_fan";
+  };
 
   const checkUsernameAvailable = async (newUsername: string) => {
     if (!user) return false;
@@ -170,6 +135,93 @@ const EditProfile = () => {
     return existingDoc.id === user.uid;
   };
 
+  const generateUniqueUsername = async (first: string, last: string) => {
+    const base = buildUsernameSeed(first, last);
+
+    const candidates = [
+      base,
+      `${base}_movies`,
+      `${base}_${Math.floor(1000 + Math.random() * 9000)}`,
+      `${base}_${Date.now().toString().slice(-4)}`,
+    ];
+
+    for (const candidate of candidates) {
+      const available = await checkUsernameAvailable(candidate);
+
+      if (available) {
+        return candidate;
+      }
+    }
+
+    return `${base}_${Date.now().toString().slice(-6)}`;
+  };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const userRef = doc(FIREBASE_DB, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+
+          const savedFirstName = data.firstName || "";
+          const savedLastName = data.lastName || "";
+
+          setFirstName(savedFirstName);
+          setLastName(savedLastName);
+          setEmail(data.email || user.email || "");
+
+          const savedUsername =
+            data.username ||
+            (await generateUniqueUsername(savedFirstName, savedLastName));
+
+          setUsername(savedUsername);
+          setOriginalUsername(savedUsername);
+
+          const savedAvatarType = isValidAvatarType(data.avatarType)
+            ? data.avatarType
+            : "initials";
+
+          setAvatarType(savedAvatarType);
+          setAvatarKey(data.avatarKey || null);
+          setAvatarBackgroundColor(data.avatarBackgroundColor || "#C044D8");
+        } else {
+          const fallbackFirstName = user.displayName?.split(" ")?.[0] || "";
+          const fallbackLastName =
+            user.displayName?.split(" ")?.slice(1).join(" ") || "";
+          const fallbackUsername = await generateUniqueUsername(
+            fallbackFirstName,
+            fallbackLastName
+          );
+
+          setFirstName(fallbackFirstName);
+          setLastName(fallbackLastName);
+          setUsername(fallbackUsername);
+          setEmail(user.email || "");
+          setOriginalUsername(fallbackUsername);
+
+          setAvatarType("initials");
+          setAvatarKey(null);
+          setAvatarBackgroundColor("#C044D8");
+        }
+      } catch (error) {
+        console.log("Fetch edit profile error:", error);
+
+        Alert.alert(t("editProfile.errorTitle"), t("editProfile.loadFailed"));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [user, t]);
+
   const handleSelectAvatar = (avatar: ProfileAvatarOption) => {
     setAvatarType(avatar.type);
     setAvatarKey(avatar.key);
@@ -182,6 +234,11 @@ const EditProfile = () => {
     setAvatarKey(null);
     setAvatarBackgroundColor("#C044D8");
     setAvatarModalVisible(false);
+  };
+
+  const openAvatarModal = (mode: "avatar" | "gallery") => {
+    setAvatarPickerMode(mode);
+    setAvatarModalVisible(true);
   };
 
   const handleSaveChanges = async () => {
@@ -239,6 +296,7 @@ const EditProfile = () => {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           fullName,
+          email: user.email || email.trim().toLowerCase(),
           username: normalizedUsername,
 
           avatarType,
@@ -397,7 +455,7 @@ const EditProfile = () => {
             )}
 
             <TouchableOpacity
-              className="w-[40px] h-[40px] bg-orange rounded-full justify-center items-center absolute bottom-2 right-0 border-4 border-primary"
+              className="w-[35px] h-[35px] bg-orange rounded-full justify-center items-center -mt-7 ml-24"
               onPress={() => setAvatarModalVisible(true)}
               activeOpacity={0.85}
             >
@@ -409,30 +467,60 @@ const EditProfile = () => {
             {t("editProfile.changeAvatar")}
           </Text>
 
-          <TouchableOpacity
-            onPress={() => setAvatarModalVisible(true)}
-            activeOpacity={0.85}
-            className="w-full h-[78px] rounded-[22px] border border-[#A33A8F] bg-[#26142D] items-center justify-center mt-8"
-          >
-            <Text className="text-[#F08AD8] font-bold text-[17px]">
-              😊 {t("editProfile.chooseAvatar")}
-            </Text>
-          </TouchableOpacity>
+          <View className="flex-row gap-4 mt-8 w-full">
+            <TouchableOpacity
+              onPress={() => openAvatarModal("avatar")}
+              activeOpacity={0.85}
+              className="flex-1 h-[88px] rounded-[22px] border border-[#A33A8F] bg-[#26142D] items-center justify-center px-3"
+            >
+              <Text className="text-[#F08AD8] font-bold text-[16px] text-center">
+                😊 {t("editProfile.avatar")}
+              </Text>
+
+              <Text className="text-[#8B88A8] text-[12px] text-center mt-1">
+                {t("editProfile.initials")} + {t("editProfile.memoji")}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => openAvatarModal("gallery")}
+              activeOpacity={0.85}
+              className="flex-1 h-[88px] rounded-[22px] border border-[#2A2845] bg-dark-300 items-center justify-center px-3"
+            >
+              <Text className="text-[#8B88A8] font-bold text-[16px] text-center">
+                🖼️ {t("editProfile.gallery")}
+              </Text>
+
+              <Text className="text-[#6A6880] text-[12px] text-center mt-1">
+                {t("editProfile.presetImages")}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View className="mt-10 gap-5">
+          <Text className="text-dark-500 uppercase text-[20px] font-semibold">
+            {t("editProfile.personalInfo")}
+          </Text>
           <View>
             <Text className="text-[#8B88A8] font-bold mb-2">
               {t("editProfile.firstName")}
             </Text>
 
-            <TextInput
-              value={firstName}
-              onChangeText={setFirstName}
-              placeholder={t("editProfile.firstNamePlaceholder")}
-              placeholderTextColor="#4C4968"
-              className="h-[58px] rounded-[18px] border border-[#2A2845] bg-dark-300 px-5 text-white text-[17px] font-semibold"
-            />
+            <View className="h-[58px] rounded-[18px] border border-[#2A2845] bg-dark-300  flex-row items-center justify-between">
+              <TextInput
+                value={firstName}
+                onChangeText={setFirstName}
+                placeholder={t("editProfile.firstNamePlaceholder")}
+                placeholderTextColor="#4C4968"
+                className="ml-4 flex-1 text-white text-[17px] font-semibold"
+              />
+              {firstName.trim() !== "" && (
+                <Text className="w-[30px] h-[30px] text-green-500 items-center justify-center">
+                  ✓
+                </Text>
+              )}
+            </View>
           </View>
 
           <View>
@@ -474,6 +562,25 @@ const EditProfile = () => {
               {t("editProfile.usernameHint")}
             </Text>
           </View>
+          <View className="flex-row items-center rounded-[18px] border border-[#2A2845] bg-[#0F0E1E] h-[60px]">
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              placeholder={t("auth.emailPlaceholder")}
+              placeholderTextColor="#3A3858"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="done"
+              className="ml-4 flex-1 text-[#EDEAF8] text-lg font-semibold"
+            />
+
+            {isValidEmail(email) && (
+              <Text className="w-[30px] h-[30px] text-green-500 items-center justify-center">
+                ✓
+              </Text>
+            )}
+          </View>
         </View>
 
         <TouchableOpacity
@@ -512,10 +619,15 @@ const EditProfile = () => {
         onRequestClose={() => setAvatarModalVisible(false)}
       >
         <View className="flex-1 bg-black/70 justify-end">
-          <View className="bg-[#141325] rounded-t-[32px] border border-[#2A2845] px-6 pt-6 pb-10">
+          <View
+            className="bg-[#141325] rounded-t-[32px] border border-[#2A2845] px-6 pt-6 pb-8"
+            style={{ maxHeight: "82%" }}
+          >
             <View className="flex-row items-center justify-between mb-5">
               <Text className="text-white text-[22px] font-bold">
-                {t("editProfile.chooseAvatar")}
+                {avatarPickerMode === "avatar"
+                  ? t("editProfile.chooseAvatar")
+                  : t("editProfile.gallery")}
               </Text>
 
               <Pressable onPress={() => setAvatarModalVisible(false)}>
@@ -525,71 +637,77 @@ const EditProfile = () => {
 
             <ScrollView
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingBottom: 24,
-              }}
+              contentContainerStyle={{ paddingBottom: 24 }}
             >
-              <Text className="text-[#8B88A8] font-bold uppercase mb-4">
-                {t("editProfile.initials")}
-              </Text>
+              {avatarPickerMode === "avatar" && (
+                <>
+                  <Text className="text-[#8B88A8] font-bold uppercase mb-4">
+                    {t("editProfile.initials")}
+                  </Text>
 
-              <TouchableOpacity
-                activeOpacity={0.85}
-                onPress={handleUseInitials}
-                className="w-[74px] h-[74px] rounded-full bg-[#C044D8] items-center justify-center mb-6"
-              >
-                <Text className="text-white text-[24px] font-bold">
-                  {initials}
-                </Text>
-              </TouchableOpacity>
-
-              <Text className="text-[#8B88A8] font-bold uppercase mb-4">
-                {t("editProfile.gallery")}
-              </Text>
-
-              <View className="flex-row flex-wrap gap-4 mb-6">
-                {GALLERY_AVATARS.map((avatar) => (
                   <TouchableOpacity
-                    key={avatar.key}
                     activeOpacity={0.85}
-                    onPress={() => handleSelectAvatar(avatar)}
-                    className="w-[74px] h-[74px] rounded-full overflow-hidden border border-[#2A2845]"
-                    style={{ borderRadius: 999 }}
+                    onPress={handleUseInitials}
+                    className="w-[74px] h-[74px] rounded-full bg-[#C044D8] items-center justify-center mb-6"
                   >
-                    <Image
-                      source={avatar.image}
-                      className="w-full h-full"
-                      resizeMode="cover"
-                      style={{ borderRadius: 999 }}
-                    />
+                    <Text className="text-white text-[24px] font-bold">
+                      {initials}
+                    </Text>
                   </TouchableOpacity>
-                ))}
-              </View>
 
-              <Text className="text-[#8B88A8] font-bold uppercase mb-4">
-                {t("editProfile.memoji")}
-              </Text>
+                  <Text className="text-[#8B88A8] font-bold uppercase mb-4">
+                    {t("editProfile.memoji")}
+                  </Text>
 
-              <View className="flex-row flex-wrap gap-4">
-                {MEMOJI_AVATARS.map((avatar) => (
-                  <TouchableOpacity
-                    key={avatar.key}
-                    activeOpacity={0.85}
-                    onPress={() => handleSelectAvatar(avatar)}
-                    className="w-[74px] h-[74px] rounded-full overflow-hidden items-center justify-center"
-                    style={{
-                      borderRadius: 999,
-                      backgroundColor: avatar.backgroundColor || "#E9DDFF",
-                    }}
-                  >
-                    <Image
-                      source={avatar.image}
-                      className="w-[62px] h-[62px]"
-                      resizeMode="contain"
-                    />
-                  </TouchableOpacity>
-                ))}
-              </View>
+                  <View className="flex-row flex-wrap gap-4">
+                    {MEMOJI_AVATARS.map((avatar) => (
+                      <TouchableOpacity
+                        key={avatar.key}
+                        activeOpacity={0.85}
+                        onPress={() => handleSelectAvatar(avatar)}
+                        className="w-[74px] h-[74px] rounded-full overflow-hidden items-center justify-center"
+                        style={{
+                          borderRadius: 999,
+                          backgroundColor: avatar.backgroundColor || "#E9DDFF",
+                        }}
+                      >
+                        <Image
+                          source={avatar.image}
+                          className="w-[62px] h-[62px]"
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </>
+              )}
+
+              {avatarPickerMode === "gallery" && (
+                <>
+                  <Text className="text-[#8B88A8] font-bold uppercase mb-4">
+                    {t("editProfile.gallery")}
+                  </Text>
+
+                  <View className="flex-row flex-wrap gap-4">
+                    {GALLERY_AVATARS.map((avatar) => (
+                      <TouchableOpacity
+                        key={avatar.key}
+                        activeOpacity={0.85}
+                        onPress={() => handleSelectAvatar(avatar)}
+                        className="w-[74px] h-[74px] rounded-full overflow-hidden border border-[#2A2845] bg-[#0F0D23]"
+                        style={{ borderRadius: 999 }}
+                      >
+                        <Image
+                          source={avatar.image}
+                          className="w-full h-full"
+                          resizeMode="cover"
+                          style={{ borderRadius: 999 }}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </>
+              )}
             </ScrollView>
           </View>
         </View>

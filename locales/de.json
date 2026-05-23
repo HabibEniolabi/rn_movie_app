@@ -398,6 +398,8 @@
     "usernameTakenMessage": "Dieser Benutzername wird bereits verwendet. Bitte wähle einen anderen.",
     "deleteAccountWarning": "Dadurch wird dein Konto dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
     "reloginRequired": "Anmeldung erforderlich",
-    "reloginRequiredMessage": "Bitte melde dich aus Sicherheitsgründen erneut an, bevor du dein Konto löschst."
+    "reloginRequiredMessage": "Bitte melde dich aus Sicherheitsgründen erneut an, bevor du dein Konto löschst.",
+    "personalInfo": "Persönliche Informationen",
+    "presetImages": "Voreingestellte Bilder"
   }
 }

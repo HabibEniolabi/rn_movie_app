@@ -398,6 +398,8 @@
     "usernameTakenMessage": "Este nombre de usuario ya está en uso. Elige otro.",
     "deleteAccountWarning": "Esto eliminará tu cuenta permanentemente. Esta acción no se puede deshacer.",
     "reloginRequired": "Inicio de sesión requerido",
-    "reloginRequiredMessage": "Por seguridad, inicia sesión de nuevo antes de eliminar tu cuenta."
+    "reloginRequiredMessage": "Por seguridad, inicia sesión de nuevo antes de eliminar tu cuenta.",
+    "personalInfo": "Información personal",
+    "presetImages": "Imágenes predefinidas"
   }
 }
