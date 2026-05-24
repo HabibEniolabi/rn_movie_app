@@ -42,6 +42,12 @@ import {
 } from "firebase/firestore";
 
 import { deleteUser, updateProfile } from "firebase/auth";
+import { Divider } from "@/components/Dividers";
+import MultiSelect from "@/components/MultiSelect";
+import { SingleSelect } from "@/components/SingleSelect";
+
+import { changeAppLanguage } from "@/interfaces/i18n";
+import { getMovieGenres, type MovieGenre } from "@/services/genres";
 
 const cleanUsername = (value: string) => {
   return value
@@ -66,7 +72,7 @@ const isValidAvatarType = (value: unknown): value is AvatarType => {
 };
 
 const EditProfile = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const user = FIREBASE_AUTH.currentUser;
 
@@ -81,9 +87,14 @@ const EditProfile = () => {
   const [avatarKey, setAvatarKey] = useState<string | null>(null);
   const [avatarBackgroundColor, setAvatarBackgroundColor] = useState("#C044D8");
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
-
   const [originalUsername, setOriginalUsername] = useState("");
 
+  const [availableGenres, setAvailableGenres] = useState<MovieGenre[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<(string | number)[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    i18n.language?.split("-")[0] || "en"
+  );
+  const [loadingGenres, setLoadingGenres] = useState(false);
   const [avatarPickerMode, setAvatarPickerMode] = useState<
     "avatar" | "gallery"
   >("avatar");
@@ -157,6 +168,24 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        setLoadingGenres(true);
+
+        const genres = await getMovieGenres(i18n.language);
+
+        setAvailableGenres(genres);
+      } catch (error) {
+        console.log("Fetch edit profile genres error:", error);
+      } finally {
+        setLoadingGenres(false);
+      }
+    };
+
+    fetchGenres();
+  }, [i18n.language]);
+
+  useEffect(() => {
     const fetchProfile = async () => {
       if (!user) {
         setLoading(false);
@@ -188,6 +217,13 @@ const EditProfile = () => {
             ? data.avatarType
             : "initials";
 
+          setAvailableGenres(
+            Array.isArray(data.favouriteGenres) ? data.favouriteGenres : []
+          );
+          setSelectedLanguage(
+            data.preferredLanguage || i18n.language?.split("-")[0] || "en"
+          );
+
           setAvatarType(savedAvatarType);
           setAvatarKey(data.avatarKey || null);
           setAvatarBackgroundColor(data.avatarBackgroundColor || "#C044D8");
@@ -205,6 +241,8 @@ const EditProfile = () => {
           setUsername(fallbackUsername);
           setEmail(user.email || "");
           setOriginalUsername(fallbackUsername);
+          setSelectedGenres([]);
+          setSelectedLanguage(i18n.language?.split("-")[0] || "en");
 
           setAvatarType("initials");
           setAvatarKey(null);
@@ -299,6 +337,9 @@ const EditProfile = () => {
           email: user.email || email.trim().toLowerCase(),
           username: normalizedUsername,
 
+          preferredLanguage: selectedLanguage,
+          favouriteGenres: selectedGenres.map(String),
+
           avatarType,
           avatarKey: avatarType === "initials" ? null : avatarKey,
           avatarBackgroundColor,
@@ -313,6 +354,10 @@ const EditProfile = () => {
         displayName: fullName,
         photoURL: null,
       });
+
+      if (selectedLanguage !== i18n.language?.split("-")[0]) {
+        await changeAppLanguage(selectedLanguage);
+      }
 
       setUsername(normalizedUsername);
       setOriginalUsername(normalizedUsername);
@@ -376,6 +421,17 @@ const EditProfile = () => {
       setSaving(false);
     }
   };
+
+  const LANGUAGE_OPTIONS = [
+    { id: "en", label: "English", value: "en" },
+    { id: "fr", label: "Français", value: "fr" },
+    { id: "es", label: "Español", value: "es" },
+    { id: "de", label: "Deutsch", value: "de" },
+    { id: "pt", label: "Português", value: "pt" },
+    { id: "ja", label: "日本語", value: "ja" },
+    { id: "ko", label: "한국어", value: "ko" },
+    { id: "ar", label: "العربية", value: "ar" },
+  ];
 
   if (loading) {
     return (
@@ -580,6 +636,45 @@ const EditProfile = () => {
                 ✓
               </Text>
             )}
+          </View>
+        </View>
+        <Divider color="#2A2845" height={2} />
+        <View className="flex flex-col gap-5 mt-4">
+          <Text className="text-dark-300 text-[17px] font-semibold uppercase">
+            {t("editProfile.preferences")}
+          </Text>
+          <View>
+            <Text className="text-[#B954F5] text-[18px] font-bold mr-1">
+              {t("profile.favouriteGenres")}
+            </Text>
+            {loadingGenres ? (
+              <View className="h-[58px] rounded-[18px] border border-[#2A2845] bg-dark-300 px-5 justify-center">
+                <ActivityIndicator size="small" color="#B954F5" />
+              </View>
+            ) : (
+              <MultiSelect
+                options={availableGenres.map((genre) => ({
+                  id: genre.id,
+                  label: genre.name,
+                  value: genre.id,
+                }))}
+                onSelect={(selected: (string | number)[]) => setSelectedGenres(selected)}
+                selectedValues={selectedGenres}
+                maxSelections={5}
+                placeholder={t("editProfile.selectFavouriteGenres")}
+              />
+            )}
+          </View>
+          <View>
+            <Text className="text-[#B954F5] text-[18px] font-bold mr-1">
+              {t("language.title")}
+            </Text>
+            <SingleSelect
+              options={LANGUAGE_OPTIONS}
+              onSelect={(option) => setSelectedLanguage(String(option.id))}
+              selectedValue={selectedLanguage}
+              placeholder={t("editProfile.selectLanguage")}
+            />
           </View>
         </View>
 
