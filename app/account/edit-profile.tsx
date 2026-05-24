@@ -433,6 +433,24 @@ const EditProfile = () => {
     { id: "ar", label: "العربية", value: "ar" },
   ];
 
+  const GENRE_OPTIONS = [
+    { id: 1, label: "Western", value: "western" },
+    { id: 2, label: "War", value: "war" },
+    { id: 3, label: "Thriller", value: "thriller" },
+    { id: 4, label: "TV Movie", value: "tvMovie" },
+    { id: 5, label: "Science Fiction", value: "scienceFiction" },
+    { id: 6, label: "Romance", value: "romance" },
+    { id: 7, label: "Mystery", value: "mystery" },
+    { id: 8, label: "Music", value: "music" },
+    { id: 9, label: "Horror", value: "horror" },
+    { id: 10, label: "History", value: "history" },
+    { id: 11, label: "Fantasy", value: "fantasy" },
+    { id: 12, label: "Family", value: "family" },
+    { id: 13, label: "Drama", value: "drama" },
+    { id: 14, label: "Documentary", value: "documentary" },
+    { id: 15, label: "Crime", value: "crime" },
+  ];
+
   if (loading) {
     return (
       <View className="flex-1 bg-primary items-center justify-center">
@@ -653,14 +671,12 @@ const EditProfile = () => {
               </View>
             ) : (
               <MultiSelect
-                options={availableGenres.map((genre) => ({
-                  id: genre.id,
-                  label: genre.name,
-                  value: genre.id,
-                }))}
-                onSelect={(selected: (string | number)[]) => setSelectedGenres(selected)}
+                options={GENRE_OPTIONS}
+                onSelect={(selected: (string | number)[]) =>
+                  setSelectedGenres(selected)
+                }
                 selectedValues={selectedGenres}
-                maxSelections={5}
+                maxSelections={6}
                 placeholder={t("editProfile.selectFavouriteGenres")}
               />
             )}

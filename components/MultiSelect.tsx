@@ -38,17 +38,23 @@ const MultiSelect = ({
   labelStyle,
 }: MultiSelectProps) => {
   const [visible, setVisible] = useState(false);
-  const [tempSelected, setTempSelected] =
-    useState<(string | number)[]>(selectedValues);
+  const [tempSelected, setTempSelected] = useState<(string | number)[]>([]);
 
+  // Sync tempSelected with selectedValues when modal opens
   useEffect(() => {
-    setTempSelected(selectedValues);
-  }, [selectedValues]);
+    if (visible) {
+      setTempSelected(selectedValues);
+    }
+  }, [visible, selectedValues]);
 
+  // Get selected labels - this is what displays in the button
   const selectedLabels = useMemo(() => {
-    return options
-      .filter((option) => selectedValues.includes(option.value))
-      .map((option) => option.label);
+    return selectedValues
+      .map((val) => {
+        const found = options.find((opt) => opt.value === val);
+        return found?.label;
+      })
+      .filter(Boolean);
   }, [options, selectedValues]);
 
   const displayText =
@@ -63,13 +69,16 @@ const MultiSelect = ({
       const alreadySelected = prev.includes(value);
 
       if (alreadySelected) {
+        // Deselect
         return prev.filter((item) => item !== value);
       }
 
+      // Check max selections
       if (maxSelections && prev.length >= maxSelections) {
         return prev;
       }
 
+      // Select
       return [...prev, value];
     });
   };
@@ -81,6 +90,8 @@ const MultiSelect = ({
 
   const handleClear = () => {
     setTempSelected([]);
+    onSelect([]);
+    setVisible(false);
   };
 
   return (
@@ -134,14 +145,11 @@ const MultiSelect = ({
 
             <FlatList
               data={options}
-              keyExtractor={(item, index) =>
-                String(item.id ?? item.value ?? index)
-              }
+              keyExtractor={(item) => String(item.value)}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.listContent}
               renderItem={({ item }) => {
                 const selected = isSelected(item.value);
-
                 return (
                   <TouchableOpacity
                     activeOpacity={0.85}
