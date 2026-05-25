@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Modal,
-  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 import { images } from "@/constants/images";
@@ -34,57 +32,51 @@ const socialButton = [
   },
 ];
 
+type FormErrors = {
+  email?: string;
+  password?: string;
+  general?: string;
+};
+
 const Login = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+
   const auth = FIREBASE_AUTH;
 
-  const [customAlert, setCustomAlert] = useState<{
-    visible: boolean;
-    title: string;
-    message: string;
-  }>({
-    visible: false,
-    title: "",
-    message: "",
-  });
+  const validateForm = () => {
+    const newErrors: FormErrors = {};
 
-  const getLoginErrorMessage = (errorCode?: string) => {
-    switch (errorCode) {
-      case "auth/invalid-email":
-        return t("auth.invalidEmail");
+    const trimmedEmail = email.trim();
 
-      case "auth/user-not-found":
-        return t("auth.noAccountFound");
-
-      case "auth/wrong-password":
-        return t("auth.incorrectPassword");
-
-      case "auth/invalid-credential":
-        return t("auth.invalidEmailOrPassword");
-
-      case "auth/too-many-requests":
-        return t("auth.tooManyAttempts");
-
-      case "auth/user-disabled":
-        return t("auth.accountDisabled");
-
-      default:
-        return t("common.somethingWentWrong");
+    if (!trimmedEmail) {
+      newErrors.email = t("auth.emailRequired") || "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(trimmedEmail)) {
+      newErrors.email = t("auth.invalidEmail") || "Enter a valid email address";
     }
+
+    if (!password) {
+      newErrors.password = t("auth.passwordRequired") || "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password =
+        t("auth.passwordTooShort") || "Password must be at least 6 characters";
+    }
+
+    return newErrors;
   };
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      setCustomAlert({
-        visible: true,
-        title: t("auth.missingDetails"),
-        message: t("auth.enterEmailAndPassword"),
-      });
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
+
+    setErrors({});
 
     try {
       await signInWithEmailAndPassword(
@@ -92,12 +84,35 @@ const Login = () => {
         email.trim().toLowerCase(),
         password
       );
+
       router.replace("/(tabs)");
     } catch (error: any) {
-      setCustomAlert({
-        visible: true,
-        title: t("auth.loginFailed"),
-        message: getLoginErrorMessage(error?.code),
+      const code = error?.code;
+
+      if (code === "auth/invalid-email") {
+        setErrors({ email: t("auth.invalidEmail") });
+        return;
+      }
+
+      if (code === "auth/wrong-password") {
+        setErrors({ password: t("auth.incorrectPassword") });
+        return;
+      }
+
+      if (code === "auth/user-not-found") {
+        setErrors({ email: t("auth.noAccountFound") });
+        return;
+      }
+
+      if (code === "auth/invalid-credential") {
+        setErrors({
+          password: t("auth.invalidEmailOrPassword"),
+        });
+        return;
+      }
+
+      setErrors({
+        general: getLoginErrorMessage(code),
       });
     }
   };
@@ -153,12 +168,25 @@ const Login = () => {
                   {t("auth.email")}
                 </Text>
 
-                <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
+                <View
+                  className={`flex-row items-center rounded-[14px] border bg-[#141325] px-6 h-[52px] ${
+                    errors.email ? "border-red-500" : "border-[#2A2845]"
+                  }`}
+                >
                   <Feather name="mail" size={18} color="#3A3858" />
 
                   <TextInput
                     value={email}
-                    onChangeText={setEmail}
+                    onChangeText={(text) => {
+                      setEmail(text);
+
+                      if (errors.email) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          email: undefined,
+                        }));
+                      }
+                    }}
                     placeholder={t("auth.emailPlaceholder")}
                     placeholderTextColor="#3A3858"
                     keyboardType="email-address"
@@ -168,6 +196,11 @@ const Login = () => {
                     className="ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold"
                   />
                 </View>
+                {errors.email && (
+                  <Text className="text-red-400 text-sm font-semibold">
+                    {errors.email}
+                  </Text>
+                )}
               </View>
 
               <View className="flex flex-col gap-2">
@@ -175,12 +208,25 @@ const Login = () => {
                   {t("auth.password")}
                 </Text>
 
-                <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
+                <View
+                  className={`flex-row items-center rounded-[14px] border bg-[#141325] px-6 h-[52px] ${
+                    errors.password ? "border-red-500" : "border-[#2A2845]"
+                  }`}
+                >
                   <EvilIcons name="lock" size={24} color="#3A3858" />
 
                   <TextInput
                     value={password}
-                    onChangeText={setPassword}
+                    onChangeText={(text) => {
+                      setPassword(text);
+
+                      if (errors.password) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          password: undefined,
+                        }));
+                      }
+                    }}
                     placeholder={t("auth.enterPassword")}
                     secureTextEntry={!showPassword}
                     placeholderTextColor="#3A3858"
@@ -201,6 +247,11 @@ const Login = () => {
                     />
                   </TouchableOpacity>
                 </View>
+                {errors.password && (
+                  <Text className="text-red-400 text-sm font-semibold">
+                    {errors.password}
+                  </Text>
+                )}
               </View>
 
               <TouchableOpacity
@@ -212,7 +263,11 @@ const Login = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-
+            {errors.general && (
+              <Text className="text-red-400 text-sm font-semibold text-center mb-3">
+                {errors.general}
+              </Text>
+            )}
             <View className="mt-6">
               <Button title={t("auth.signIn")} onPress={handleLogin} />
             </View>
@@ -252,38 +307,6 @@ const Login = () => {
             </View>
           </View>
         </KeyboardAwareScrollView>
-
-        <Modal
-          visible={customAlert.visible}
-          transparent
-          animationType="fade"
-          onRequestClose={() =>
-            setCustomAlert((prev) => ({ ...prev, visible: false }))
-          }
-        >
-          <View className="flex-1 bg-black/60 items-center justify-center px-6">
-            <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
-              <Text className="text-white text-2xl font-bold text-center">
-                {customAlert.title}
-              </Text>
-
-              <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
-                {customAlert.message}
-              </Text>
-
-              <Pressable
-                onPress={() =>
-                  setCustomAlert((prev) => ({ ...prev, visible: false }))
-                }
-                className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
-              >
-                <Text className="text-white font-bold text-lg">
-                  {t("common.okay")}
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
       </View>
     </KeyboardAvoidingView>
   );

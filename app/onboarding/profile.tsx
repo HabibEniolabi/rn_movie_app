@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Modal,
-  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 import OnboardingHeader from "@/components/OnboardingHeader";
@@ -24,6 +22,15 @@ import Button from "@/components/Button";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+
+type FormErrors = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  terms?: string;
+  general?: string;
+};
 
 const socialButton = [
   {
@@ -48,6 +55,7 @@ const Profile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const getPasswordStrength = (value: string) => {
     let score = 0;
@@ -124,45 +132,57 @@ const Profile = () => {
     }
   };
 
-  const [customAlert, setCustomAlert] = useState<{
-    visible: boolean;
-    title: string;
-    message: string;
-  }>({
-    visible: false,
-    title: "",
-    message: "",
-  });
+  const clearError = (field: keyof FormErrors) => {
+    if (errors[field] || errors.general) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: undefined,
+        general: undefined,
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: FormErrors = {};
+
+    if (!firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    }
+
+    if (!lastName.trim()) {
+      newErrors.lastName = "Last name is required";
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "Email address is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      newErrors.email = t("auth.invalidEmail");
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = t("auth.passwordAtLeast6");
+    }
+
+    if (!agreed) {
+      newErrors.terms = t("auth.agreeTermsAndPrivacy");
+    }
+
+    return newErrors;
+  };
 
   const handleCreateAccount = async () => {
     if (isSubmitting) return;
 
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !password) {
-      setCustomAlert({
-        visible: true,
-        title: t("auth.missingDetails"),
-        message: t("auth.completeAllFields"),
-      });
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    if (password.length < 6) {
-      setCustomAlert({
-        visible: true,
-        title: t("auth.weakPassword"),
-        message: t("auth.passwordAtLeast6"),
-      });
-      return;
-    }
-
-    if (!agreed) {
-      setCustomAlert({
-        visible: true,
-        title: t("auth.termsRequired"),
-        message: t("auth.agreeTermsAndPrivacy"),
-      });
-      return;
-    }
+    setErrors({});
 
     try {
       setIsSubmitting(true);
@@ -193,14 +213,25 @@ const Profile = () => {
 
       router.replace("/onboarding/genres");
     } catch (error: any) {
-      console.log("Create account error:", error);
-      console.log("Error code:", error?.code);
-      console.log("Error message:", error?.message);
+      const code = error?.code;
 
-      setCustomAlert({
-        visible: true,
-        title: t("auth.signupFailed"),
-        message: getSignupErrorMessage(error?.code),
+      if (code === "auth/email-already-in-use") {
+        setErrors({ email: t("auth.emailAlreadyRegistered") });
+        return;
+      }
+
+      if (code === "auth/invalid-email") {
+        setErrors({ email: t("auth.invalidEmail") });
+        return;
+      }
+
+      if (code === "auth/weak-password") {
+        setErrors({ password: t("auth.passwordAtLeast6") });
+        return;
+      }
+
+      setErrors({
+        general: getSignupErrorMessage(code),
       });
     } finally {
       setIsSubmitting(false);
@@ -233,7 +264,11 @@ const Profile = () => {
                   <Text className="text-md text-[#6A6880] font-bold">
                     {t("auth.firstName")}
                   </Text>
-                  <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
+                  <View
+                    className={`flex-row items-center rounded-[14px] border bg-[#141325] px-6 h-[52px] ${
+                      errors.firstName ? "border-red-500" : "border-[#2A2845]"
+                    }`}
+                  >
                     <Image
                       source={images.user}
                       className="w-5 h-5"
@@ -242,40 +277,67 @@ const Profile = () => {
                     />
                     <TextInput
                       value={firstName}
-                      onChangeText={setFirstName}
+                      onChangeText={(text) => {
+                        setFirstName(text);
+                        clearError("firstName");
+                      }}
                       placeholder={t("auth.firstNamePlaceholder")}
                       placeholderTextColor="#3A3858"
                       autoCapitalize="words"
                       className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
                     />
                   </View>
+                  {errors.firstName && (
+                    <Text className="text-red-400 text-sm font-semibold">
+                      {errors.firstName}
+                    </Text>
+                  )}
                 </View>
                 <View className="flex-1 flex-col gap-2">
                   <Text className="text-md text-[#6A6880] font-bold">
                     {t("auth.lastName")}
                   </Text>
-                  <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
+                  <View
+                    className={`flex-row items-center rounded-[14px] border bg-[#141325] px-6 h-[52px] ${
+                      errors.lastName ? "border-red-500" : "border-[#2A2845]"
+                    }`}
+                  >
                     <TextInput
                       value={lastName}
-                      onChangeText={setLastName}
+                      onChangeText={(text) => {
+                        setLastName(text);
+                        clearError("lastName");
+                      }}
                       placeholder={t("auth.lastNamePlaceholder")}
                       placeholderTextColor="#3A3858"
                       autoCapitalize="words"
                       className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
                     />
                   </View>
+                  {errors.lastName && (
+                    <Text className="text-red-400 text-sm font-semibold">
+                      {errors.lastName}
+                    </Text>
+                  )}
                 </View>
               </View>
               <View className="flex flex-col gap-2">
                 <Text className="text-md text-[#6A6880] font-bold">
                   {t("auth.emailAddress")}
                 </Text>
-                <View className="flex-row items-center rounded-[14px] border border-[#2A2845] bg-[#141325] px-6 h-[52px]">
+                <View
+                  className={`flex-row items-center rounded-[14px] border bg-[#141325] px-6 h-[52px] ${
+                    errors.email ? "border-red-500" : "border-[#2A2845]"
+                  }`}
+                >
                   <Feather name="mail" size={18} color="#3A3858" />
 
                   <TextInput
                     value={email}
-                    onChangeText={setEmail}
+                    onChangeText={(text) => {
+                      setEmail(text);
+                      clearError("email");
+                    }}
                     placeholder={t("auth.emailPlaceholder")}
                     placeholderTextColor="#3A3858"
                     keyboardType="email-address"
@@ -284,18 +346,30 @@ const Profile = () => {
                     className={`ml-5 flex-1 text-[#EDEAF8] text-lg font-semibold`}
                   />
                 </View>
+                {errors.email && (
+                  <Text className="text-red-400 text-sm font-semibold">
+                    {errors.email}
+                  </Text>
+                )}
               </View>
               <View className="flex flex-col gap-2">
                 <Text className="text-md text-[#8B88A8] font-bold">
                   {t("auth.password")}
                 </Text>
 
-                <View className="flex-row items-center rounded-[18px] border border-[#2A2845] bg-[#141325] px-6 h-[64px]">
+                <View
+                  className={`flex-row items-center rounded-[18px] border bg-[#141325] px-6 h-[64px] ${
+                    errors.password ? "border-red-500" : "border-[#2A2845]"
+                  }`}
+                >
                   <EvilIcons name="lock" size={26} color="#8B88A8" />
 
                   <TextInput
                     value={password}
-                    onChangeText={setPassword}
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      clearError("password");
+                    }}
                     placeholder={t("auth.enterPassword")}
                     placeholderTextColor="#3A3858"
                     secureTextEntry={!showPassword}
@@ -315,6 +389,11 @@ const Profile = () => {
                     />
                   </TouchableOpacity>
                 </View>
+                {errors.password && (
+                  <Text className="text-red-400 text-sm font-semibold">
+                    {errors.password}
+                  </Text>
+                )}
 
                 {/* Password strength */}
                 {password.length > 0 && (
@@ -345,48 +424,64 @@ const Profile = () => {
               </View>
 
               {/* Terms checkbox */}
-              <View className="flex-row items-start gap-4 mt-1">
-                <TouchableOpacity
-                  onPress={() => setAgreed((prev) => !prev)}
-                  activeOpacity={0.8}
-                  className="w-9 h-9 rounded-[10px] items-center justify-center overflow-hidden"
-                  style={{
-                    borderWidth: agreed ? 0 : 1,
-                    borderColor: agreed ? "transparent" : "#2A2845",
-                  }}
-                >
-                  {agreed ? (
-                    <LinearGradient
-                      colors={["#D946C4", "#9B4DFF"]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: 10,
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Feather name="check" size={22} color="#FFFFFF" />
-                    </LinearGradient>
-                  ) : null}
-                </TouchableOpacity>
+              <View className="flex-col gap-2 mt-1">
+                <View className="flex-row items-start gap-4">
+                  <TouchableOpacity
+                    onPress={() => {
+                      setAgreed((prev) => !prev);
+                      clearError("terms");
+                    }}
+                    activeOpacity={0.8}
+                    className="w-9 h-9 rounded-[10px] items-center justify-center overflow-hidden"
+                    style={{
+                      borderWidth: agreed ? 0 : 1,
+                      borderColor: agreed ? "transparent" : "#2A2845",
+                    }}
+                  >
+                    {agreed ? (
+                      <LinearGradient
+                        colors={["#D946C4", "#9B4DFF"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: 10,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Feather name="check" size={22} color="#FFFFFF" />
+                      </LinearGradient>
+                    ) : null}
+                  </TouchableOpacity>
 
-                <Text className="flex-1 text-[#8B88A8] text-base leading-6">
-                  {t("auth.termsPrefix")}{" "}
-                  <Text className="text-[#B15CFF] font-bold">
-                    {t("auth.termsOfService")}
-                  </Text>{" "}
-                  {t("auth.and")}{" "}
-                  <Text className="text-[#B15CFF] font-bold">
-                    {t("auth.privacyPolicy")}
-                  </Text>{" "}
-                  {t("auth.termsSuffix")}
-                </Text>
+                  <Text className="flex-1 text-[#8B88A8] text-base leading-6">
+                    {t("auth.termsPrefix")}{" "}
+                    <Text className="text-[#B15CFF] font-bold">
+                      {t("auth.termsOfService")}
+                    </Text>{" "}
+                    {t("auth.and")}{" "}
+                    <Text className="text-[#B15CFF] font-bold">
+                      {t("auth.privacyPolicy")}
+                    </Text>{" "}
+                    {t("auth.termsSuffix")}
+                  </Text>
+                </View>
+
+                {errors.terms && (
+                  <Text className="text-red-400 text-sm font-semibold ml-13">
+                    {errors.terms}
+                  </Text>
+                )}
               </View>
             </View>
             <View className="mt-6">
+              {errors.general && (
+                <Text className="text-red-400 text-sm font-semibold text-center mb-3">
+                  {errors.general}
+                </Text>
+              )}
               <Button
                 title={
                   isSubmitting
@@ -428,37 +523,6 @@ const Profile = () => {
             </View>
           </KeyboardAwareScrollView>
         </View>
-        <Modal
-          visible={customAlert.visible}
-          transparent
-          animationType="fade"
-          onRequestClose={() =>
-            setCustomAlert((prev) => ({ ...prev, visible: false }))
-          }
-        >
-          <View className="flex-1 bg-black/60 items-center justify-center px-6">
-            <View className="w-full rounded-[28px] bg-[#141325] border border-[#2A2845] px-6 py-6">
-              <Text className="text-white text-2xl font-bold text-center">
-                {customAlert.title}
-              </Text>
-
-              <Text className="text-[#8B88A8] text-base text-center leading-6 mt-4">
-                {customAlert.message}
-              </Text>
-
-              <Pressable
-                onPress={() =>
-                  setCustomAlert((prev) => ({ ...prev, visible: false }))
-                }
-                className="h-[52px] rounded-[16px] bg-[#B954F5] items-center justify-center mt-6"
-              >
-                <Text className="text-white font-bold text-lg">
-                  {t("common.okay")}
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
       </View>
     </KeyboardAvoidingView>
   );
