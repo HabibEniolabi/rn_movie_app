@@ -2,6 +2,8 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Localization from "expo-localization";
+import * as Updates from "expo-updates";
+import { I18nManager } from "react-native";
 
 import en from "@/locales/en.json";
 import fr from "@/locales/fr.json";
@@ -13,6 +15,8 @@ import ko from "@/locales/ko.json";
 import ar from "@/locales/ar.json";
 
 export const LANGUAGE_STORAGE_KEY = "app_language";
+
+export const RTL_LANGUAGES = ["ar"];
 
 const resources = {
   en: { translation: en },
@@ -43,6 +47,28 @@ export const getValidLanguage = (languageCode?: string | null) => {
   return "en";
 };
 
+export const isRTLlanguage = (languageCode: string) => {
+  const language = getValidLanguage(languageCode);
+
+  return RTL_LANGUAGES.includes(language);
+};
+
+const applyLanguageDirection = async (languageCode: string) => {
+  const shouldBeRTL = isRTLlanguage(languageCode);
+  const isCurrentlyRTL = I18nManager.isRTL;
+
+  if (shouldBeRTL !== isCurrentlyRTL) {
+    I18nManager.allowRTL(shouldBeRTL);
+    I18nManager.forceRTL(shouldBeRTL);
+
+    try {
+      await Updates.reloadAsync();
+    } catch (error) {
+      console.log("App reload failed after RTL change:", error);
+    }
+  }
+};
+
 i18n.use(initReactI18next).init({
   resources,
   lng: "en",
@@ -62,6 +88,8 @@ export const loadSavedLanguage = async () => {
     await i18n.changeLanguage(validSavedLanguage);
     await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, validSavedLanguage);
 
+    await applyLanguageDirection(validSavedLanguage);
+
     return;
   }
 
@@ -70,6 +98,8 @@ export const loadSavedLanguage = async () => {
 
   await i18n.changeLanguage(validDeviceLanguage);
   await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, validDeviceLanguage);
+
+  await applyLanguageDirection(validDeviceLanguage);
 };
 
 export const changeAppLanguage = async (languageCode: string) => {
@@ -77,6 +107,8 @@ export const changeAppLanguage = async (languageCode: string) => {
 
   await i18n.changeLanguage(validLanguage);
   await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, validLanguage);
+
+  await applyLanguageDirection(validLanguage);
 };
 
 export default i18n;
