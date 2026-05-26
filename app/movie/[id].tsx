@@ -108,6 +108,28 @@ const MovieDetails = () => {
     checkIfFavorited();
   }, [movie?.id]);
 
+  const notAvailable = t("movie.notAvailable");
+
+  const findBestTrailer = (
+    videos: {
+      key: string;
+      site: string;
+      type: string;
+      official?: boolean;
+    }[] = []
+  ) => {
+    return (
+      videos.find(
+        (item) =>
+          item.site === "YouTube" && item.type === "Trailer" && item.official
+      ) ||
+      videos.find(
+        (item) => item.site === "YouTube" && item.type === "Trailer"
+      ) ||
+      videos.find((item) => item.site === "YouTube")
+    );
+  };
+
   const handlePress = async () => {
     if (!id) return;
 
@@ -116,55 +138,31 @@ const MovieDetails = () => {
 
       const videoData = await playClickedMovies(id as string);
 
-      const trailer =
-        videoData.results.find(
-          (item) =>
-            item.site === "YouTube" && item.type === "Trailer" && item.official
-        ) ||
-        videoData.results.find(
-          (item) => item.site === "YouTube" && item.type === "Trailer"
-        ) ||
-        videoData.results.find((item) => item.site === "YouTube");
+      let trailer = findBestTrailer(videoData.results);
+
+      // Some movies do not have Arabic/localized trailers.
+      // So fallback to English if current language returns nothing useful.
+      if (!trailer && i18n.language.split("-")[0] !== "en") {
+        const englishVideoData = await playClickedMovies(id as string, "en-US");
+        trailer = findBestTrailer(englishVideoData.results);
+      }
 
       if (!trailer?.key) {
-        Alert.alert(
-          t("movie.noTrailerTitle", { defaultValue: "No trailer found" }),
-          t("movie.noTrailerMessage", {
-            defaultValue: "No trailer is available for this movie yet.",
-          })
-        );
+        Alert.alert(t("movie.noTrailerTitle"), t("movie.noTrailerMessage"));
         return;
       }
 
       const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
 
-      const canOpen = await Linking.canOpenURL(youtubeUrl);
-
-      if (!canOpen) {
-        Alert.alert(
-          t("movie.unableToOpenTrailer", {
-            defaultValue: "Unable to open trailer.",
-          })
-        );
-        return;
-      }
-
       await Linking.openURL(youtubeUrl);
     } catch (error) {
       console.log("Play trailer error:", error);
 
-      Alert.alert(
-        t("movie.trailerErrorTitle", { defaultValue: "Trailer error" }),
-        t("movie.trailerErrorMessage", {
-          defaultValue: "Could not open the movie trailer. Please try again.",
-        })
-      );
+      Alert.alert(t("movie.trailerErrorTitle"), t("movie.trailerErrorMessage"));
     } finally {
       setLoadingTrailer(false);
     }
   };
-
-  const notAvailable = t("movie.notAvailable");
 
   const formattedDate = movie?.release_date
     ? `${new Date(movie.release_date).toLocaleDateString("en-US", {
@@ -214,6 +212,7 @@ const MovieDetails = () => {
           <TouchableOpacity
             activeOpacity={0.85}
             onPress={handlePress}
+            disabled={loadingTrailer}
             className="absolute -bottom-10 right-7 w-[64px] h-[64px] rounded-full bg-white items-center justify-center"
           >
             {loadingTrailer ? (

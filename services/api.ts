@@ -80,9 +80,10 @@ export const fetchMovieDetails = async (movieId: string): Promise<MovieDetails> 
 };
 
 export const playClickedMovies = async (
-  movieId: string
+  movieId: string,
+  languageOverride?: string
 ): Promise<MovieVideosResponse> => {
-  const language = getTMDBLanguage();
+  const language = languageOverride || getTMDBLanguage();
 
   try {
     const params = new URLSearchParams({
