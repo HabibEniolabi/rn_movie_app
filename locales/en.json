@@ -18,11 +18,6 @@
     "trendingMovies": "Trending Movies",
     "latestMovies": "Latest Movies"
   },
-  "movie": {
-    "movie": "Movie",
-    "noTitleAvailable": "No title available",
-    "unknownYear": "Unknown year"
-  },
   "errors": {
     "failedToLoadMovies": "Failed to load movies."
   },
@@ -118,7 +113,14 @@
     "worldwide": "Worldwide",
     "million": "million",
     "voteCount_one": "({{count}} vote)",
-    "voteCount_other": "({{count}} votes)"
+    "voteCount_other": "({{count}} votes)",
+    "watchTrailer": "Watch trailer",
+    "noTrailerTitle": "No trailer found",
+    "noTrailerMessage": "No trailer is available for this movie yet.",
+    "unableToOpenTrailer": "Unable to open trailer.",
+    "trailerErrorTitle": "Trailer error",
+    "trailerErrorMessage": "Could not open the movie trailer. Please try again.",
+    "movie": "Movie"
   },
   "auth": {
     "loginTitle": "Welcome Back",

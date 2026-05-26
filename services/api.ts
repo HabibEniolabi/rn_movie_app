@@ -11,6 +11,21 @@ const TMDB_LANGUAGE_MAP: Record<string, string> = {
   ar: "ar-SA",
 };
 
+type TMDBVideo = {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+  published_at: string;
+};
+
+type MovieVideosResponse = {
+  id: number;
+  results: TMDBVideo[];
+};
+
 export const getTMDBLanguage = () => {
   const appLanguage = i18n.language?.split("-")[0] || "en";
 
@@ -62,4 +77,35 @@ export const fetchMovieDetails = async (movieId: string): Promise<MovieDetails> 
      console.log("Error fetching movie details:", error);
      throw error;
   }
-}
+};
+
+export const playClickedMovies = async (
+  movieId: string
+): Promise<MovieVideosResponse> => {
+  const language = getTMDBLanguage();
+
+  try {
+    const params = new URLSearchParams({
+      language,
+    });
+
+    const response = await fetch(
+      `${TMDB_CONFIG.BASE_URL}/movie/${movieId}/videos?${params.toString()}`,
+      {
+        method: "GET",
+        headers: TMDB_CONFIG.headers,
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.status_message || "Failed to fetch movie videos");
+    }
+
+    return data;
+  } catch (error) {
+    console.log("Error playing this movie:", error);
+    throw error;
+  }
+};

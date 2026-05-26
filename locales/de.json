@@ -18,11 +18,6 @@
     "trendingMovies": "Trendfilme",
     "latestMovies": "Neueste Filme"
   },
-  "movie": {
-    "movie": "Film",
-    "noTitleAvailable": "Kein Titel verfügbar",
-    "unknownYear": "Unbekanntes Jahr"
-  },
   "errors": {
     "failedToLoadMovies": "Filme konnten nicht geladen werden."
   },
@@ -118,7 +113,14 @@
     "worldwide": "Weltweit",
     "million": "Millionen",
     "voteCount_one": "({{count}} Stimme)",
-    "voteCount_other": "({{count}} Stimmen)"
+    "voteCount_other": "({{count}} Stimmen)",
+    "movie": "Film",
+    "watchTrailer": "Trailer ansehen",
+    "noTrailerTitle": "Kein Trailer gefunden",
+    "noTrailerMessage": "Für diesen Film ist noch kein Trailer verfügbar.",
+    "unableToOpenTrailer": "Trailer konnte nicht geöffnet werden.",
+    "trailerErrorTitle": "Trailer-Fehler",
+    "trailerErrorMessage": "Der Filmtrailer konnte nicht geöffnet werden. Bitte versuche es erneut."
   },
   "auth": {
     "loginTitle": "Willkommen zurück",

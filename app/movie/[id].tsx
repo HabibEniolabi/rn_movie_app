@@ -6,11 +6,12 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Linking,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import useFetch from "@/services/useFetch";
-import { fetchMovieDetails } from "@/services/api";
+import { fetchMovieDetails, playClickedMovies } from "@/services/api";
 import { icons } from "@/constants/icons";
 import { router } from "expo-router";
 import { getMovieCertification } from "@/utils/helpers";
@@ -61,6 +62,7 @@ const MovieDetails = () => {
 
   const { id } = useLocalSearchParams();
   const [isClicked, setIsClicked] = useState(false);
+  const [loadingTrailer, setLoadingTrailer] = useState(false);
 
   const {
     data: movie,
@@ -106,9 +108,61 @@ const MovieDetails = () => {
     checkIfFavorited();
   }, [movie?.id]);
 
-  const handlePress = () => {
-    Alert.alert("Watch movies!!")
-  }
+  const handlePress = async () => {
+    if (!id) return;
+
+    try {
+      setLoadingTrailer(true);
+
+      const videoData = await playClickedMovies(id as string);
+
+      const trailer =
+        videoData.results.find(
+          (item) =>
+            item.site === "YouTube" && item.type === "Trailer" && item.official
+        ) ||
+        videoData.results.find(
+          (item) => item.site === "YouTube" && item.type === "Trailer"
+        ) ||
+        videoData.results.find((item) => item.site === "YouTube");
+
+      if (!trailer?.key) {
+        Alert.alert(
+          t("movie.noTrailerTitle", { defaultValue: "No trailer found" }),
+          t("movie.noTrailerMessage", {
+            defaultValue: "No trailer is available for this movie yet.",
+          })
+        );
+        return;
+      }
+
+      const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
+
+      const canOpen = await Linking.canOpenURL(youtubeUrl);
+
+      if (!canOpen) {
+        Alert.alert(
+          t("movie.unableToOpenTrailer", {
+            defaultValue: "Unable to open trailer.",
+          })
+        );
+        return;
+      }
+
+      await Linking.openURL(youtubeUrl);
+    } catch (error) {
+      console.log("Play trailer error:", error);
+
+      Alert.alert(
+        t("movie.trailerErrorTitle", { defaultValue: "Trailer error" }),
+        t("movie.trailerErrorMessage", {
+          defaultValue: "Could not open the movie trailer. Please try again.",
+        })
+      );
+    } finally {
+      setLoadingTrailer(false);
+    }
+  };
 
   const notAvailable = t("movie.notAvailable");
 
@@ -162,11 +216,15 @@ const MovieDetails = () => {
             onPress={handlePress}
             className="absolute -bottom-10 right-7 w-[64px] h-[64px] rounded-full bg-white items-center justify-center"
           >
-            <Image
-              source={images.pause}
-              className="w-8 h-8"
-              resizeMode="contain"
-            />
+            {loadingTrailer ? (
+              <ActivityIndicator size="small" color="#B954F5" />
+            ) : (
+              <Image
+                source={images.pause}
+                className="w-8 h-8"
+                resizeMode="contain"
+              />
+            )}
           </TouchableOpacity>
         </View>
         <View className="flex-col item-start justify-center mt-5 px-5">

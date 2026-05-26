@@ -18,11 +18,6 @@
     "trendingMovies": "Filmes em alta",
     "latestMovies": "Filmes recentes"
   },
-  "movie": {
-    "movie": "Filme",
-    "noTitleAvailable": "Nenhum título disponível",
-    "unknownYear": "Ano desconhecido"
-  },
   "errors": {
     "failedToLoadMovies": "Falha ao carregar filmes."
   },
@@ -118,7 +113,14 @@
     "worldwide": "Mundial",
     "million": "milhões",
     "voteCount_one": "({{count}} voto)",
-    "voteCount_other": "({{count}} votos)"
+    "voteCount_other": "({{count}} votos)",
+    "movie": "Filme",
+    "watchTrailer": "Assistir ao trailer",
+    "noTrailerTitle": "Nenhum trailer encontrado",
+    "noTrailerMessage": "Ainda não há trailer disponível para este filme.",
+    "unableToOpenTrailer": "Não foi possível abrir o trailer.",
+    "trailerErrorTitle": "Erro no trailer",
+    "trailerErrorMessage": "Não foi possível abrir o trailer do filme. Tente novamente."
   },
   "auth": {
     "loginTitle": "Bem-vindo de volta",

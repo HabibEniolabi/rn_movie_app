@@ -18,11 +18,6 @@
     "trendingMovies": "トレンド映画",
     "latestMovies": "最新映画"
   },
-  "movie": {
-    "movie": "映画",
-    "noTitleAvailable": "タイトルがありません",
-    "unknownYear": "不明な年"
-  },
   "errors": {
     "failedToLoadMovies": "映画を読み込めませんでした。"
   },
@@ -118,7 +113,14 @@
     "worldwide": "全世界",
     "million": "百万",
     "voteCount_one": "({{count}}票)",
-    "voteCount_other": "({{count}}票)"
+    "voteCount_other": "({{count}}票)",
+    "movie": "映画",
+    "watchTrailer": "予告編を見る",
+    "noTrailerTitle": "予告編が見つかりません",
+    "noTrailerMessage": "この映画の予告編はまだ利用できません。",
+    "unableToOpenTrailer": "予告編を開けませんでした。",
+    "trailerErrorTitle": "予告編エラー",
+    "trailerErrorMessage": "映画の予告編を開けませんでした。もう一度お試しください。"
   },
   "auth": {
     "loginTitle": "おかえりなさい",

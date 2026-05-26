@@ -18,11 +18,6 @@
     "trendingMovies": "الأفلام الرائجة",
     "latestMovies": "أحدث الأفلام"
   },
-  "movie": {
-    "movie": "فيلم",
-    "noTitleAvailable": "لا يوجد عنوان متاح",
-    "unknownYear": "سنة غير معروفة"
-  },
   "errors": {
     "failedToLoadMovies": "فشل تحميل الأفلام."
   },
@@ -118,7 +113,14 @@
     "worldwide": "عالميًا",
     "million": "مليون",
     "voteCount_one": "({{count}} صوت)",
-    "voteCount_other": "({{count}} أصوات)"
+    "voteCount_other": "({{count}} أصوات)",
+    "movie": "فيلم",
+    "watchTrailer": "مشاهدة الإعلان",
+    "noTrailerTitle": "لم يتم العثور على إعلان",
+    "noTrailerMessage": "لا يوجد إعلان متاح لهذا الفيلم حتى الآن.",
+    "unableToOpenTrailer": "تعذر فتح الإعلان.",
+    "trailerErrorTitle": "خطأ في الإعلان",
+    "trailerErrorMessage": "تعذر فتح إعلان الفيلم. يرجى المحاولة مرة أخرى."
   },
   "auth": {
     "loginTitle": "مرحبًا بعودتك",
