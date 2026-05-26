@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router/build/hooks";
@@ -17,6 +18,7 @@ import { saveFavorite, removeFavorite } from "@/services/appwrite";
 import Entypo from "react-native-vector-icons/Entypo";
 import { getExistingFavorite } from "@/services/appwrite";
 import { useTranslation } from "react-i18next";
+import { images } from "@/constants/images";
 
 interface MovieInfoProps {
   label: string;
@@ -104,6 +106,10 @@ const MovieDetails = () => {
     checkIfFavorited();
   }, [movie?.id]);
 
+  const handlePress = () => {
+    Alert.alert("Watch movies!!")
+  }
+
   const notAvailable = t("movie.notAvailable");
 
   const formattedDate = movie?.release_date
@@ -143,14 +149,25 @@ const MovieDetails = () => {
           paddingBottom: 80,
         }}
       >
-        <View>
+        <View className="relative w-full h-[550px]">
           <Image
             source={{
               uri: getPosterUrl(movie?.poster_path),
             }}
-            className="w-full h-[550px]"
+            className="w-full h-full"
             resizeMode="stretch"
           />
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={handlePress}
+            className="absolute -bottom-10 right-7 w-[64px] h-[64px] rounded-full bg-white items-center justify-center"
+          >
+            <Image
+              source={images.pause}
+              className="w-8 h-8"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
         </View>
         <View className="flex-col item-start justify-center mt-5 px-5">
           <Text className="text-white font-bold text-xl">

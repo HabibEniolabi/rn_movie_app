@@ -14,6 +14,7 @@ import crown from "@/assets/images/crown.png";
 import gift from "@/assets/images/gift.png";
 import email from "@/assets/images/email.png";
 import lock from "@/assets/images/lock.png";
+import pause from "@/assets/images/pause.png";
 
 
 export const images = {
@@ -33,6 +34,7 @@ export const images = {
   gift,
   lock,
   email,
+  pause,
 
   profileGalleryPopcorn: require("@/assets/images/profile-gallery/boy.png"),
   profileGalleryCinema: require("@/assets/images/profile-gallery/guy.png"),
