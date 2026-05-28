@@ -120,7 +120,11 @@
     "noTrailerMessage": "Ainda não há trailer disponível para este filme.",
     "unableToOpenTrailer": "Não foi possível abrir o trailer.",
     "trailerErrorTitle": "Erro no trailer",
-    "trailerErrorMessage": "Não foi possível abrir o trailer do filme. Tente novamente."
+    "trailerErrorMessage": "Não foi possível abrir o trailer do filme. Tente novamente.",
+    "speed": "Velocidade",
+    "audioSubtitles": "Áudio e legendas",
+    "playbackSpeed": "Velocidade de reprodução",
+    "subtitles": "Legendas"
   },
   "auth": {
     "loginTitle": "Bem-vindo de volta",

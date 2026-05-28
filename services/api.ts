@@ -11,7 +11,7 @@ const TMDB_LANGUAGE_MAP: Record<string, string> = {
   ar: "ar-SA",
 };
 
-type TMDBVideo = {
+export type TMDBVideo = {
   id: string;
   key: string;
   name: string;
@@ -21,7 +21,7 @@ type TMDBVideo = {
   published_at: string;
 };
 
-type MovieVideosResponse = {
+export type MovieVideosResponse = {
   id: number;
   results: TMDBVideo[];
 };

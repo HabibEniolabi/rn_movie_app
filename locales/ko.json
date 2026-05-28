@@ -120,7 +120,11 @@
     "noTrailerMessage": "이 영화의 예고편은 아직 제공되지 않습니다.",
     "unableToOpenTrailer": "예고편을 열 수 없습니다.",
     "trailerErrorTitle": "예고편 오류",
-    "trailerErrorMessage": "영화 예고편을 열 수 없습니다. 다시 시도해 주세요."
+    "trailerErrorMessage": "영화 예고편을 열 수 없습니다. 다시 시도해 주세요.",
+    "speed": "속도",
+    "audioSubtitles": "오디오 및 자막",
+    "playbackSpeed": "재생 속도",
+    "subtitles": "자막"
   },
   "auth": {
     "loginTitle": "다시 오신 것을 환영합니다",

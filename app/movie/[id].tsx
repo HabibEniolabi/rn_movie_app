@@ -116,6 +116,7 @@ const MovieDetails = () => {
       site: string;
       type: string;
       official?: boolean;
+      name?: string;
     }[] = []
   ) => {
     return (
@@ -131,7 +132,7 @@ const MovieDetails = () => {
   };
 
   const handlePress = async () => {
-    if (!id) return;
+    if (!id || !movie) return;
 
     try {
       setLoadingTrailer(true);
@@ -151,10 +152,15 @@ const MovieDetails = () => {
         Alert.alert(t("movie.noTrailerTitle"), t("movie.noTrailerMessage"));
         return;
       }
-
-      const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
-
-      await Linking.openURL(youtubeUrl);
+      
+      router.push({
+        pathname: "/watch/[id]",
+        params: {
+          id: String(movie.id),
+          videoId: trailer.key,
+          title: movie.title || trailer.name || t("movie.watchTrailer"),
+        },
+      });
     } catch (error) {
       console.log("Play trailer error:", error);
 
@@ -355,7 +361,6 @@ const MovieDetails = () => {
           tintColor="#fff"
         />
         <Text className="text-white font-semibold text-base">
-          {" "}
           {t("movie.goBack")}
         </Text>
       </TouchableOpacity>

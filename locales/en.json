@@ -120,7 +120,11 @@
     "unableToOpenTrailer": "Unable to open trailer.",
     "trailerErrorTitle": "Trailer error",
     "trailerErrorMessage": "Could not open the movie trailer. Please try again.",
-    "movie": "Movie"
+    "movie": "Movie",
+    "speed": "Speed",
+    "audioSubtitles": "Audio & Subtitles",
+    "playbackSpeed": "Playback Speed",
+    "subtitles": "Subtitles"
   },
   "auth": {
     "loginTitle": "Welcome Back",

@@ -120,7 +120,11 @@
     "noTrailerMessage": "لا يوجد إعلان متاح لهذا الفيلم حتى الآن.",
     "unableToOpenTrailer": "تعذر فتح الإعلان.",
     "trailerErrorTitle": "خطأ في الإعلان",
-    "trailerErrorMessage": "تعذر فتح إعلان الفيلم. يرجى المحاولة مرة أخرى."
+    "trailerErrorMessage": "تعذر فتح إعلان الفيلم. يرجى المحاولة مرة أخرى.",
+    "speed": "السرعة",
+    "audioSubtitles": "الصوت والترجمة",
+    "playbackSpeed": "سرعة التشغيل",
+    "subtitles": "الترجمة"
   },
   "auth": {
     "loginTitle": "مرحبًا بعودتك",

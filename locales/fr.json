@@ -120,7 +120,11 @@
     "noTrailerMessage": "Aucune bande-annonce n'est encore disponible pour ce film.",
     "unableToOpenTrailer": "Impossible d'ouvrir la bande-annonce.",
     "trailerErrorTitle": "Erreur de bande-annonce",
-    "trailerErrorMessage": "Impossible d'ouvrir la bande-annonce du film. Veuillez réessayer."
+    "trailerErrorMessage": "Impossible d'ouvrir la bande-annonce du film. Veuillez réessayer.",
+     "speed": "Vitesse",
+    "audioSubtitles": "Audio et sous-titres",
+    "playbackSpeed": "Vitesse de lecture",
+    "subtitles": "Sous-titres"
   },
   "auth": {
     "loginTitle": "Bon retour",

@@ -120,7 +120,11 @@
     "noTrailerMessage": "この映画の予告編はまだ利用できません。",
     "unableToOpenTrailer": "予告編を開けませんでした。",
     "trailerErrorTitle": "予告編エラー",
-    "trailerErrorMessage": "映画の予告編を開けませんでした。もう一度お試しください。"
+    "trailerErrorMessage": "映画の予告編を開けませんでした。もう一度お試しください。",
+    "speed": "速度",
+    "audioSubtitles": "音声と字幕",
+    "playbackSpeed": "再生速度",
+    "subtitles": "字幕"
   },
   "auth": {
     "loginTitle": "おかえりなさい",

@@ -63,6 +63,8 @@ export default function RootLayout() {
 
         <Stack.Screen name="movie/[id]" />
 
+        <Stack.Screen name="watch/[id]" />
+
         <Stack.Screen name="account" />
       </Stack>
     </View>
