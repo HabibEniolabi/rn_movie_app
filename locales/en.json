@@ -124,7 +124,8 @@
     "speed": "Speed",
     "audioSubtitles": "Audio & Subtitles",
     "playbackSpeed": "Playback Speed",
-    "subtitles": "Subtitles"
+    "subtitles": "Subtitles",
+    "trailersMore": "Trailers & More"
   },
   "auth": {
     "loginTitle": "Welcome Back",

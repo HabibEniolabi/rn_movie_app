@@ -124,7 +124,8 @@
      "speed": "Vitesse",
     "audioSubtitles": "Audio et sous-titres",
     "playbackSpeed": "Vitesse de lecture",
-    "subtitles": "Sous-titres"
+    "subtitles": "Sous-titres",
+    "trailersMore": "Bandes-annonces et plus"
   },
   "auth": {
     "loginTitle": "Bon retour",

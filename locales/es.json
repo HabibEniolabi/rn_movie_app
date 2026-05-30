@@ -124,7 +124,8 @@
      "speed": "Velocidad",
     "audioSubtitles": "Audio y subtítulos",
     "playbackSpeed": "Velocidad de reproducción",
-    "subtitles": "Subtítulos"
+    "subtitles": "Subtítulos",
+    "trailersMore": "Tráilers y más"
   },
   "auth": {
     "loginTitle": "Bienvenido de nuevo",

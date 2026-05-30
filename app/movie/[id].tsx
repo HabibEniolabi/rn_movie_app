@@ -5,8 +5,6 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
-  Linking,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router/build/hooks";
@@ -62,7 +60,6 @@ const MovieDetails = () => {
 
   const { id } = useLocalSearchParams();
   const [isClicked, setIsClicked] = useState(false);
-  const [loadingTrailer, setLoadingTrailer] = useState(false);
 
   const {
     data: movie,
@@ -110,64 +107,16 @@ const MovieDetails = () => {
 
   const notAvailable = t("movie.notAvailable");
 
-  const findBestTrailer = (
-    videos: {
-      key: string;
-      site: string;
-      type: string;
-      official?: boolean;
-      name?: string;
-    }[] = []
-  ) => {
-    return (
-      videos.find(
-        (item) =>
-          item.site === "YouTube" && item.type === "Trailer" && item.official
-      ) ||
-      videos.find(
-        (item) => item.site === "YouTube" && item.type === "Trailer"
-      ) ||
-      videos.find((item) => item.site === "YouTube")
-    );
-  };
+  const handleOpenTrailers = () => {
+    if (!movie?.id) return;
 
-  const handlePress = async () => {
-    if (!id || !movie) return;
-
-    try {
-      setLoadingTrailer(true);
-
-      const videoData = await playClickedMovies(id as string);
-
-      let trailer = findBestTrailer(videoData.results);
-
-      // Some movies do not have Arabic/localized trailers.
-      // So fallback to English if current language returns nothing useful.
-      if (!trailer && i18n.language.split("-")[0] !== "en") {
-        const englishVideoData = await playClickedMovies(id as string, "en-US");
-        trailer = findBestTrailer(englishVideoData.results);
-      }
-
-      if (!trailer?.key) {
-        Alert.alert(t("movie.noTrailerTitle"), t("movie.noTrailerMessage"));
-        return;
-      }
-      
-      router.push({
-        pathname: "/watch/[id]",
-        params: {
-          id: String(movie.id),
-          videoId: trailer.key,
-          title: movie.title || trailer.name || t("movie.watchTrailer"),
-        },
-      });
-    } catch (error) {
-      console.log("Play trailer error:", error);
-
-      Alert.alert(t("movie.trailerErrorTitle"), t("movie.trailerErrorMessage"));
-    } finally {
-      setLoadingTrailer(false);
-    }
+    router.push({
+      pathname: "/trailers/[id]" as const,
+      params: {
+        id: String(movie.id),
+        title: movie.title || t("movie.watchTrailer"),
+      },
+    });
   };
 
   const formattedDate = movie?.release_date
@@ -217,19 +166,15 @@ const MovieDetails = () => {
           />
           <TouchableOpacity
             activeOpacity={0.85}
-            onPress={handlePress}
-            disabled={loadingTrailer}
+            onPress={handleOpenTrailers}
+            disabled={!movie}
             className="absolute -bottom-10 right-7 w-[64px] h-[64px] rounded-full bg-white items-center justify-center"
           >
-            {loadingTrailer ? (
-              <ActivityIndicator size="small" color="#B954F5" />
-            ) : (
               <Image
                 source={images.pause}
                 className="w-8 h-8"
                 resizeMode="contain"
               />
-            )}
           </TouchableOpacity>
         </View>
         <View className="flex-col item-start justify-center mt-5 px-5">

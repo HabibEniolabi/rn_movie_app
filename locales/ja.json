@@ -124,7 +124,8 @@
     "speed": "速度",
     "audioSubtitles": "音声と字幕",
     "playbackSpeed": "再生速度",
-    "subtitles": "字幕"
+    "subtitles": "字幕",
+    "trailersMore": "予告編など"
   },
   "auth": {
     "loginTitle": "おかえりなさい",

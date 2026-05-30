@@ -124,7 +124,8 @@
     "speed": "속도",
     "audioSubtitles": "오디오 및 자막",
     "playbackSpeed": "재생 속도",
-    "subtitles": "자막"
+    "subtitles": "자막",
+    "trailersMore": "예고편 및 더보기"
   },
   "auth": {
     "loginTitle": "다시 오신 것을 환영합니다",

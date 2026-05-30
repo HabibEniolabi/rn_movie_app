@@ -124,7 +124,8 @@
     "speed": "Velocidade",
     "audioSubtitles": "Áudio e legendas",
     "playbackSpeed": "Velocidade de reprodução",
-    "subtitles": "Legendas"
+    "subtitles": "Legendas",
+    "trailersMore": "Trailers e mais"
   },
   "auth": {
     "loginTitle": "Bem-vindo de volta",
