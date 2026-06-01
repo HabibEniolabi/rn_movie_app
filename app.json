@@ -47,14 +47,7 @@
         }
       ],
       "expo-localization",
-      "expo-web-browser",
-      [
-        "expo-video",
-        {
-          "supportsBackgroundPlayback": true,
-          "supportsPictureInPicture": true
-        }
-      ]
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
