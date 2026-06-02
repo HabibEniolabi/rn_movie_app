@@ -45,6 +45,7 @@ export default function RootLayout() {
           contentStyle: {
             backgroundColor: "#030014",
           },
+          orientation: "portrait",
         }}
       >
         <Stack.Screen name="index" />
@@ -65,7 +66,12 @@ export default function RootLayout() {
 
         <Stack.Screen name="trailers/[id]" />
 
-        <Stack.Screen name="watch/[id]" />
+        <Stack.Screen
+          name="watch/[id]"
+          options={{
+            orientation: "landscape",
+          }}
+        />
 
         <Stack.Screen name="account" />
       </Stack>

@@ -77,7 +77,7 @@ const WatchClipScreen = () => {
   const [showSubtitleModal, setShowSubtitleModal] = useState(false);
   const [playerKey, setPlayerKey] = useState(0);
 
-  const videoHeight = Math.min(height, width * 0.5625);
+  const videoHeight = height;
 
   const clearHideControlsTimer = () => {
     if (hideControlsTimeoutRef.current) {
@@ -318,6 +318,9 @@ const WatchClipScreen = () => {
             scheduleHideControls();
           }}
           onChangeState={handleStateChange}
+          onError={(error: any) => {
+            console.log("YouTube player error:", error);
+          }}
           initialPlayerParams={{
             start: startTime,
             controls: false,
