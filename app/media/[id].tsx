@@ -11,7 +11,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
 import { useTranslation } from "react-i18next";
-import { fetchMovieDetails, playClickedMovies, type TMDBVideo } from "@/services/api";
+import {
+  fetchMovieDetails,
+  fetchMovieVideos,
+  fetchSimilarMovies,
+  type TMDBVideo,
+} from "@/services/api";
 
 const getPosterUrl = (posterPath?: string | null) => {
   if (!posterPath) {
@@ -25,7 +30,10 @@ const getPosterUrl = (posterPath?: string | null) => {
   return `https://image.tmdb.org/t/p/w500${posterPath}`;
 };
 
-const getBackdropUrl = (backdropPath?: string | null, posterPath?: string | null) => {
+const getBackdropUrl = (
+  backdropPath?: string | null,
+  posterPath?: string | null
+) => {
   const imagePath = backdropPath || posterPath;
 
   if (!imagePath) {
@@ -60,8 +68,7 @@ const sortVideos = (videos: TMDBVideo[]) => {
     if (aPriority !== bPriority) return aPriority - bPriority;
 
     return (
-      new Date(b.published_at).getTime() -
-      new Date(a.published_at).getTime()
+      new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
     );
   });
 };
@@ -76,18 +83,31 @@ const MediaScreen = () => {
 
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [videos, setVideos] = useState<TMDBVideo[]>([]);
+  const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState<"watch" | "trailers" | "similar">(
-    "watch"
-  );
+  const [selectedTab, setSelectedTab] = useState<
+    "watch" | "trailers" | "similar"
+  >("watch");
 
   const trailerVideos = useMemo(() => {
-    const youtubeVideos = videos.filter(
-      (video) => video.key && video.site?.toLowerCase() === "youtube"
-    );
+    // const youtubeVideos = videos.filter(
+    //   (video) => video.key && video.site?.toLowerCase() === "youtube"
+    // );
 
-    return sortVideos(youtubeVideos);
+    return sortVideos(videos);
   }, [videos]);
+
+  const getMoviePosterUrl = (posterPath?: string | null) => {
+    if (!posterPath) {
+      return "https://placehold.co/500x750/1a1a1a/ffffff.png";
+    }
+
+    if (posterPath.startsWith("http")) {
+      return posterPath;
+    }
+
+    return `https://image.tmdb.org/t/p/w500${posterPath}`;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,20 +116,15 @@ const MediaScreen = () => {
       try {
         setLoading(true);
 
-        const [movieData, videoData] = await Promise.all([
+        const [movieData, videoData, similarMoviesData] = await Promise.all([
           fetchMovieDetails(String(id)),
-          playClickedMovies(String(id)),
+          fetchMovieVideos(String(id)),
+          fetchSimilarMovies(String(id)),
         ]);
 
-        let results = videoData.results || [];
-
-        if (!results.length && i18n.language.split("-")[0] !== "en") {
-          const englishVideoData = await playClickedMovies(String(id), "en-US");
-          results = englishVideoData.results || [];
-        }
-
         setMovie(movieData);
-        setVideos(results);
+        setVideos(videoData);
+        setSimilarMovies(similarMoviesData);
       } catch (error) {
         console.log("Fetch media page error:", error);
 
@@ -190,7 +205,7 @@ const MediaScreen = () => {
         </View>
 
         <View className="px-5 pt-5">
-          <Text className="text-[#E50914] text-base font-extrabold tracking-widest">
+          <Text className="text-[#AB8BFF] text-base font-extrabold tracking-widest">
             MOVIEFLIX
           </Text>
 
@@ -252,7 +267,7 @@ const MediaScreen = () => {
             <TouchableOpacity
               onPress={() => setSelectedTab("watch")}
               className={`pb-3 mr-8 ${
-                selectedTab === "watch" ? "border-b-[3px] border-[#E50914]" : ""
+                selectedTab === "watch" ? "border-b-[3px] border-[#AB8BFF]" : ""
               }`}
             >
               <Text className="text-white font-bold text-base">
@@ -264,7 +279,7 @@ const MediaScreen = () => {
               onPress={() => setSelectedTab("trailers")}
               className={`pb-3 mr-8 ${
                 selectedTab === "trailers"
-                  ? "border-b-[3px] border-[#E50914]"
+                  ? "border-b-[3px] border-[#AB8BFF]"
                   : ""
               }`}
             >
@@ -277,7 +292,7 @@ const MediaScreen = () => {
               onPress={() => setSelectedTab("similar")}
               className={`pb-3 mr-8 ${
                 selectedTab === "similar"
-                  ? "border-b-[3px] border-[#E50914]"
+                  ? "border-b-[3px] border-[#AB8BFF]"
                   : ""
               }`}
             >
@@ -301,7 +316,7 @@ const MediaScreen = () => {
 
               <TouchableOpacity
                 onPress={() => setSelectedTab("trailers")}
-                className="bg-[#E50914] rounded-md py-4 mt-5 items-center"
+                className="bg-[#AB8BFF] rounded-md py-4 mt-5 items-center"
               >
                 <Text className="text-white font-extrabold text-base">
                   {t("movie.watchTrailersInstead")}
@@ -367,15 +382,57 @@ const MediaScreen = () => {
 
         {selectedTab === "similar" && (
           <View className="px-5 pt-6">
-            <View className="rounded-xl border border-[#2A2A2A] bg-[#111] p-5">
-              <Text className="text-white text-xl font-extrabold">
-                {t("movie.moreLikeThis")}
-              </Text>
+            {similarMovies.length === 0 ? (
+              <View className="rounded-xl border border-[#2A2A2A] bg-[#111] p-5">
+                <Text className="text-white text-xl font-extrabold">
+                  {t("movie.moreLikeThis")}
+                </Text>
 
-              <Text className="text-light-200 mt-3 leading-6">
-                {t("movie.moreLikeThisComingSoon")}
-              </Text>
-            </View>
+                <Text className="text-light-200 mt-3 leading-6">
+                  {t("movie.noSimilarMovies", {
+                    defaultValue: "No similar movies found yet.",
+                  })}
+                </Text>
+              </View>
+            ) : (
+              <View className="flex-row flex-wrap justify-between">
+                {similarMovies.map((similarMovie) => (
+                  <TouchableOpacity
+                    key={similarMovie.id}
+                    activeOpacity={0.85}
+                    onPress={() => {
+                      router.push({
+                        pathname: "/movie/[id]" as const,
+                        params: {
+                          id: String(similarMovie.id),
+                        },
+                      });
+                    }}
+                    className="w-[48%] mb-6"
+                  >
+                    <Image
+                      source={{
+                        uri: getMoviePosterUrl(similarMovie.poster_path),
+                      }}
+                      className="w-full h-[240px] rounded-xl bg-[#111]"
+                      resizeMode="cover"
+                    />
+
+                    <Text
+                      className="text-white text-sm font-bold mt-2"
+                      numberOfLines={2}
+                    >
+                      {similarMovie.title || similarMovie.original_title}
+                    </Text>
+
+                    <Text className="text-light-200 text-xs mt-1">
+                      {similarMovie.release_date?.split("-")[0] ||
+                        t("movie.unknownYear")}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
         )}
       </ScrollView>

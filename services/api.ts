@@ -79,34 +79,96 @@ export const fetchMovieDetails = async (movieId: string): Promise<MovieDetails> 
   }
 };
 
+const mergeUniqueVideos = (videos: TMDBVideo[]) => {
+  const uniqueVideos = new Map<string, TMDBVideo>();
+
+  videos.forEach((video) => {
+    if (!video?.key) return;
+
+    uniqueVideos.set(video.key, video);
+  });
+
+  return Array.from(uniqueVideos.values());
+};
+
+
 export const playClickedMovies = async (
   movieId: string,
   languageOverride?: string
 ): Promise<MovieVideosResponse> => {
   const language = languageOverride || getTMDBLanguage();
 
-  try {
-    const params = new URLSearchParams({
-      language,
-    });
+  const params = new URLSearchParams({
+    language,
+  });
 
-    const response = await fetch(
-      `${TMDB_CONFIG.BASE_URL}/movie/${movieId}/videos?${params.toString()}`,
-      {
-        method: "GET",
-        headers: TMDB_CONFIG.headers,
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data?.status_message || "Failed to fetch movie videos");
+  const response = await fetch(
+    `${TMDB_CONFIG.BASE_URL}/movie/${movieId}/videos?${params.toString()}`,
+    {
+      method: "GET",
+      headers: TMDB_CONFIG.headers,
     }
+  );
 
-    return data;
-  } catch (error) {
-    console.log("Error playing this movie:", error);
-    throw error;
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.status_message || "Failed to fetch movie videos");
   }
+
+  return data;
+};
+
+export const fetchMovieVideos = async (
+  movieId: string
+): Promise<TMDBVideo[]> => {
+  const currentLanguage = getTMDBLanguage();
+
+  const currentLanguageData = await playClickedMovies(movieId, currentLanguage);
+
+  let englishLanguageData: MovieVideosResponse = {
+    id: Number(movieId),
+    results: [],
+  };
+
+  if (currentLanguage !== "en-US") {
+    englishLanguageData = await playClickedMovies(movieId, "en-US");
+  }
+
+  const mergedVideos = mergeUniqueVideos([
+    ...(currentLanguageData.results || []),
+    ...(englishLanguageData.results || []),
+  ]);
+
+  return mergedVideos.filter(
+    (video) => video.key && video.site?.toLowerCase() === "youtube"
+  );
+};
+
+export const fetchSimilarMovies = async (
+  movieId: string,
+  page = 1
+): Promise<Movie[]> => {
+  const language = getTMDBLanguage();
+
+  const params = new URLSearchParams({
+    language,
+    page: String(page),
+  });
+
+  const response = await fetch(
+    `${TMDB_CONFIG.BASE_URL}/movie/${movieId}/similar?${params.toString()}`,
+    {
+      method: "GET",
+      headers: TMDB_CONFIG.headers,
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.status_message || "Failed to fetch similar movies");
+  }
+
+  return data.results || [];
 };
