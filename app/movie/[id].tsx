@@ -111,7 +111,7 @@ const MovieDetails = () => {
     if (!movie?.id) return;
 
     router.push({
-      pathname: "/trailers/[id]" as const,
+      pathname: "/media/[id]" as const,
       params: {
         id: String(movie.id),
         title: movie.title || t("movie.watchTrailer"),

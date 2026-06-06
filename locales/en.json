@@ -125,7 +125,18 @@
     "audioSubtitles": "Audio & Subtitles",
     "playbackSpeed": "Playback Speed",
     "subtitles": "Subtitles",
-    "trailersMore": "Trailers & More"
+    "trailersMore": "Trailers & More",
+    "playMovie": "Play Movie",
+    "watch": "Watch",
+    "videos": "videos",
+    "video": "Video",
+    "moreLikeThis": "More Like This",
+    "streamingUnderwayTitle": "Movie streaming is underway",
+    "streamingUnderwayMessage": "Full movie playback is not available yet. For now, you can watch official trailers and clips while we work on licensed streaming support.",
+    "fullMovieComingSoon": "Full movie playback coming soon",
+    "fullMovieComingSoonMessage": "We currently do not have a licensed streaming URL for this movie. Trailers and official clips are available below.",
+    "watchTrailersInstead": "Watch trailers instead",
+    "moreLikeThisComingSoon": "Similar movie recommendations are coming soon."
   },
   "auth": {
     "loginTitle": "Welcome Back",
