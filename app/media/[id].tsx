@@ -176,7 +176,17 @@ const MediaScreen = () => {
           paddingBottom: 90,
         }}
       >
-        <View className="relative w-full h-[330px] bg-black">
+        <View className="bg-black pt-12 px-5 pb-3">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            activeOpacity={0.8}
+            className="w-11 h-11 items-center justify-center"
+          >
+            <Feather name="arrow-left" size={30} color="#fff" />
+          </TouchableOpacity>
+        </View>
+
+        <View className="relative w-full h-[300px] bg-black">
           <Image
             source={{
               uri: getBackdropUrl(movie?.backdrop_path, movie?.poster_path),
@@ -185,17 +195,11 @@ const MediaScreen = () => {
             resizeMode="cover"
           />
 
-          <View className="absolute inset-0 bg-black/35" />
-
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="absolute top-12 left-5 w-11 h-11 rounded-full bg-black/40 items-center justify-center"
-          >
-            <Feather name="arrow-left" size={28} color="#fff" />
-          </TouchableOpacity>
+          <View className="absolute inset-0 bg-black/25" />
 
           <TouchableOpacity
             onPress={handlePlayFullMovie}
+            activeOpacity={0.85}
             className="absolute inset-0 items-center justify-center"
           >
             <View className="w-[76px] h-[76px] rounded-full border-2 border-white items-center justify-center bg-black/25">
