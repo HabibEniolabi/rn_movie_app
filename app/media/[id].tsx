@@ -6,28 +6,25 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  useWindowDimensions,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
 import { useTranslation } from "react-i18next";
+import YoutubePlayer from "react-native-youtube-iframe";
+
 import {
   fetchMovieDetails,
   fetchMovieVideos,
   fetchSimilarMovies,
   type TMDBVideo,
 } from "@/services/api";
+import { fetchKinoCheckTrailers } from "@/services/kinocheck";
 
-const getPosterUrl = (posterPath?: string | null) => {
-  if (!posterPath) {
-    return "https://placehold.co/600x900/1a1a1a/ffffff.png";
-  }
-
-  if (posterPath.startsWith("http")) {
-    return posterPath;
-  }
-
-  return `https://image.tmdb.org/t/p/w500${posterPath}`;
+type TrailerVideo = TMDBVideo & {
+  thumbnail?: string;
+  source?: "tmdb" | "kinocheck";
 };
 
 const getBackdropUrl = (
@@ -47,11 +44,25 @@ const getBackdropUrl = (
   return `https://image.tmdb.org/t/p/w780${imagePath}`;
 };
 
-const getYoutubeThumbnail = (videoKey: string) => {
-  return `https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`;
+const getMoviePosterUrl = (posterPath?: string | null) => {
+  if (!posterPath) {
+    return "https://placehold.co/500x750/1a1a1a/ffffff.png";
+  }
+
+  if (posterPath.startsWith("http")) {
+    return posterPath;
+  }
+
+  return `https://image.tmdb.org/t/p/w500${posterPath}`;
 };
 
-const sortVideos = (videos: TMDBVideo[]) => {
+const getTrailerThumbnail = (video: TrailerVideo) => {
+  return (
+    video.thumbnail || `https://img.youtube.com/vi/${video.key}/hqdefault.jpg`
+  );
+};
+
+const sortVideos = (videos: TrailerVideo[]) => {
   const priority: Record<string, number> = {
     Trailer: 1,
     Teaser: 2,
@@ -68,13 +79,15 @@ const sortVideos = (videos: TMDBVideo[]) => {
     if (aPriority !== bPriority) return aPriority - bPriority;
 
     return (
-      new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+      new Date(b.published_at || 0).getTime() -
+      new Date(a.published_at || 0).getTime()
     );
   });
 };
 
 const MediaScreen = () => {
   const { t, i18n } = useTranslation();
+  const { width } = useWindowDimensions();
 
   const { id, title } = useLocalSearchParams<{
     id: string;
@@ -82,32 +95,19 @@ const MediaScreen = () => {
   }>();
 
   const [movie, setMovie] = useState<MovieDetails | null>(null);
-  const [videos, setVideos] = useState<TMDBVideo[]>([]);
+  const [videos, setVideos] = useState<TrailerVideo[]>([]);
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+
   const [selectedTab, setSelectedTab] = useState<
     "watch" | "trailers" | "similar"
   >("watch");
 
   const trailerVideos = useMemo(() => {
-    // const youtubeVideos = videos.filter(
-    //   (video) => video.key && video.site?.toLowerCase() === "youtube"
-    // );
-
     return sortVideos(videos);
   }, [videos]);
 
-  const getMoviePosterUrl = (posterPath?: string | null) => {
-    if (!posterPath) {
-      return "https://placehold.co/500x750/1a1a1a/ffffff.png";
-    }
-
-    if (posterPath.startsWith("http")) {
-      return posterPath;
-    }
-
-    return `https://image.tmdb.org/t/p/w500${posterPath}`;
-  };
+  const previewVideo = trailerVideos[0];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,14 +116,23 @@ const MediaScreen = () => {
       try {
         setLoading(true);
 
-        const [movieData, videoData, similarMoviesData] = await Promise.all([
+        const [movieData, similarMoviesData] = await Promise.all([
           fetchMovieDetails(String(id)),
-          fetchMovieVideos(String(id)),
           fetchSimilarMovies(String(id)),
         ]);
 
+        let trailerResults = (await fetchKinoCheckTrailers(
+          String(id)
+        )) as TrailerVideo[];
+
+        if (!trailerResults.length) {
+          trailerResults = (await fetchMovieVideos(
+            String(id)
+          )) as TrailerVideo[];
+        }
+
         setMovie(movieData);
-        setVideos(videoData);
+        setVideos(trailerResults);
         setSimilarMovies(similarMoviesData);
       } catch (error) {
         console.log("Fetch media page error:", error);
@@ -147,7 +156,7 @@ const MediaScreen = () => {
     );
   };
 
-  const handlePlayTrailer = (video: TMDBVideo) => {
+  const handlePlayTrailer = (video: TrailerVideo) => {
     router.push({
       pathname: "/watch/[id]" as const,
       params: {
@@ -186,16 +195,44 @@ const MediaScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="relative w-full h-[300px] bg-black">
-          <Image
-            source={{
-              uri: getBackdropUrl(movie?.backdrop_path, movie?.poster_path),
-            }}
-            className="w-full h-full"
-            resizeMode="cover"
-          />
+        <View className="relative w-full h-[300px] bg-black overflow-hidden">
+          {previewVideo?.key ? (
+            <YoutubePlayer
+              height={300}
+              width={width}
+              play
+              mute
+              videoId={previewVideo.key}
+              initialPlayerParams={{
+                controls: false,
+                rel: false,
+                modestbranding: true,
+                loop: true,
+              }}
+              webViewProps={{
+                mediaPlaybackRequiresUserAction: false,
+              }}
+              onError={(error: any) => {
+                console.log("Preview video error:", error);
+              }}
+            />
+          ) : (
+            <Image
+              source={{
+                uri: getBackdropUrl(movie?.backdrop_path, movie?.poster_path),
+              }}
+              className="w-full h-full"
+              resizeMode="cover"
+            />
+          )}
 
           <View className="absolute inset-0 bg-black/25" />
+
+          <View className="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded-full">
+            <Text className="text-white text-xs font-bold">
+              {previewVideo?.key ? "Preview" : "Backdrop"}
+            </Text>
+          </View>
 
           <TouchableOpacity
             onPress={handlePlayFullMovie}
@@ -353,7 +390,7 @@ const MediaScreen = () => {
                   <View className="w-full h-[190px] rounded-xl overflow-hidden bg-[#111]">
                     <Image
                       source={{
-                        uri: getYoutubeThumbnail(video.key),
+                        uri: getTrailerThumbnail(video),
                       }}
                       className="w-full h-full"
                       resizeMode="cover"
