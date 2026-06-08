@@ -59,4 +59,4 @@ DerivedData
 
 # Firebase (if using)
 google-services.json
-GoogleService-Info.plist
+GoogleService-Info.plist.expo

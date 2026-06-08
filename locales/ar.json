@@ -125,7 +125,21 @@
     "audioSubtitles": "الصوت والترجمة",
     "playbackSpeed": "سرعة التشغيل",
     "subtitles": "الترجمة",
-    "trailersMore": "الإعلانات والمزيد"
+    "trailersMore": "الإعلانات والمزيد",
+    "playMovie": "تشغيل الفيلم",
+    "watch": "مشاهدة",
+    "videos": "فيديوهات",
+    "video": "فيديو",
+    "moreLikeThis": "أعمال مشابهة",
+    "streamingUnderwayTitle": "بث الأفلام قيد التجهيز",
+    "streamingUnderwayMessage": "تشغيل الفيلم بالكامل غير متاح حاليًا. في الوقت الحالي، يمكنك مشاهدة الإعلانات والمقاطع الرسمية بينما نعمل على دعم البث المرخّص.",
+    "fullMovieComingSoon": "تشغيل الفيلم بالكامل قريبًا",
+    "fullMovieComingSoonMessage": "لا نملك حاليًا رابط بث مرخّص لهذا الفيلم. الإعلانات والمقاطع الرسمية متاحة أدناه.",
+    "watchTrailersInstead": "مشاهدة الإعلانات",
+    "moreLikeThisComingSoon": "اقتراحات الأفلام المشابهة ستتوفر قريبًا.",
+    "noSimilarMovies": "لم يتم العثور على أفلام مشابهة بعد.",
+    "starring": "بطولة",
+    "director": "المخرج"
   },
   "auth": {
     "loginTitle": "مرحبًا بعودتك",

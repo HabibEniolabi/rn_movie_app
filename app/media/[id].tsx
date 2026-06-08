@@ -18,6 +18,9 @@ import {
   fetchMovieDetails,
   fetchMovieVideos,
   fetchSimilarMovies,
+  fetchMovieCredits,
+  type MovieCastMember,
+  type MovieCrewMember,
   type TMDBVideo,
 } from "@/services/api";
 import { fetchKinoCheckTrailers } from "@/services/kinocheck";
@@ -99,6 +102,9 @@ const MediaScreen = () => {
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [topCast, setTopCast] = useState<MovieCastMember[]>([]);
+  const [director, setDirector] = useState<MovieCrewMember | null>(null);
+
   const [selectedTab, setSelectedTab] = useState<
     "watch" | "trailers" | "similar"
   >("watch");
@@ -116,9 +122,10 @@ const MediaScreen = () => {
       try {
         setLoading(true);
 
-        const [movieData, similarMoviesData] = await Promise.all([
+        const [movieData, similarMoviesData, creditsData] = await Promise.all([
           fetchMovieDetails(String(id)),
           fetchSimilarMovies(String(id)),
+          fetchMovieCredits(String(id)),
         ]);
 
         let trailerResults = (await fetchKinoCheckTrailers(
@@ -131,9 +138,18 @@ const MediaScreen = () => {
           )) as TrailerVideo[];
         }
 
+        const cast = creditsData.cast || [];
+        const crew = creditsData.crew || [];
+
         setMovie(movieData);
         setVideos(trailerResults);
         setSimilarMovies(similarMoviesData);
+
+        setTopCast(
+          cast.sort((a, b) => (a.order ?? 999) - (b.order ?? 999)).slice(0, 4)
+        );
+
+        setDirector(crew.find((member) => member.job === "Director") || null);
       } catch (error) {
         console.log("Fetch media page error:", error);
 
@@ -293,6 +309,25 @@ const MediaScreen = () => {
           {!!movie?.overview && (
             <Text className="text-white text-base leading-7 mt-5">
               {movie.overview}
+            </Text>
+          )}
+          {topCast.length > 0 && (
+            <Text className="text-light-200 text-base leading-6 mt-4">
+              <Text className="text-white font-bold">
+                {t("movie.starring")}:{" "}
+              </Text>
+
+              {topCast.map((actor) => actor.name).join(", ")}
+            </Text>
+          )}
+
+          {director?.name && (
+            <Text className="text-light-200 text-base leading-6 mt-2">
+              <Text className="text-white font-bold">
+                {t("movie.director")}:{" "}
+              </Text>
+
+              {director.name}
             </Text>
           )}
         </View>

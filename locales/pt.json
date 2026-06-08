@@ -125,7 +125,21 @@
     "audioSubtitles": "Áudio e legendas",
     "playbackSpeed": "Velocidade de reprodução",
     "subtitles": "Legendas",
-    "trailersMore": "Trailers e mais"
+    "trailersMore": "Trailers e mais",
+    "playMovie": "Reproduzir filme",
+    "watch": "Assistir",
+    "videos": "vídeos",
+    "video": "Vídeo",
+    "moreLikeThis": "Mais como este",
+    "streamingUnderwayTitle": "O streaming do filme está em preparação",
+    "streamingUnderwayMessage": "A reprodução completa do filme ainda não está disponível. Por enquanto, você pode assistir a trailers e clipes oficiais enquanto trabalhamos no suporte a streaming licenciado.",
+    "fullMovieComingSoon": "Reprodução completa do filme em breve",
+    "fullMovieComingSoonMessage": "No momento, não temos uma URL de streaming licenciada para este filme. Trailers e clipes oficiais estão disponíveis abaixo.",
+    "watchTrailersInstead": "Assistir aos trailers",
+    "moreLikeThisComingSoon": "Recomendações de filmes semelhantes estarão disponíveis em breve.",
+    "noSimilarMovies": "Nenhum filme semelhante encontrado ainda.",
+    "starring": "Elenco",
+    "director": "Diretor"
   },
   "auth": {
     "loginTitle": "Bem-vindo de volta",

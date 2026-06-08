@@ -137,7 +137,9 @@
     "fullMovieComingSoonMessage": "We currently do not have a licensed streaming URL for this movie. Trailers and official clips are available below.",
     "watchTrailersInstead": "Watch trailers instead",
     "moreLikeThisComingSoon": "Similar movie recommendations are coming soon.",
-    "noSimilarMovies": "No similar movies found yet."
+    "noSimilarMovies": "No similar movies found yet.",
+    "starring": "Starring",
+    "director": "Director"
   },
   "auth": {
     "loginTitle": "Welcome Back",

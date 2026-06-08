@@ -125,7 +125,21 @@
     "audioSubtitles": "音声と字幕",
     "playbackSpeed": "再生速度",
     "subtitles": "字幕",
-    "trailersMore": "予告編など"
+    "trailersMore": "予告編など",
+    "playMovie": "映画を再生",
+    "watch": "視聴",
+    "videos": "動画",
+    "video": "動画",
+    "moreLikeThis": "こちらもおすすめ",
+    "streamingUnderwayTitle": "映画ストリーミングを準備中です",
+    "streamingUnderwayMessage": "映画本編の再生はまだ利用できません。現在、ライセンス付きストリーミング対応を準備している間、公式予告編やクリップを視聴できます。",
+    "fullMovieComingSoon": "映画本編の再生は近日対応予定です",
+    "fullMovieComingSoonMessage": "現在、この映画のライセンス付きストリーミングURLはありません。公式予告編とクリップは下で視聴できます。",
+    "watchTrailersInstead": "予告編を見る",
+    "moreLikeThisComingSoon": "似ている映画のおすすめは近日公開予定です。",
+    "noSimilarMovies": "似ている映画はまだ見つかっていません。",
+    "starring": "出演",
+    "director": "監督"
   },
   "auth": {
     "loginTitle": "おかえりなさい",

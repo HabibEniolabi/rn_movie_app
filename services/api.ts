@@ -172,3 +172,55 @@ export const fetchSimilarMovies = async (
 
   return data.results || [];
 };
+
+
+
+export type MovieCastMember = {
+  id: number;
+  name: string;
+  original_name?: string;
+  character?: string;
+  profile_path?: string | null;
+  order?: number;
+};
+
+export type MovieCrewMember = {
+  id: number;
+  name: string;
+  original_name?: string;
+  job?: string;
+  department?: string;
+  profile_path?: string | null;
+};
+
+export type MovieCreditsResponse = {
+  id: number;
+  cast: MovieCastMember[];
+  crew: MovieCrewMember[];
+};
+
+export const fetchMovieCredits = async (
+  movieId: string
+): Promise<MovieCreditsResponse> => {
+  const language = getTMDBLanguage();
+
+  const params = new URLSearchParams({
+    language,
+  });
+
+  const response = await fetch(
+    `${TMDB_CONFIG.BASE_URL}/movie/${movieId}/credits?${params.toString()}`,
+    {
+      method: "GET",
+      headers: TMDB_CONFIG.headers,
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.status_message || "Failed to fetch movie credits");
+  }
+
+  return data;
+};
