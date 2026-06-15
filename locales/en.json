@@ -16,7 +16,23 @@
   "home": {
     "searchMovies": "Search through 300+ movies online",
     "trendingMovies": "Trending Movies",
-    "latestMovies": "Latest Movies"
+    "latestMovies": "Latest Movies",
+    "topMovies": "Top Movies",
+    "gemsForYou": "Gems for You",
+    "newOnMovieflix": "New on MovieFlix",
+    "topTVShows": "Top TV Shows",
+    "popularTVShows": "Popular TV Shows",
+    "comedies": "Comedies",
+    "romanticPicks": "Romantic Picks",
+    "anime": "Anime",
+    "bingeworthyTVShows": "Bingeworthy TV Shows",
+    "continueWatching": "Continue Watching",
+    "title": "Home",
+    "shows": "Shows",
+    "movies": "Movies",
+    "newAndHot": "New & Hot",
+    "heroTags": "Trending • Popular • New on MovieFlix",
+    "myList": "My List"
   },
   "errors": {
     "failedToLoadMovies": "Failed to load movies."
