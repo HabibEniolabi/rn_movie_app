@@ -1,126 +1,3 @@
-// import SearchBar from "@/components/SearchBar";
-// import { icons } from "@/constants/icons";
-// import { images } from "@/constants/images";
-// import {
-//   ActivityIndicator,
-//   Image,
-//   ScrollView,
-//   View,
-//   Text,
-//   FlatList,
-// } from "react-native";
-// import { useRouter } from "expo-router";
-// import useFetch from "@/services/useFetch";
-// import { fetchMovies } from "@/services/api";
-// import MovieCard from "@/components/MovieCard";
-// import { getTrendingMovies } from "@/services/appwrite";
-// import TrendingCard from "@/components/TrendingCard";
-// import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-// import { useTranslation } from "react-i18next";
-// import { useEffect } from "react";
-
-// export default function Index() {
-//   const { t, i18n } = useTranslation();
-//   const router = useRouter();
-//   const tabBarHeight = useBottomTabBarHeight();
-
-//   const {
-//     data: trendingMovies,
-//     loading: trendingLoading,
-//     error: trendingError,
-//     refetch: refetchTrendingMovies,
-//   } = useFetch(getTrendingMovies);
-
-//   const {
-//     data: movies,
-//     loading: moviesLoading,
-//     error: moviesError,
-//     refetch: refetchMovies,
-//   } = useFetch(() => fetchMovies({ query: "" }));
-
-//   useEffect(() => {
-//     refetchTrendingMovies();
-//     refetchMovies()
-//   }, [i18n.language]);
-
-//   return (
-//     <View className="flex-1 bg-primary">
-//       <Image source={images.bg} className="absolute z-0 w-full" />
-//       <ScrollView
-//         className="flex-1 px-5"
-//         showsVerticalScrollIndicator={false}
-//         contentContainerStyle={{
-//           minHeight: "100%",
-//           paddingBlock: 10,
-//           paddingBottom: tabBarHeight + 40,
-//         }}
-//       >
-//         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
-//         {moviesLoading || trendingLoading ? (
-//           <ActivityIndicator
-//             size="large"
-//             color="#0000ff"
-//             className="mt-10 self-center"
-//           />
-//         ) : moviesError || trendingError ? (
-//           <Text className="text-dark-500">
-//             {t("common.error")}:{" "}
-//             {moviesError?.message ||
-//               trendingError?.message ||
-//               t("errors.failedToLoadMovies")}
-//           </Text>
-//         ) : (
-//           <View className="flex-1 mt-5">
-//             <SearchBar
-//               onPress={() => router.push("/search")}
-//               placeholder={t("home.searchMovies")}
-//             />
-//             {trendingMovies && (
-//               <View className="mt-10">
-//                 <Text className="text-lg text-white font-bold mt-5 mb-3">
-//                   {t("home.trendingMovies")}
-//                 </Text>
-//                 <FlatList
-//                   className="mb-4 mt-3"
-//                   horizontal
-//                   showsHorizontalScrollIndicator={false}
-//                   ItemSeparatorComponent={() => <View className="w-4" />}
-//                   data={trendingMovies}
-//                   renderItem={({ item, index }) => (
-//                     <TrendingCard movie={item} index={index} />
-//                   )}
-//                   keyExtractor={(item) => item.movie_id.toString()}
-//                 />
-//               </View>
-//             )}
-
-//             <>
-//               <Text className="text-lg text-white font-bold mt-5 mb-3">
-//                 {t("home.latestMovies")}
-//               </Text>
-//               <FlatList
-//                 data={movies}
-//                 renderItem={({ item }) => <MovieCard {...item} />}
-//                 keyExtractor={(item) => item.id.toString()}
-//                 numColumns={3}
-//                 columnWrapperStyle={{
-//                   justifyContent: "flex-start",
-//                   gap: 20,
-//                   paddingRight: 5,
-//                   marginBottom: 10,
-//                 }}
-//                 className="mt-2 pd-32"
-//                 scrollEnabled={false}
-//               />
-//             </>
-//           </View>
-//         )}
-//       </ScrollView>
-//     </View>
-//   );
-// }
-
-import SearchBar from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import {
@@ -143,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
+import Fontisto from "react-native-vector-icons/Fontisto";
 
 const getPosterUrl = (posterPath?: string | null) => {
   if (!posterPath) {
@@ -182,15 +60,18 @@ export default function Index() {
     refetchMovies();
   }, [i18n.language]);
 
+  /**
+   * heroMovie comes from your fetched movies list.
+   * It selects one movie with a poster/backdrop and displays it as the big top card.
+   */
   const heroMovie = useMemo(() => {
     if (!movies?.length) return null;
 
-    const movieWithPoster =
+    return (
       movies.find((movie: any) => movie.poster_path && movie.backdrop_path) ||
       movies.find((movie: any) => movie.poster_path) ||
-      movies[0];
-
-    return movieWithPoster;
+      movies[0]
+    );
   }, [movies]);
 
   const categoryChips = [
@@ -238,22 +119,29 @@ export default function Index() {
             </Text>
           </View>
 
-          {/* Search button instead of download button */}
-          <View className="flex gap-[5px]">
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push("/search")}
-            // className="w-11 h-11 rounded-full items-center justify-center"
-          >
-            <Feather name="search" size={24} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push("/")}
-            // className="w-11 h-11 rounded-full items-center justify-center"
-          >
-            <Feather name="search" size={24} color="#fff" />
-          </TouchableOpacity>
+          <View className="flex-row items-center gap-3">
+            {/* Search button */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => router.push("/search")}
+              className="w-11 h-11 rounded-full bg-white/10 items-center justify-center"
+            >
+              <Feather name="search" size={24} color="#fff" />
+            </TouchableOpacity>
+
+            {/* Notification button */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              className="w-11 h-11 rounded-full bg-white/10 items-center justify-center relative"
+            >
+              <Fontisto name="bell" size={23} color="#fff" />
+
+              <View className="absolute -top-1 -right-1 min-w-[20px] h-[20px] rounded-full bg-red-600 items-center justify-center px-1">
+                <Text className="text-white text-[11px] font-extrabold">
+                  7
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -304,20 +192,9 @@ export default function Index() {
           </Text>
         ) : (
           <View className="flex-1 mt-6">
-            {/* Hero card */}
+            {/* Hero featured movie */}
             {heroMovie && (
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() =>
-                  router.push({
-                    pathname: "/movie/[id]" as const,
-                    params: {
-                      id: String(heroMovie.id),
-                    },
-                  })
-                }
-                className="w-full h-[520px] rounded-[26px] overflow-hidden bg-dark-100 border border-white/15"
-              >
+              <View className="w-full h-[520px] rounded-[26px] overflow-hidden bg-dark-100 border border-white/15">
                 <Image
                   source={{
                     uri: getPosterUrl(heroMovie.poster_path),
@@ -326,14 +203,27 @@ export default function Index() {
                   resizeMode="cover"
                 />
 
+                {/* Blend image into black/background */}
                 <LinearGradient
                   colors={[
-                    "rgba(0,0,0,0.05)",
-                    "rgba(0,0,0,0.35)",
-                    "rgba(0,0,0,0.95)",
+                    "rgba(0,0,0,0)",
+                    "rgba(0,0,0,0.25)",
+                    "rgba(0,0,0,0.85)",
+                    "#030014",
                   ]}
-                  locations={[0, 0.55, 1]}
-                  className="absolute inset-0 justify-end px-6 pb-7"
+                  locations={[0, 0.45, 0.78, 1]}
+                  pointerEvents="box-none"
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    justifyContent: "flex-end",
+                    paddingHorizontal: 24,
+                    paddingBottom: 28,
+                    zIndex: 20,
+                  }}
                 >
                   <Text
                     className="text-white text-[38px] font-extrabold text-center"
@@ -347,8 +237,7 @@ export default function Index() {
                     numberOfLines={1}
                   >
                     {t("home.heroTags", {
-                      defaultValue:
-                        "Trending • Popular • New on MovieFlix",
+                      defaultValue: "Trending • Popular • New on MovieFlix",
                     })}
                   </Text>
 
@@ -360,11 +249,16 @@ export default function Index() {
                           pathname: "/media/[id]" as const,
                           params: {
                             id: String(heroMovie.id),
-                            title: heroMovie.title || heroMovie.original_title,
+                            title:
+                              heroMovie.title || heroMovie.original_title,
                           },
                         })
                       }
                       className="flex-1 h-[56px] rounded-md bg-white flex-row items-center justify-center"
+                      style={{
+                        zIndex: 30,
+                        elevation: 30,
+                      }}
                     >
                       <Feather name="play" size={28} color="#000" />
 
@@ -375,7 +269,12 @@ export default function Index() {
 
                     <TouchableOpacity
                       activeOpacity={0.85}
+                      onPress={() => router.push("/(tabs)/saved")}
                       className="flex-1 h-[56px] rounded-md bg-white/25 flex-row items-center justify-center"
+                      style={{
+                        zIndex: 30,
+                        elevation: 30,
+                      }}
                     >
                       <Feather name="plus" size={30} color="#fff" />
 
@@ -385,16 +284,8 @@ export default function Index() {
                     </TouchableOpacity>
                   </View>
                 </LinearGradient>
-              </TouchableOpacity>
+              </View>
             )}
-
-            {/* Search bar still available below hero */}
-            {/* <View className="mt-8">
-              <SearchBar
-                onPress={() => router.push("/search")}
-                placeholder={t("home.searchMovies")}
-              />
-            </View> */}
 
             {/* Trending */}
             {trendingMovies && (
