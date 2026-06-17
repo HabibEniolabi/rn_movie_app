@@ -22,7 +22,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import HomeSectionRow from "@/components/HomeSectionRow";
-import { fetchHomeSections } from "@/services/homeSections";
+import { getMyListMovies } from "@/services/appwrite";
+import { fetchHomeSections, type HomeSection } from "@/services/homeSections";
 
 const getPosterUrl = (posterPath?: string | null) => {
   if (!posterPath) {
@@ -58,6 +59,13 @@ export default function Index() {
   } = useFetch(fetchHomeSections);
 
   const {
+    data: myListMovies,
+    loading: myListLoading,
+    error: myListError,
+    refetch: refetchMyList,
+  } = useFetch(getMyListMovies);
+
+  const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
@@ -68,6 +76,7 @@ export default function Index() {
     refetchTrendingMovies();
     refetchMovies();
     refetchHomeSections();
+    refetchMyList();
   }, [i18n.language]);
 
   /**
@@ -83,6 +92,27 @@ export default function Index() {
       movies[0]
     );
   }, [movies]);
+
+  const finalHomeSections = useMemo(() => {
+    const sections: HomeSection[] = [];
+
+    if (myListMovies?.length) {
+      sections.push({
+        id: "my_list",
+        titleKey: "home.myList",
+        type: "movie",
+        items: myListMovies,
+        variant: "normal",
+        showSeeAll: true,
+      });
+    }
+
+    if (homeSections?.length) {
+      sections.push(...homeSections);
+    }
+
+    return sections;
+  }, [myListMovies, homeSections]);
 
   const categoryChips = [
     {
@@ -103,8 +133,10 @@ export default function Index() {
     },
   ];
 
-  const isLoading = moviesLoading || trendingLoading;
-  const hasError = moviesError || trendingError;
+  const isLoading =
+    moviesLoading || trendingLoading || sectionsLoading || myListLoading;
+
+  const hasError = moviesError || trendingError || sectionsError || myListError;
 
   return (
     <View className="flex-1 bg-primary">
@@ -200,7 +232,6 @@ export default function Index() {
           </Text>
         ) : (
           <View className="flex-1 mt-6">
-            {/* Hero featured movie */}
             {heroMovie && (
               <View className="w-full h-[520px] rounded-[26px] overflow-hidden bg-dark-100 border border-white/15">
                 <Image
@@ -210,8 +241,6 @@ export default function Index() {
                   className="w-full h-full"
                   resizeMode="cover"
                 />
-
-                {/* Blend image into black/background */}
                 <LinearGradient
                   colors={[
                     "rgba(0,0,0,0)",
@@ -293,52 +322,7 @@ export default function Index() {
                 </LinearGradient>
               </View>
             )}
-
-            {/* Trending */}
-            {/* {trendingMovies && (
-              <View className="mt-8">
-                <Text className="text-lg text-white font-bold mt-5 mb-3">
-                  {t("home.trendingMovies")}
-                </Text>
-
-                <FlatList
-                  className="mb-4 mt-3"
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={trendingMovies}
-                  renderItem={({ item, index }) => (
-                    <TrendingCard movie={item} index={index} />
-                  )}
-                  keyExtractor={(item) => item.movie_id.toString()}
-                  contentContainerStyle={{
-                    paddingRight: 20,
-                  }}
-                />
-              </View>
-            )} */}
-
-            {/* Latest Movies */}
-            {/* <View className="mt-4">
-              <Text className="text-lg text-white font-bold mt-5 mb-3">
-                {t("home.latestMovies")}
-              </Text>
-
-              <FlatList
-                data={movies}
-                renderItem={({ item }) => <MovieCard {...item} />}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={3}
-                columnWrapperStyle={{
-                  justifyContent: "flex-start",
-                  gap: 20,
-                  paddingRight: 5,
-                  marginBottom: 10,
-                }}
-                className="mt-2"
-                scrollEnabled={false}
-              />
-            </View> */}
-            {homeSections?.map((section) => (
+            {finalHomeSections.map((section) => (
               <HomeSectionRow key={section.id} section={section} />
             ))}
           </View>

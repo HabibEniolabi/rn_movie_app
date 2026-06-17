@@ -18,7 +18,8 @@ export type HomeSection = {
   titleKey: string;
   type: "movie" | "tv";
   items: HomeMediaItem[];
-  variant?: "normal" | "top10";
+  variant?: "normal" | "top10" | "large";
+  showSeeAll?: boolean;
 };
 
 type SectionConfig = {
@@ -27,7 +28,7 @@ type SectionConfig = {
   type: "movie" | "tv";
   path: string;
   params?: Record<string, string>;
-  variant?: "normal" | "top10";
+  variant?: "normal" | "top10" | "large";
 };
 
 const normalizeMovie = (item: any): HomeMediaItem => ({
@@ -87,15 +88,6 @@ const cleanItems = (items: HomeMediaItem[]) => {
 
 const HOME_SECTION_CONFIGS: SectionConfig[] = [
   {
-    id: "my_list",
-    titleKey: "home.myList",
-    type: "movie",
-    path: "/movie/popular",
-    params: {
-      sort_by: "popularity.desc",
-    },
-  },
-  {
     id: "top_tv_ng",
     titleKey: "home.topTVShowsNigeria",
     type: "tv",
@@ -116,6 +108,7 @@ const HOME_SECTION_CONFIGS: SectionConfig[] = [
       sort_by: "vote_average.desc",
       "vote_count.gte": "1000",
     },
+    variant: "large",
   },
   {
     id: "because_you_liked",

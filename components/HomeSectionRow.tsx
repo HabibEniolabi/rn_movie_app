@@ -1,10 +1,10 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import HomeMediaCard from "./HomeMediaCard";
 import TrendingCard from "./TrendingCard";
-import type { HomeSection } from "../services/homeSections";
+import type { HomeMediaItem, HomeSection } from "../services/homeSections";
 
 type HomeSectionRowProps = {
   section: HomeSection;
@@ -13,7 +13,7 @@ type HomeSectionRowProps = {
 const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
   const { t } = useTranslation();
 
-  const handlePressItem = (item: any) => {
+  const handlePressItem = (item: HomeMediaItem) => {
     if (item.mediaType === "movie") {
       router.push({
         pathname: "/movie/[id]" as const,
@@ -25,13 +25,19 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
       return;
     }
 
-    // Later you can create /show/[id]
-    router.push({
-      pathname: "/movie/[id]" as const,
-      params: {
-        id: String(item.id),
-      },
-    });
+    Alert.alert("TV show details coming soon");
+  };
+
+  const handleSeeAll = () => {
+    if (section.id !== "my_list") return;
+
+    // Later you can create /my-list screen.
+    Alert.alert(
+      t("home.myList", { defaultValue: "My List" }),
+      t("home.myListSeeAllComingSoon", {
+        defaultValue: "Full My List screen is coming soon.",
+      })
+    );
   };
 
   return (
@@ -41,15 +47,13 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
           {t(section.titleKey)}
         </Text>
 
-        <TouchableOpacity
-          onPress={() => {
-            console.log("See all:", section.id);
-          }}
-        >
-          <Text className="text-[#AB8BFF] font-bold">
-            {t("home.seeAll", { defaultValue: "See all" })}
-          </Text>
-        </TouchableOpacity>
+        {section.showSeeAll && (
+          <TouchableOpacity onPress={handleSeeAll}>
+            <Text className="text-[#AB8BFF] font-bold">
+              {t("home.seeAll", { defaultValue: "See all" })}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <FlatList
@@ -57,18 +61,25 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
         showsHorizontalScrollIndicator={false}
         data={section.items}
         keyExtractor={(item) => `${section.id}-${item.id}`}
+        // ItemSeparatorComponent={() => <View className="w-2"/>}
         renderItem={({ item, index }) =>
           section.variant === "top10" ? (
-            <TrendingCard
-              movie={{
-                movie_id: item.id,
-                title: item.title,
-                poster_url: `https://image.tmdb.org/t/p/w500${item.posterPath}`,
-              }}
-              index={index}
-            />
+              <TrendingCard
+                movie={{
+                  movie_id: item.id,
+                  title: item.title,
+                  poster_url: item.posterPath?.startsWith("http")
+                    ? item.posterPath
+                    : `https://image.tmdb.org/t/p/w500${item.posterPath}`,
+                }}
+                index={index}
+              />
           ) : (
-            <HomeMediaCard item={item} onPress={() => handlePressItem(item)} />
+            <HomeMediaCard
+              item={item}
+              variant={section.variant === "large" ? "large" : "normal"}
+              onPress={() => handlePressItem(item)}
+            />
           )
         }
         contentContainerStyle={{

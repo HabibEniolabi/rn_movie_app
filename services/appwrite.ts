@@ -1,6 +1,7 @@
 import { Client, Databases, ID, Query, Account } from "react-native-appwrite";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { fetchMovieDetails } from "./api";
+import { HomeMediaItem } from "./homeSections";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
@@ -198,6 +199,31 @@ export const getSavedMovies = async (): Promise<SavedMovie[]> => {
     return result.documents as unknown as SavedMovie[];
   } catch (error) {
     console.log("Error fetching saved movies", error);
+    return [];
+  }
+};
+
+export const getMyListMovies = async (): Promise<HomeMediaItem[]> => {
+  try {
+    const user = account.get();
+
+    const response = await database.listDocuments(DATABASE_ID, COLLECTION_ID!, [
+      Query.equal("userId", user.$id),
+      Query.orderDesc("$createdAt"),
+      Query.limit(30),
+    ]);
+    return response.documents.map((doc: any) => ({
+      id: Number(doc.movie_id || doc.movieId || doc.id),
+      mediaType: "movie",
+      title: doc.title || doc.name || "Untitled",
+      posterPath: doc.poster_path || doc.posterPath || doc.poster_url || null,
+      backdropPath: doc.backdrop_path || doc.backdropPath || null,
+      overview: doc.overview || "",
+      releaseDate: doc.release_date || doc.releaseDate || "",
+      voteAverage: doc.vote_average || doc.voteAverage || 0,
+    }));
+  } catch (error) {
+    console.log("Get my list movies error:", error);
     return [];
   }
 };
