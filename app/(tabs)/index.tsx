@@ -21,6 +21,8 @@ import { useEffect, useMemo, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
 import Fontisto from "react-native-vector-icons/Fontisto";
+import HomeSectionRow from "@/components/HomeSectionRow";
+import { fetchHomeSections } from "@/services/homeSections";
 
 const getPosterUrl = (posterPath?: string | null) => {
   if (!posterPath) {
@@ -49,6 +51,13 @@ export default function Index() {
   } = useFetch(getTrendingMovies);
 
   const {
+    data: homeSections,
+    loading: sectionsLoading,
+    error: sectionsError,
+    refetch: refetchHomeSections,
+  } = useFetch(fetchHomeSections);
+
+  const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
@@ -58,6 +67,7 @@ export default function Index() {
   useEffect(() => {
     refetchTrendingMovies();
     refetchMovies();
+    refetchHomeSections();
   }, [i18n.language]);
 
   /**
@@ -137,9 +147,7 @@ export default function Index() {
               <Fontisto name="bell" size={23} color="#fff" />
 
               <View className="absolute -top-1 -right-1 min-w-[20px] h-[20px] rounded-full bg-red-600 items-center justify-center px-1">
-                <Text className="text-white text-[11px] font-extrabold">
-                  7
-                </Text>
+                <Text className="text-white text-[11px] font-extrabold">7</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -249,8 +257,7 @@ export default function Index() {
                           pathname: "/media/[id]" as const,
                           params: {
                             id: String(heroMovie.id),
-                            title:
-                              heroMovie.title || heroMovie.original_title,
+                            title: heroMovie.title || heroMovie.original_title,
                           },
                         })
                       }
@@ -288,7 +295,7 @@ export default function Index() {
             )}
 
             {/* Trending */}
-            {trendingMovies && (
+            {/* {trendingMovies && (
               <View className="mt-8">
                 <Text className="text-lg text-white font-bold mt-5 mb-3">
                   {t("home.trendingMovies")}
@@ -308,10 +315,10 @@ export default function Index() {
                   }}
                 />
               </View>
-            )}
+            )} */}
 
             {/* Latest Movies */}
-            <View className="mt-4">
+            {/* <View className="mt-4">
               <Text className="text-lg text-white font-bold mt-5 mb-3">
                 {t("home.latestMovies")}
               </Text>
@@ -330,7 +337,10 @@ export default function Index() {
                 className="mt-2"
                 scrollEnabled={false}
               />
-            </View>
+            </View> */}
+            {homeSections?.map((section) => (
+              <HomeSectionRow key={section.id} section={section} />
+            ))}
           </View>
         )}
       </ScrollView>

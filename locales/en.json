@@ -19,7 +19,6 @@
     "latestMovies": "Latest Movies",
     "topMovies": "Top Movies",
     "gemsForYou": "Gems for You",
-    "newOnMovieflix": "New on MovieFlix",
     "topTVShows": "Top TV Shows",
     "popularTVShows": "Popular TV Shows",
     "comedies": "Comedies",
@@ -32,7 +31,23 @@
     "movies": "Movies",
     "newAndHot": "New & Hot",
     "heroTags": "Trending • Popular • New on MovieFlix",
-    "myList": "My List"
+    "myList": "My List",
+    "seeAll": "See all",
+    "topTVShowsNigeria": "Top TV Shows in Nigeria Today",
+    "onlyOnMovieflix": "Only on MovieFlix",
+    "becauseYouLiked": "Because you liked this",
+    "newOnMovieflix": "New on MovieFlix",
+    "usTVShows": "US TV Shows",
+    "topMoviesNigeria": "Top Movies in Nigeria Today",
+    "suspensefulTVShows": "Suspenseful TV Shows",
+    "animeSeries": "Anime Series",
+    "kidsMovies": "Kids Movies",
+    "watchItAgain": "Watch It Again",
+    "yourNextWatch": "Your Next Watch",
+    "excitingJapaneseTVShows": "Exciting Japanese TV Shows",
+    "usTVActionAdventure": "US TV Action & Adventure",
+    "usTVDramas": "US TV Dramas",
+    "getInOnAction": "Get In on Action"
   },
   "errors": {
     "failedToLoadMovies": "Failed to load movies."
