@@ -446,18 +446,18 @@
 // });
 
 import React, { useEffect, useRef } from "react";
-import {
-  ActivityIndicator,
-  Animated,
-  Easing,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, Animated, Easing, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 const AppLoadingScreen = () => {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -588,8 +588,11 @@ const AppLoadingScreen = () => {
       locations={[0, 0.35, 0.72, 1]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      className="flex-1 items-center justify-center px-8 overflow-hidden"
+      className="flex-1 overflow-hidden"
     >
+      <StatusBar style="light" />
+
+      {/* Decorative background only */}
       <Animated.View
         className="absolute w-[320px] h-[320px] rounded-full -top-24 -right-24"
         style={{
@@ -618,50 +621,60 @@ const AppLoadingScreen = () => {
         }}
       />
 
-      <Animated.View
+      {/* Safe-area protected content */}
+      <SafeAreaView
+        className="flex-1 items-center justify-center px-8"
+        edges={["top", "left", "right", "bottom"]}
         style={{
-          opacity: fadeAnim,
-          transform: [
-            { scale: scaleAnim },
-            { rotate },
-            { translateY: bounceAnim },
-          ],
+          paddingTop: Math.max(insets.top, 12),
+          paddingBottom: Math.max(insets.bottom, 12),
         }}
-        className="w-32 h-32 rounded-[42px] overflow-hidden mb-7"
       >
-        <LinearGradient
-          colors={["#D946C4", "#9B4DFF"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          className="flex-1 items-center justify-center"
+        <Animated.View
           style={{
-            borderWidth: 1,
-            borderColor: "rgba(255,255,255,0.25)",
+            opacity: fadeAnim,
+            transform: [
+              { scale: scaleAnim },
+              { rotate },
+              { translateY: bounceAnim },
+            ],
           }}
+          className="w-32 h-32 rounded-[42px] overflow-hidden mb-7"
         >
-          <Text className="text-white font-extrabold text-6xl">M</Text>
-        </LinearGradient>
-      </Animated.View>
+          <LinearGradient
+            colors={["#D946C4", "#9B4DFF"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            className="flex-1 items-center justify-center"
+            style={{
+              borderWidth: 1,
+              borderColor: "rgba(255,255,255,0.25)",
+            }}
+          >
+            <Text className="text-white font-extrabold text-6xl">M</Text>
+          </LinearGradient>
+        </Animated.View>
 
-      <Text className="text-white font-extrabold text-4xl mb-2 tracking-wide">
-        MovieFlix
-      </Text>
+        <Text className="text-white font-extrabold text-4xl mb-2 tracking-wide">
+          MovieFlix
+        </Text>
 
-      <Text className="text-light-200 text-base text-center mb-8 leading-6">
-        {t("splash.tagline", {
-          defaultValue: "Find your next favorite movie",
-        })}
-      </Text>
-
-      <View className="h-[54px] px-8 rounded-full bg-white/5 border border-white/10 flex-row items-center justify-center gap-3">
-        <ActivityIndicator size="small" color="#D946C4" />
-
-        <Text className="text-light-200 text-sm font-semibold">
-          {t("splash.loading", {
-            defaultValue: "Loading movies...",
+        <Text className="text-light-200 text-base text-center mb-8 leading-6">
+          {t("splash.tagline", {
+            defaultValue: "Find your next favorite movie",
           })}
         </Text>
-      </View>
+
+        <View className="h-[54px] px-8 rounded-full bg-white/5 border border-white/10 flex-row items-center justify-center gap-3">
+          <ActivityIndicator size="small" color="#D946C4" />
+
+          <Text className="text-light-200 text-sm font-semibold">
+            {t("splash.loading", {
+              defaultValue: "Loading movies...",
+            })}
+          </Text>
+        </View>
+      </SafeAreaView>
     </LinearGradient>
   );
 };
