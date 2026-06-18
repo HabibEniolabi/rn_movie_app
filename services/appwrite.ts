@@ -227,3 +227,35 @@ export const getMyListMovies = async (): Promise<HomeMediaItem[]> => {
     return [];
   }
 };
+
+export type AppNotification = {
+  $id: string;
+  title: string;
+  message: string;
+  type: "info" | "warning" | "critical" | "update";
+  isActive: boolean;
+  createdAt: string;
+  target?: "all" | "ios" | "android";
+};
+
+const NOTIFICATIONS_COLLECTION_ID =
+  process.env.EXPO_PUBLIC_APPWRITE_NOTIFICATIONS_COLLECTION_ID!;
+
+export const getSystemNotifications = async (): Promise<AppNotification[]> => {
+  try {
+    const response = await database.listDocuments(
+      DATABASE_ID,
+      NOTIFICATIONS_COLLECTION_ID,
+      [
+        Query.equal("isActive", true),
+        Query.orderDesc("createdAt"),
+        Query.limit(30),
+      ]
+    );
+
+    return response.documents as unknown as AppNotification[];
+  } catch (error) {
+    console.log("Get system notifications error:", error);
+    return [];
+  }
+};

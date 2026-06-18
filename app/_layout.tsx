@@ -74,6 +74,7 @@ export default function RootLayout() {
         />
 
         <Stack.Screen name="account" />
+        <Stack.Screen name="notifications" />
       </Stack>
     </View>
   );

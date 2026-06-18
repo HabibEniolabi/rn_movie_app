@@ -49,6 +49,12 @@
     "usTVDramas": "US TV Dramas",
     "getInOnAction": "Get In on Action"
   },
+  "notifications": {
+    "title": "Notifications",
+    "failedToLoad": "Unable to load notifications.",
+    "emptyTitle": "No notifications yet",
+    "emptyMessage": "Important updates about MovieFlix will appear here."
+  },
   "errors": {
     "failedToLoadMovies": "Failed to load movies."
   },

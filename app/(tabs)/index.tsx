@@ -24,6 +24,8 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import HomeSectionRow from "@/components/HomeSectionRow";
 import { getMyListMovies } from "@/services/appwrite";
 import { fetchHomeSections, type HomeSection } from "@/services/homeSections";
+import NotificationBell from "@/components/NotificationBell";
+import { getSystemNotifications } from "@/services/appwrite";
 
 const getPosterUrl = (posterPath?: string | null) => {
   if (!posterPath) {
@@ -66,6 +68,11 @@ export default function Index() {
   } = useFetch(getMyListMovies);
 
   const {
+    data: notifications,
+    refetch: refetchNotifications,
+  } = useFetch(getSystemNotifications)
+
+  const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
@@ -77,6 +84,7 @@ export default function Index() {
     refetchMovies();
     refetchHomeSections();
     refetchMyList();
+    refetchNotifications();
   }, [i18n.language]);
 
   /**
@@ -172,16 +180,7 @@ export default function Index() {
             </TouchableOpacity>
 
             {/* Notification button */}
-            <TouchableOpacity
-              activeOpacity={0.8}
-              className="w-11 h-11 rounded-full bg-white/10 items-center justify-center relative"
-            >
-              <Fontisto name="bell" size={23} color="#fff" />
-
-              <View className="absolute -top-1 -right-1 min-w-[20px] h-[20px] rounded-full bg-red-600 items-center justify-center px-1">
-                <Text className="text-white text-[11px] font-extrabold">7</Text>
-              </View>
-            </TouchableOpacity>
+            <NotificationBell count={notifications?.length || 0} />
           </View>
         </View>
 
