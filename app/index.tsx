@@ -1,4 +1,4 @@
-import AppLoadingScreen from "@/components/ApploadingScreen";
+import AppLoadingScreen from "@/components/AppLoadingScreen";
 import { Redirect } from "expo-router";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";

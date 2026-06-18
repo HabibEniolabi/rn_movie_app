@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 
 import { loadSavedLanguage } from "../interfaces/i18n";
-import AppLoadingScreen from "@/components/ApploadingScreen";
+import AppLoadingScreen from "@/components/AppLoadingScreen";
 
 SplashScreen.preventAutoHideAsync();
 

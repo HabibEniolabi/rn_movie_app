@@ -446,7 +446,14 @@
 // });
 
 import React, { useEffect, useRef } from "react";
-import { ActivityIndicator, Animated, Easing, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Animated,
+  Easing,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import {
@@ -467,6 +474,8 @@ const AppLoadingScreen = () => {
   const glowAnim = useRef(new Animated.Value(0.4)).current;
 
   useEffect(() => {
+    console.log("AppLoadingScreen mounted");
+
     const logoAnimation = Animated.loop(
       Animated.parallel([
         Animated.sequence([
@@ -588,87 +597,87 @@ const AppLoadingScreen = () => {
       locations={[0, 0.35, 0.72, 1]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      className="flex-1 overflow-hidden"
+      style={styles.container}
     >
       <StatusBar style="light" />
 
-      {/* Decorative background only */}
       <Animated.View
-        className="absolute w-[320px] h-[320px] rounded-full -top-24 -right-24"
-        style={{
-          opacity: glowAnim,
-          backgroundColor: "rgba(217, 70, 196, 0.18)",
-        }}
+        style={[
+          styles.topGlow,
+          {
+            opacity: glowAnim,
+          },
+        ]}
       />
 
       <Animated.View
-        className="absolute w-[320px] h-[320px] rounded-full -bottom-28 -left-28"
-        style={{
-          opacity: glowAnim,
-          backgroundColor: "rgba(155, 77, 255, 0.2)",
-        }}
+        style={[
+          styles.bottomGlow,
+          {
+            opacity: glowAnim,
+          },
+        ]}
       />
 
-      <View className="absolute top-28 left-10 w-16 h-1 rounded-full bg-white/10 rotate-12" />
-      <View className="absolute top-40 right-12 w-24 h-1 rounded-full bg-white/10 -rotate-12" />
-      <View className="absolute bottom-44 right-10 w-20 h-1 rounded-full bg-white/10 rotate-12" />
+      <View style={styles.lineOne} />
+      <View style={styles.lineTwo} />
+      <View style={styles.lineThree} />
 
       <Animated.View
-        className="absolute w-36 h-36 rounded-full border border-[#D946C4]"
-        style={{
-          opacity: ringOpacity,
-          transform: [{ scale: ringScale }],
-        }}
+        style={[
+          styles.pulseRing,
+          {
+            opacity: ringOpacity,
+            transform: [{ scale: ringScale }],
+          },
+        ]}
       />
 
-      {/* Safe-area protected content */}
       <SafeAreaView
-        className="flex-1 items-center justify-center px-8"
+        style={[
+          styles.safeArea,
+          {
+            paddingTop: Math.max(insets.top, 12),
+            paddingBottom: Math.max(insets.bottom, 12),
+          },
+        ]}
         edges={["top", "left", "right", "bottom"]}
-        style={{
-          paddingTop: Math.max(insets.top, 12),
-          paddingBottom: Math.max(insets.bottom, 12),
-        }}
       >
         <Animated.View
-          style={{
-            opacity: fadeAnim,
-            transform: [
-              { scale: scaleAnim },
-              { rotate },
-              { translateY: bounceAnim },
-            ],
-          }}
-          className="w-32 h-32 rounded-[42px] overflow-hidden mb-7"
+          style={[
+            styles.logoWrapper,
+            {
+              opacity: fadeAnim,
+              transform: [
+                { scale: scaleAnim },
+                { rotate },
+                { translateY: bounceAnim },
+              ],
+            },
+          ]}
         >
           <LinearGradient
             colors={["#D946C4", "#9B4DFF"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            className="flex-1 items-center justify-center"
-            style={{
-              borderWidth: 1,
-              borderColor: "rgba(255,255,255,0.25)",
-            }}
+            style={styles.logoGradient}
           >
-            <Text className="text-white font-extrabold text-6xl">M</Text>
+            <Text style={styles.logoText}>M</Text>
           </LinearGradient>
         </Animated.View>
 
-        <Text className="text-white font-extrabold text-4xl mb-2 tracking-wide">
-          MovieFlix
-        </Text>
+        <Text style={styles.title}>MovieFlix</Text>
 
-        <Text className="text-light-200 text-base text-center mb-8 leading-6">
+        <Text style={styles.tagline}>
           {t("splash.tagline", {
             defaultValue: "Find your next favorite movie",
           })}
         </Text>
 
-        <View className="h-[54px] px-8 rounded-full bg-white/5 border border-white/10 flex-row items-center justify-center gap-3">
+        <View style={styles.loadingBox}>
           <ActivityIndicator size="small" color="#D946C4" />
 
-          <Text className="text-light-200 text-sm font-semibold">
+          <Text style={styles.loadingText}>
             {t("splash.loading", {
               defaultValue: "Loading movies...",
             })}
@@ -680,3 +689,122 @@ const AppLoadingScreen = () => {
 };
 
 export default AppLoadingScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    overflow: "hidden",
+  },
+  safeArea: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 32,
+  },
+  topGlow: {
+    position: "absolute",
+    width: 320,
+    height: 320,
+    borderRadius: 160,
+    top: -96,
+    right: -96,
+    backgroundColor: "rgba(217, 70, 196, 0.18)",
+  },
+  bottomGlow: {
+    position: "absolute",
+    width: 320,
+    height: 320,
+    borderRadius: 160,
+    bottom: -112,
+    left: -112,
+    backgroundColor: "rgba(155, 77, 255, 0.2)",
+  },
+  lineOne: {
+    position: "absolute",
+    top: 112,
+    left: 40,
+    width: 64,
+    height: 4,
+    borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.1)",
+    transform: [{ rotate: "12deg" }],
+  },
+  lineTwo: {
+    position: "absolute",
+    top: 160,
+    right: 48,
+    width: 96,
+    height: 4,
+    borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.1)",
+    transform: [{ rotate: "-12deg" }],
+  },
+  lineThree: {
+    position: "absolute",
+    bottom: 176,
+    right: 40,
+    width: 80,
+    height: 4,
+    borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.1)",
+    transform: [{ rotate: "12deg" }],
+  },
+  pulseRing: {
+    position: "absolute",
+    width: 144,
+    height: 144,
+    borderRadius: 72,
+    borderWidth: 1,
+    borderColor: "#D946C4",
+  },
+  logoWrapper: {
+    width: 128,
+    height: 128,
+    borderRadius: 42,
+    overflow: "hidden",
+    marginBottom: 28,
+  },
+  logoGradient: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.25)",
+  },
+  logoText: {
+    color: "#FFFFFF",
+    fontSize: 60,
+    fontWeight: "900",
+  },
+  title: {
+    color: "#FFFFFF",
+    fontSize: 36,
+    fontWeight: "900",
+    letterSpacing: 0.5,
+    marginBottom: 8,
+  },
+  tagline: {
+    color: "rgba(220,215,240,0.75)",
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 32,
+    lineHeight: 24,
+  },
+  loadingBox: {
+    height: 54,
+    paddingHorizontal: 32,
+    borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.05)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.1)",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+  },
+  loadingText: {
+    color: "rgba(220,215,240,0.75)",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+});
