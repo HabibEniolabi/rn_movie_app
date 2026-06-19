@@ -32,6 +32,34 @@ const socialButton = [
   },
 ];
 
+const getLoginErrorMessage = (code?: string) => {
+  switch (code) {
+    case "auth/invalid-email":
+      return "Enter a valid email address.";
+
+    case "auth/user-disabled":
+      return "This account has been disabled.";
+
+    case "auth/user-not-found":
+      return "No account found with this email.";
+
+    case "auth/wrong-password":
+      return "Incorrect password.";
+
+    case "auth/invalid-credential":
+      return "Invalid email or password.";
+
+    case "auth/network-request-failed":
+      return "Network error. Please check your internet connection.";
+
+    case "auth/too-many-requests":
+      return "Too many attempts. Please try again later.";
+
+    default:
+      return "Unable to sign in. Please try again.";
+  }
+};
+
 type FormErrors = {
   email?: string;
   password?: string;
@@ -44,6 +72,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState(false);
 
   const auth = FIREBASE_AUTH;
 
@@ -69,6 +98,7 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
+    if (loading) return;
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length > 0) {
@@ -77,6 +107,7 @@ const Login = () => {
     }
 
     setErrors({});
+    setLoading(true);
 
     try {
       await signInWithEmailAndPassword(
@@ -269,7 +300,14 @@ const Login = () => {
               </Text>
             )}
             <View className="mt-6">
-              <Button title={t("auth.signIn")} onPress={handleLogin} />
+              <Button
+                title={
+                  loading
+                    ? t("auth.signingIn")
+                    : t("auth.signIn")
+                }
+                onPress={handleLogin}
+              />
             </View>
 
             <View className="flex-row items-center my-3 gap-2">

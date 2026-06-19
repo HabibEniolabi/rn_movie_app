@@ -179,6 +179,7 @@
     "director": "Director"
   },
   "auth": {
+    "signingIn": "Signing In...",
     "loginTitle": "Welcome Back",
     "loginSubtitle": "Sign in to continue watching your favorite movies.",
     "signupTitle": "Create Account",

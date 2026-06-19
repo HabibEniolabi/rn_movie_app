@@ -205,22 +205,26 @@ export const getSavedMovies = async (): Promise<SavedMovie[]> => {
 
 export const getMyListMovies = async (): Promise<HomeMediaItem[]> => {
   try {
-    const user = account.get();
+    // const user = account.get();
 
-    const response = await database.listDocuments(DATABASE_ID, COLLECTION_ID!, [
-      Query.equal("userId", user.$id),
-      Query.orderDesc("$createdAt"),
-      Query.limit(30),
-    ]);
-    return response.documents.map((doc: any) => ({
-      id: Number(doc.movie_id || doc.movieId || doc.id),
+    // const response = await database.listDocuments(DATABASE_ID, COLLECTION_ID!, [
+    //   Query.equal("userId", user.$id),
+    //   Query.orderDesc("$createdAt"),
+    //   Query.limit(30),
+    // ]);
+
+    const SavedMovie = await getSavedMovies();
+    console.log("Saved movies from appwrite: ", SavedMovie);
+
+    return SavedMovie.map((movie: any) => ({
+      id: Number(movie.movie_id || movie.movieId || movie.id),
       mediaType: "movie",
-      title: doc.title || doc.name || "Untitled",
-      posterPath: doc.poster_path || doc.posterPath || doc.poster_url || null,
-      backdropPath: doc.backdrop_path || doc.backdropPath || null,
-      overview: doc.overview || "",
-      releaseDate: doc.release_date || doc.releaseDate || "",
-      voteAverage: doc.vote_average || doc.voteAverage || 0,
+      title: movie.title || movie.name || "Untitled",
+      posterPath: movie.poster_path || movie.posterPath || movie.poster_url || null,
+      backdropPath: movie.backdrop_path || movie.backdropPath || null,
+      overview: movie.overview || "",
+      releaseDate: movie.release_date || movie.releaseDate || "",
+      voteAverage: movie.vote_average || movie.voteAverage || 0,
     }));
   } catch (error) {
     console.log("Get my list movies error:", error);

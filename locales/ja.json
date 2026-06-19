@@ -142,6 +142,7 @@
     "director": "監督"
   },
   "auth": {
+    "signingIn": "サインイン中...",
     "loginTitle": "おかえりなさい",
     "loginSubtitle": "お気に入りの映画を続けて視聴するにはサインインしてください。",
     "signupTitle": "アカウント作成",

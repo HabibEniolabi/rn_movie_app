@@ -142,6 +142,7 @@
     "director": "Diretor"
   },
   "auth": {
+    "signingIn": "Entrando...",
     "loginTitle": "Bem-vindo de volta",
     "loginSubtitle": "Entre para continuar assistindo aos seus filmes favoritos.",
     "signupTitle": "Criar conta",

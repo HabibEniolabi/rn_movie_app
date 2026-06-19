@@ -61,19 +61,18 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
         showsHorizontalScrollIndicator={false}
         data={section.items}
         keyExtractor={(item) => `${section.id}-${item.id}`}
-        // ItemSeparatorComponent={() => <View className="w-2"/>}
         renderItem={({ item, index }) =>
           section.variant === "top10" ? (
-              <TrendingCard
-                movie={{
-                  movie_id: item.id,
-                  title: item.title,
-                  poster_url: item.posterPath?.startsWith("http")
-                    ? item.posterPath
-                    : `https://image.tmdb.org/t/p/w500${item.posterPath}`,
-                }}
-                index={index}
-              />
+            <TrendingCard
+              movie={{
+                movie_id: item.id,
+                title: item.title,
+                poster_url: item.posterPath?.startsWith("http")
+                  ? item.posterPath
+                  : `https://image.tmdb.org/t/p/w500${item.posterPath}`,
+              }}
+              index={index}
+            />
           ) : (
             <HomeMediaCard
               item={item}

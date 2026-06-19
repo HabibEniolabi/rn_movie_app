@@ -142,6 +142,7 @@
     "director": "감독"
   },
   "auth": {
+    "signingIn": "サインイン中...",
     "loginTitle": "다시 오신 것을 환영합니다",
     "loginSubtitle": "좋아하는 영화를 계속 보려면 로그인하세요.",
     "signupTitle": "계정 만들기",

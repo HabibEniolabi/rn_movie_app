@@ -142,6 +142,7 @@
     "director": "Regie"
   },
   "auth": {
+    "signingIn": "Anmeldung läuft...",
     "loginTitle": "Willkommen zurück",
     "loginSubtitle": "Melde dich an, um deine Lieblingsfilme weiter anzusehen.",
     "signupTitle": "Konto erstellen",

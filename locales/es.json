@@ -142,6 +142,7 @@
     "director": "Director"
   },
   "auth": {
+    "signingIn": "Connexion en cours...",
     "loginTitle": "Bienvenido de nuevo",
     "loginSubtitle": "Inicia sesión para seguir viendo tus películas favoritas.",
     "signupTitle": "Crear cuenta",

@@ -67,10 +67,9 @@ export default function Index() {
     refetch: refetchMyList,
   } = useFetch(getMyListMovies);
 
-  const {
-    data: notifications,
-    refetch: refetchNotifications,
-  } = useFetch(getSystemNotifications)
+  const { data: notifications, refetch: refetchNotifications } = useFetch(
+    getSystemNotifications
+  );
 
   const {
     data: movies,
@@ -91,15 +90,63 @@ export default function Index() {
    * heroMovie comes from your fetched movies list.
    * It selects one movie with a poster/backdrop and displays it as the big top card.
    */
-  const heroMovie = useMemo(() => {
-    if (!movies?.length) return null;
 
-    return (
-      movies.find((movie: any) => movie.poster_path && movie.backdrop_path) ||
-      movies.find((movie: any) => movie.poster_path) ||
-      movies[0]
+  const getHeroShuffleSlot = () => {
+    const now = new Date();
+
+    const day = now.toISOString().split("T")[0];
+
+    // 6 changes per day = every 4 hours
+    const slot = Math.floor(now.getHours() / 4);
+
+    return `${day}-${slot}`;
+  };
+
+  const getSeedNumber = (value: string) => {
+    let hash = 0;
+
+    for (let i = 0; i < value.length; i++) {
+      hash = (hash << 5) - hash + value.charCodeAt(i);
+      hash |= 0;
+    }
+
+    return Math.abs(hash);
+  };
+
+  const heroMovie = useMemo(() => {
+    const allSectionItems =
+      homeSections?.flatMap((section) => section.items) || [];
+
+    const validItems = allSectionItems.filter(
+      (item) =>
+        item.posterPath && item.backdropPath && item.mediaType === "movie"
     );
-  }, [movies]);
+
+    if (!validItems.length) {
+      if (!movies?.length) return null;
+
+      return (
+        movies.find((movie: any) => movie.poster_path && movie.backdrop_path) ||
+        movies.find((movie: any) => movie.poster_path) ||
+        movies[0]
+      );
+    }
+
+    const slot = getHeroShuffleSlot();
+    const seed = getSeedNumber(slot);
+    const index = seed % validItems.length;
+
+    const selected = validItems[index];
+
+    return {
+      id: selected.id,
+      title: selected.title,
+      original_title: selected.title,
+      poster_path: selected.posterPath,
+      backdrop_path: selected.backdropPath,
+      overview: selected.overview,
+    };
+  }, [homeSections, movies]);
 
   const finalHomeSections = useMemo(() => {
     const sections: HomeSection[] = [];

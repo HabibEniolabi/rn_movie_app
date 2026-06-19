@@ -18,8 +18,8 @@ const TrendingCard = ({
 
   return (
     <Link href={`/movie/${movie_id}`} asChild>
-      <TouchableOpacity activeOpacity={0.85} className="mr-8">
-        <View className="relative w-[235px] h-[235px]">
+      <TouchableOpacity activeOpacity={0.85} className="mr-3">
+        <View className="relative w-[175px] h-[235px]">
           {/* Big outline rank behind poster */}
           <View
             className="absolute z-0"
