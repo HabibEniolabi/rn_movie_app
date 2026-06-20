@@ -462,7 +462,7 @@ import {
 } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
-const AppLoadingScreen = () => {
+const SplashLoadingScreen = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 
@@ -474,8 +474,6 @@ const AppLoadingScreen = () => {
   const glowAnim = useRef(new Animated.Value(0.4)).current;
 
   useEffect(() => {
-    console.log("AppLoadingScreen mounted");
-
     const logoAnimation = Animated.loop(
       Animated.parallel([
         Animated.sequence([
@@ -688,7 +686,7 @@ const AppLoadingScreen = () => {
   );
 };
 
-export default AppLoadingScreen;
+export default SplashLoadingScreen;
 
 const styles = StyleSheet.create({
   container: {

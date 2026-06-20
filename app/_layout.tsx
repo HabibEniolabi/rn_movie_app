@@ -5,8 +5,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 
+import AppLoadingScreen from "@/components/SplashLoadingScreen";
 import { loadSavedLanguage } from "../interfaces/i18n";
-import AppLoadingScreen from "@/components/AppLoadingScreen";
 
 SplashScreen.preventAutoHideAsync();
 

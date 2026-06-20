@@ -1,8 +1,8 @@
-import AppLoadingScreen from "@/components/AppLoadingScreen";
+import SplashLoadingScreen from "@/components/SplashLoadingScreen";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { Redirect } from "expo-router";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
 
 export default function Index() {
   const [user, setUser] = useState<User | null>(null);
@@ -27,7 +27,7 @@ export default function Index() {
   }, []);
 
   if (!authReady || !splashDone) {
-    return <AppLoadingScreen />;
+    return <SplashLoadingScreen />;
   }
 
   if (user) {
