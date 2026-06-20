@@ -24,7 +24,7 @@ import HomeSectionRow from "@/components/HomeSectionRow";
 import { getMyListMovies } from "@/services/appwrite";
 import { fetchHomeSections, type HomeSection } from "@/services/homeSections";
 import NotificationBell from "@/components/NotificationBell";
-import { getSystemNotifications } from "@/services/appwrite";
+import { getContentNotifications, type ContentNotification } from "@/services/appwrite";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { subscribeToMyListChanges } from "@/services/appwrite";
@@ -73,7 +73,7 @@ export default function Index() {
   } = useFetch(getMyListMovies);
 
   const { data: notifications, refetch: refetchNotifications } = useFetch(
-    getSystemNotifications
+    getContentNotifications
   );
 
   const {

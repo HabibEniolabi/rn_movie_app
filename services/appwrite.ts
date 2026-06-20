@@ -231,38 +231,38 @@ export const getMyListMovies = async (): Promise<HomeMediaItem[]> => {
   }
 };
 
-export type AppNotification = {
-  $id: string;
-  title: string;
-  message: string;
-  type: "info" | "warning" | "critical" | "update";
-  isActive: boolean;
-  $createdAt: string;
-  $updatedAt: string;
-  target?: "all" | "ios" | "android";
-};
+// export type AppNotification = {
+//   $id: string;
+//   title: string;
+//   message: string;
+//   type: "info" | "warning" | "critical" | "update";
+//   isActive: boolean;
+//   $createdAt: string;
+//   $updatedAt: string;
+//   target?: "all" | "ios" | "android";
+// };
 
-const NOTIFICATIONS_COLLECTION_ID =
-  process.env.EXPO_PUBLIC_APPWRITE_NOTIFICATIONS_COLLECTION_ID!;
+// const NOTIFICATIONS_COLLECTION_ID =
+//   process.env.EXPO_PUBLIC_APPWRITE_NOTIFICATIONS_COLLECTION_ID!;
 
-export const getSystemNotifications = async (): Promise<AppNotification[]> => {
-  try {
-    const response = await database.listDocuments(
-      DATABASE_ID,
-      NOTIFICATIONS_COLLECTION_ID,
-      [
-        Query.equal("isActive", true),
-        Query.orderDesc("$createdAt"),
-        Query.limit(30),
-      ]
-    );
+// export const getSystemNotifications = async (): Promise<AppNotification[]> => {
+//   try {
+//     const response = await database.listDocuments(
+//       DATABASE_ID,
+//       NOTIFICATIONS_COLLECTION_ID,
+//       [
+//         Query.equal("isActive", true),
+//         Query.orderDesc("$createdAt"),
+//         Query.limit(30),
+//       ]
+//     );
 
-    return response.documents as unknown as AppNotification[];
-  } catch (error) {
-    console.log("Get system notifications error:", error);
-    return [];
-  }
-};
+//     return response.documents as unknown as AppNotification[];
+//   } catch (error) {
+//     console.log("Get system notifications error:", error);
+//     return [];
+//   }
+// };
 
 export const subscribeToMyListChanges = (
   userId: string,
@@ -289,10 +289,56 @@ export const subscribeToMyListChanges = (
      */
     if (payload?.userId && payload.userId !== userId) return;
 
-    console.log("🔁 My List realtime update:", events);
-
     onChange();
   });
 
   return unsubscribe;
+};
+
+
+//Notification 
+export type ContentNotification = {
+  $id: string;
+  $createdAt: string;
+  $updatedAt: string;
+  title: string;
+  message: string;
+  type: "movie" | "tv" | "category" | "update";
+  category:
+    | "movies"
+    | "comedies"
+    | "series"
+    | "tv_shows"
+    | "anime"
+    | "new_hot"
+    | "romance"
+    | "action";
+  mediaId?: string;
+  mediaType?: "movie" | "tv";
+  posterPath?: string;
+  isActive: boolean;
+};
+
+const NOTIFICATIONS_COLLECTION_ID =
+  process.env.EXPO_PUBLIC_APPWRITE_NOTIFICATIONS_COLLECTION_ID!;
+
+export const getContentNotifications = async (): Promise<
+  ContentNotification[]
+> => {
+  try {
+    const response = await database.listDocuments(
+      DATABASE_ID,
+      NOTIFICATIONS_COLLECTION_ID,
+      [
+        Query.equal("isActive", true),
+        Query.orderDesc("$createdAt"),
+        Query.limit(30),
+      ]
+    );
+
+    return response.documents as unknown as ContentNotification[];
+  } catch (error) {
+    console.log("Get content notifications error:", error);
+    return [];
+  }
 };
