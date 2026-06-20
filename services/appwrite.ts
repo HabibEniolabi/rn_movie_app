@@ -2,15 +2,23 @@ import { Client, Databases, ID, Query, Account } from "react-native-appwrite";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { fetchMovieDetails } from "./api";
 import { HomeMediaItem } from "./homeSections";
+import { Platform } from "react-native";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const FAVORITES_COLLECTION_ID =
   process.env.EXPO_PUBLIC_APPWRITE_FAVORITES_COLLECTION_ID!;
 
+const APPWRITE_PLATFORM = Platform.select({
+  ios: process.env.EXPO_PUBLIC_APPWRITE_IOS_PLATFORM,
+  android: process.env.EXPO_PUBLIC_APPWRITE_ANDROID_PLATFORM,
+  default: process.env.EXPO_PUBLIC_APPWRITE_ANDROID_PLATFORM,
+});
+
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
-  .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
+  .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
+  .setPlatform(APPWRITE_PLATFORM!);
 
 const database = new Databases(client);
 const account = new Account(client);
@@ -205,26 +213,17 @@ export const getSavedMovies = async (): Promise<SavedMovie[]> => {
 
 export const getMyListMovies = async (): Promise<HomeMediaItem[]> => {
   try {
-    // const user = account.get();
+    const savedMovies = await getSavedMovies();
 
-    // const response = await database.listDocuments(DATABASE_ID, COLLECTION_ID!, [
-    //   Query.equal("userId", user.$id),
-    //   Query.orderDesc("$createdAt"),
-    //   Query.limit(30),
-    // ]);
-
-    const SavedMovie = await getSavedMovies();
-    console.log("Saved movies from appwrite: ", SavedMovie);
-
-    return SavedMovie.map((movie: any) => ({
-      id: Number(movie.movie_id || movie.movieId || movie.id),
-      mediaType: "movie",
-      title: movie.title || movie.name || "Untitled",
-      posterPath: movie.poster_path || movie.posterPath || movie.poster_url || null,
-      backdropPath: movie.backdrop_path || movie.backdropPath || null,
+    return savedMovies.map((movie: any) => ({
+      id: Number(movie.movieId),
+      mediaType: movie.mediaType || "movie",
+      title: movie.title || "Untitled",
+      posterPath: movie.posterPath || null,
+      backdropPath: movie.backdropPath || null,
       overview: movie.overview || "",
-      releaseDate: movie.release_date || movie.releaseDate || "",
-      voteAverage: movie.vote_average || movie.voteAverage || 0,
+      releaseDate: movie.releaseDate || "",
+      voteAverage: movie.voteAverage || 0,
     }));
   } catch (error) {
     console.log("Get my list movies error:", error);
@@ -238,7 +237,8 @@ export type AppNotification = {
   message: string;
   type: "info" | "warning" | "critical" | "update";
   isActive: boolean;
-  createdAt: string;
+  $createdAt: string;
+  $updatedAt: string;
   target?: "all" | "ios" | "android";
 };
 
@@ -252,7 +252,7 @@ export const getSystemNotifications = async (): Promise<AppNotification[]> => {
       NOTIFICATIONS_COLLECTION_ID,
       [
         Query.equal("isActive", true),
-        Query.orderDesc("createdAt"),
+        Query.orderDesc("$createdAt"),
         Query.limit(30),
       ]
     );
@@ -262,4 +262,37 @@ export const getSystemNotifications = async (): Promise<AppNotification[]> => {
     console.log("Get system notifications error:", error);
     return [];
   }
+};
+
+export const subscribeToMyListChanges = (
+  userId: string,
+  onChange: () => void
+) => {
+  const channel = `databases.${DATABASE_ID}.collections.${FAVORITES_COLLECTION_ID}.documents`;
+
+  const unsubscribe = client.subscribe(channel, (response) => {
+    const payload = response.payload as any;
+    const events = response.events || [];
+
+    const isFavoritesEvent = events.some((event: string) =>
+      event.includes(
+        `databases.${DATABASE_ID}.collections.${FAVORITES_COLLECTION_ID}.documents`
+      )
+    );
+
+    if (!isFavoritesEvent) return;
+
+    /**
+     * If payload has userId, only refresh for the current user.
+     * If payload does not have userId, refresh anyway because delete events
+     * may not always give the full document shape depending on response.
+     */
+    if (payload?.userId && payload.userId !== userId) return;
+
+    console.log("🔁 My List realtime update:", events);
+
+    onChange();
+  });
+
+  return unsubscribe;
 };

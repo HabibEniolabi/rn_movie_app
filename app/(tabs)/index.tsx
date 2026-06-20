@@ -17,15 +17,17 @@ import { getTrendingMovies } from "@/services/appwrite";
 import TrendingCard from "@/components/TrendingCard";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
-import Fontisto from "react-native-vector-icons/Fontisto";
 import HomeSectionRow from "@/components/HomeSectionRow";
 import { getMyListMovies } from "@/services/appwrite";
 import { fetchHomeSections, type HomeSection } from "@/services/homeSections";
 import NotificationBell from "@/components/NotificationBell";
 import { getSystemNotifications } from "@/services/appwrite";
+import { onAuthStateChanged } from "firebase/auth";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { subscribeToMyListChanges } from "@/services/appwrite";
 
 const getPosterUrl = (posterPath?: string | null) => {
   if (!posterPath) {
@@ -45,6 +47,9 @@ export default function Index() {
   const tabBarHeight = useBottomTabBarHeight();
 
   const [selectedChip, setSelectedChip] = useState("movies");
+  const [authUserId, setAuthUserId] = useState(
+    FIREBASE_AUTH.currentUser?.uid || null
+  );
 
   const {
     data: trendingMovies,
@@ -90,6 +95,29 @@ export default function Index() {
    * heroMovie comes from your fetched movies list.
    * It selects one movie with a poster/backdrop and displays it as the big top card.
    */
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      setAuthUserId(user?.uid || null);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (!authUserId) return;
+
+    console.log("✅ Subscribing to My List realtime:", authUserId);
+
+    const unsubscribe = subscribeToMyListChanges(authUserId, () => {
+      refetchMyList();
+    });
+
+    return () => {
+      console.log("🛑 Unsubscribing from My List realtime");
+      unsubscribe();
+    };
+  }, [authUserId]);
 
   const getHeroShuffleSlot = () => {
     const now = new Date();

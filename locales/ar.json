@@ -14,9 +14,46 @@
     "profile": "الملف الشخصي"
   },
   "home": {
-    "searchMovies": "ابحث في أكثر من 300 فيلم عبر الإنترنت",
+    "searchMovies": "ابحث بين أكثر من 300 فيلم عبر الإنترنت",
     "trendingMovies": "الأفلام الرائجة",
-    "latestMovies": "أحدث الأفلام"
+    "latestMovies": "أحدث الأفلام",
+    "topMovies": "أفضل الأفلام",
+    "gemsForYou": "اختيارات مميزة لك",
+    "topTVShows": "أفضل المسلسلات التلفزيونية",
+    "popularTVShows": "المسلسلات التلفزيونية الشائعة",
+    "comedies": "كوميديا",
+    "romanticPicks": "اختيارات رومانسية",
+    "anime": "أنمي",
+    "bingeworthyTVShows": "مسلسلات تستحق المشاهدة المتواصلة",
+    "continueWatching": "متابعة المشاهدة",
+    "title": "الرئيسية",
+    "shows": "مسلسلات",
+    "movies": "أفلام",
+    "newAndHot": "جديد ورائج",
+    "heroTags": "رائج • شائع • جديد على MovieFlix",
+    "myList": "قائمتي",
+    "seeAll": "عرض الكل",
+    "topTVShowsNigeria": "أفضل المسلسلات في نيجيريا اليوم",
+    "onlyOnMovieflix": "حصريًا على MovieFlix",
+    "becauseYouLiked": "لأنك أعجبت بهذا",
+    "newOnMovieflix": "جديد على MovieFlix",
+    "usTVShows": "مسلسلات أمريكية",
+    "topMoviesNigeria": "أفضل الأفلام في نيجيريا اليوم",
+    "suspensefulTVShows": "مسلسلات مشوقة",
+    "animeSeries": "مسلسلات أنمي",
+    "kidsMovies": "أفلام للأطفال",
+    "watchItAgain": "شاهده مرة أخرى",
+    "yourNextWatch": "مشاهدتك التالية",
+    "excitingJapaneseTVShows": "مسلسلات يابانية مشوقة",
+    "usTVActionAdventure": "مسلسلات أمريكية أكشن ومغامرات",
+    "usTVDramas": "دراما تلفزيونية أمريكية",
+    "getInOnAction": "انضم إلى الأكشن"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "failedToLoad": "تعذر تحميل الإشعارات.",
+    "emptyTitle": "لا توجد إشعارات بعد",
+    "emptyMessage": "ستظهر هنا التحديثات المهمة حول MovieFlix."
   },
   "errors": {
     "failedToLoadMovies": "فشل تحميل الأفلام."

@@ -114,9 +114,9 @@ const NotificationsScreen = () => {
                     {item.message}
                   </Text>
 
-                  {!!item.createdAt && (
+                  {!!item.$createdAt && (
                     <Text className="text-[#6A6880] text-xs mt-3">
-                      {new Date(item.createdAt).toLocaleDateString(
+                      {new Date(item.$createdAt).toLocaleDateString(
                         i18n.language,
                         {
                           month: "short",
