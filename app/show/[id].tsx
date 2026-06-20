@@ -7,13 +7,13 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import MyListToast from "@/components/MyListToast";
 import { router, useLocalSearchParams } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-
 import useFetch from "@/services/useFetch";
 import { fetchTVDetails } from "@/services/api";
 import {
@@ -32,18 +32,27 @@ const ShowDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
 
+  const [localFavorite, setLocalFavorite] = useState<any | null>(null);
+  const [myListLoading, setMyListLoading] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"added" | "removed">("added");
+
   const {
     data: show,
     loading,
     error,
   } = useFetch(() => fetchTVDetails(String(id)));
 
-  const {
-    data: existingFavorite,
-    refetch: refetchExistingFavorite,
-  } = useFetch(() => getExistingFavorite(String(id)));
+  const { data: existingFavorite, refetch: refetchExistingFavorite } = useFetch(
+    () => getExistingFavorite(String(id))
+  );
 
-  const isSaved = !!existingFavorite;
+  useEffect(() => {
+    setLocalFavorite(existingFavorite || null);
+  }, [existingFavorite]);
+
+  const isSaved = !!localFavorite;
 
   const trailer = useMemo(() => {
     return show?.videos?.results?.find(
@@ -56,16 +65,24 @@ const ShowDetails = () => {
   }, [show]);
 
   const handleToggleMyList = async () => {
-    if (!show) return;
+    if (!show || myListLoading) return;
+
+    setMyListLoading(true);
 
     try {
-      if (isSaved && existingFavorite) {
-        await removeFavorite(existingFavorite.$id);
+      if (isSaved && localFavorite) {
+        await removeFavorite(localFavorite.$id);
+
+        setLocalFavorite(null);
+        setToastType("removed");
+        setToastMessage("Removed from My List");
+        setToastVisible(true);
+
         await refetchExistingFavorite();
         return;
       }
 
-      await saveFavorite({
+      const savedFavorite = await saveFavorite({
         id: show.id,
         title: show.name,
         poster_path: show.poster_path,
@@ -79,14 +96,23 @@ const ShowDetails = () => {
         mediaType: "tv",
       });
 
+      setLocalFavorite(savedFavorite);
+      setToastType("added");
+      setToastMessage("Added to My List");
+      setToastVisible(true);
+
       await refetchExistingFavorite();
     } catch (error) {
       console.log("Toggle show favorite error:", error);
 
       Alert.alert(
         t("details.error", { defaultValue: "Error" }),
-        t("details.unableToUpdateMyList")
+        t("details.unableToUpdateMyList", {
+          defaultValue: "Unable to update My List.",
+        })
       );
+    } finally {
+      setMyListLoading(false);
     }
   };
 
@@ -99,10 +125,7 @@ const ShowDetails = () => {
       return;
     }
 
-    Alert.alert(
-      t("details.trailer"),
-      `YouTube trailer key: ${trailer.key}`
-    );
+    Alert.alert(t("details.trailer"), `YouTube trailer key: ${trailer.key}`);
   };
 
   if (loading) {
@@ -134,6 +157,12 @@ const ShowDetails = () => {
 
   return (
     <View className="flex-1 bg-primary">
+      <MyListToast
+        visible={toastVisible}
+        message={toastMessage}
+        type={toastType}
+        onHide={() => setToastVisible(false)}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full h-[520px]">
           <Image
@@ -183,10 +212,8 @@ const ShowDetails = () => {
             </Text>
 
             <Text className="text-light-200 text-sm font-semibold mt-2">
-              {show.first_air_date?.slice(0, 4) ||
-                t("details.notAvailable")}{" "}
-              • {show.number_of_seasons || 0}{" "}
-              {t("details.seasons")} •{" "}
+              {show.first_air_date?.slice(0, 4) || t("details.notAvailable")} •{" "}
+              {show.number_of_seasons || 0} {t("details.seasons")} •{" "}
               {show.vote_average?.toFixed?.(1) || "0.0"} ★
             </Text>
 
@@ -212,7 +239,12 @@ const ShowDetails = () => {
               <TouchableOpacity
                 activeOpacity={0.85}
                 onPress={handleToggleMyList}
-                className="flex-1 h-[52px] rounded-xl bg-white/15 border border-white/20 flex-row items-center justify-center"
+                disabled={myListLoading}
+                className={`flex-1 h-[52px] rounded-xl border flex-row items-center justify-center ${
+                  isSaved
+                    ? "bg-[#AB8BFF] border-[#AB8BFF]"
+                    : "bg-white/15 border-white/20"
+                }`}
               >
                 <Feather
                   name={isSaved ? "check" : "plus"}
@@ -221,9 +253,7 @@ const ShowDetails = () => {
                 />
 
                 <Text className="text-white font-extrabold text-base ml-2">
-                  {isSaved
-                    ? t("details.saved")
-                    : t("details.myList")}
+                  {t("details.myList", { defaultValue: "My List" })}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -236,8 +266,7 @@ const ShowDetails = () => {
           </Text>
 
           <Text className="text-light-200 text-base leading-7">
-            {show.overview ||
-              t("details.noOverviewAvailable")}
+            {show.overview || t("details.noOverviewAvailable")}
           </Text>
 
           <View className="mt-8">
@@ -247,26 +276,17 @@ const ShowDetails = () => {
 
             <InfoRow
               label={t("details.status")}
-              value={
-                show.status ||
-                t("details.notAvailable")
-              }
+              value={show.status || t("details.notAvailable")}
             />
 
             <InfoRow
               label={t("details.firstAired", { defaultValue: "First aired" })}
-              value={
-                show.first_air_date ||
-                t("details.notAvailable")
-              }
+              value={show.first_air_date || t("details.notAvailable")}
             />
 
             <InfoRow
               label={t("details.lastAired")}
-              value={
-                show.last_air_date ||
-                t("details.notAvailable")
-              }
+              value={show.last_air_date || t("details.notAvailable")}
             />
 
             <InfoRow

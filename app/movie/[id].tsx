@@ -7,13 +7,13 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-
+import MyListToast from "@/components/MyListToast";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
 import {
@@ -53,18 +53,27 @@ const MovieDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
 
+  const [localFavorite, setLocalFavorite] = useState<any | null>(null);
+  const [myListLoading, setMyListLoading] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"added" | "removed">("added");
+
   const {
     data: movie,
     loading,
     error,
   } = useFetch(() => fetchMovieDetails(String(id)));
 
-  const {
-    data: existingFavorite,
-    refetch: refetchExistingFavorite,
-  } = useFetch(() => getExistingFavorite(String(id)));
+  const { data: existingFavorite, refetch: refetchExistingFavorite } = useFetch(
+    () => getExistingFavorite(String(id))
+  );
 
-  const isSaved = !!existingFavorite;
+  useEffect(() => {
+    setLocalFavorite(existingFavorite || null);
+  }, [existingFavorite]);
+
+  const isSaved = !!localFavorite;
 
   const trailer = useMemo(() => {
     const videos = (movie as any)?.videos?.results || [];
@@ -95,19 +104,32 @@ const MovieDetailsScreen = () => {
   }, [movie]);
 
   const handleToggleMyList = async () => {
-    if (!movie) return;
+    if (!movie || myListLoading) return;
+
+    setMyListLoading(true);
 
     try {
-      if (isSaved && existingFavorite) {
-        await removeFavorite(existingFavorite.$id);
+      if (isSaved && localFavorite) {
+        await removeFavorite(localFavorite.$id);
+
+        setLocalFavorite(null);
+        setToastType("removed");
+        setToastMessage("Removed from My List");
+        setToastVisible(true);
+
         await refetchExistingFavorite();
         return;
       }
 
-      await saveFavorite({
+      const savedFavorite = await saveFavorite({
         ...movie,
         mediaType: "movie",
       });
+
+      setLocalFavorite(savedFavorite);
+      setToastType("added");
+      setToastMessage("Added to My List");
+      setToastVisible(true);
 
       await refetchExistingFavorite();
     } catch (error) {
@@ -119,6 +141,8 @@ const MovieDetailsScreen = () => {
           defaultValue: "Unable to update My List.",
         })
       );
+    } finally {
+      setMyListLoading(false);
     }
   };
 
@@ -182,6 +206,12 @@ const MovieDetailsScreen = () => {
 
   return (
     <View className="flex-1 bg-primary">
+      <MyListToast
+        visible={toastVisible}
+        message={toastMessage}
+        type={toastType}
+        onHide={() => setToastVisible(false)}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full h-[520px]">
           <Image
@@ -272,7 +302,12 @@ const MovieDetailsScreen = () => {
               <TouchableOpacity
                 activeOpacity={0.85}
                 onPress={handleToggleMyList}
-                className="flex-1 h-[52px] rounded-xl bg-white/15 border border-white/20 flex-row items-center justify-center"
+                disabled={myListLoading}
+                className={`flex-1 h-[52px] rounded-xl border flex-row items-center justify-center ${
+                  isSaved
+                    ? "bg-[#AB8BFF] border-[#AB8BFF]"
+                    : "bg-white/15 border-white/20"
+                }`}
               >
                 <Feather
                   name={isSaved ? "check" : "plus"}
@@ -281,9 +316,7 @@ const MovieDetailsScreen = () => {
                 />
 
                 <Text className="text-white font-extrabold text-base ml-2">
-                  {isSaved
-                    ? t("movie.saved", { defaultValue: "Saved" })
-                    : t("movie.myList", { defaultValue: "My List" })}
+                  {t("movie.myList", { defaultValue: "My List" })}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -318,8 +351,7 @@ const MovieDetailsScreen = () => {
             <InfoRow
               label={t("movie.status", { defaultValue: "Status" })}
               value={
-                movie.status ||
-                t("movie.notAvailable", { defaultValue: "N/A" })
+                movie.status || t("movie.notAvailable", { defaultValue: "N/A" })
               }
             />
 
