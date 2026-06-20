@@ -460,5 +460,27 @@
     "reloginRequiredMessage": "Por seguridad, inicia sesión de nuevo antes de eliminar tu cuenta.",
     "personalInfo": "Información personal",
     "presetImages": "Imágenes predefinidas"
+  },
+  "details": {
+    "error": "Error",
+    "unableToUpdateMyList": "No se pudo actualizar Mi lista.",
+    "trailerNotAvailable": "Tráiler no disponible",
+    "noTrailerAvailable": "Aún no hay tráiler disponible para esta serie.",
+    "trailer": "Tráiler",
+    "unableToLoadShow": "No se pudieron cargar los detalles de la serie.",
+    "tvShow": "SERIE",
+    "notAvailable": "N/D",
+    "seasons": "Temporadas",
+    "play": "Reproducir",
+    "saved": "Guardado",
+    "myList": "Mi lista",
+    "overview": "Resumen",
+    "noOverviewAvailable": "No hay resumen disponible.",
+    "showInfo": "Información de la serie",
+    "status": "Estado",
+    "firstAired": "Primera emisión",
+    "lastAired": "Última emisión",
+    "episodes": "Episodios",
+    "cast": "Reparto"
   }
 }

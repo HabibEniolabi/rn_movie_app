@@ -224,3 +224,22 @@ export const fetchMovieCredits = async (
 
   return data;
 };
+
+export const fetchTVDetails = async (id: string) => {
+  const language = getTMDBLanguage();
+
+  const endpoint = `${TMDB_CONFIG.BASE_URL}/tv/${id}?language=${language}&append_to_response=credits`
+
+  const response = await fetch(endpoint, {
+    method: "GET",
+    headers: TMDB_CONFIG.headers
+  });
+
+  const data = await response.json();
+
+  if(!response.ok) {
+    throw new Error(data?.status_message || "Failed to fetch TV show details");
+  }
+
+  return data;
+}

@@ -86,7 +86,7 @@ const NotificationsScreen = () => {
     if (item.type === "tv" && item.mediaId) {
       // Later when you create /show/[id], change this to /show/[id]
       router.push({
-        pathname: "/movie/[id]" as const,
+        pathname: "/show/[id]" as const,
         params: {
           id: String(item.mediaId),
         },

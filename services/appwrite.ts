@@ -124,7 +124,7 @@ export const getExistingFavorite = async (movieId: number | string) => {
   }
 };
 
-export const saveFavorite = async (movie: Movie | MovieDetails) => {
+export const saveFavorite = async (movie: FavoriteMediaInput) => {
   try {
     const firebaseUser = FIREBASE_AUTH.currentUser;
 
@@ -147,22 +147,28 @@ export const saveFavorite = async (movie: Movie | MovieDetails) => {
       {
         userId: firebaseUser.uid,
         movieId: String(movie.id),
-        title: movie.title,
+
+        title: movie.title || movie.name || "Untitled",
+
         posterPath: movie.poster_path ?? "",
-        releaseDate: movie.release_date ?? "",
+        backdropPath: movie.backdrop_path ?? "",
+
+        releaseDate: movie.release_date || movie.first_air_date || "",
+
         voteAverage: movie.vote_average ?? 0,
+        reviewCount: movie.vote_count ?? 0,
+
         overview: movie.overview ?? "",
-        runtime:
-          "runtime" in movie && movie.runtime ? `${movie.runtime} mins` : "",
-        reviewCount: movie.vote_count ? `${movie.vote_count} reviews` : "",
-        genres:
-          "genres" in movie && Array.isArray(movie.genres)
-            ? movie.genres.map((genre) => genre.name).join(",")
-            : "",
+
+        runtime: movie.runtime ?? movie.episode_run_time?.[0] ?? 0,
+
+        genres: Array.isArray(movie.genres)
+          ? movie.genres.map((genre) => genre.name).join(", ")
+          : "",
+
+        mediaType: movie.mediaType || "movie",
       }
     );
-
-    console.log("✅ Favorite saved:", result);
 
     return result as unknown as SavedMovie;
   } catch (error) {

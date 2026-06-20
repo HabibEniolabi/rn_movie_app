@@ -460,5 +460,27 @@
     "reloginRequiredMessage": "For security reasons, please log in again before deleting your account.",
     "personalInfo": "Personal Info",
     "presetImages": "Preset images"
+  },
+  "details": {
+    "error": "Error",
+    "unableToUpdateMyList": "Unable to update My List.",
+    "trailerNotAvailable": "Trailer not available",
+    "noTrailerAvailable": "No trailer is available for this show yet.",
+    "trailer": "Trailer",
+    "unableToLoadShow": "Unable to load TV show details.",
+    "tvShow": "TV SHOW",
+    "notAvailable": "N/A",
+    "seasons": "Seasons",
+    "play": "Play",
+    "saved": "Saved",
+    "myList": "My List",
+    "overview": "Overview",
+    "noOverviewAvailable": "No overview available.",
+    "showInfo": "Show Info",
+    "status": "Status",
+    "firstAired": "First aired",
+    "lastAired": "Last aired",
+    "episodes": "Episodes",
+    "cast": "Cast"
   }
 }

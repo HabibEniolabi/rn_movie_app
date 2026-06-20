@@ -83,3 +83,36 @@ interface TrendingCardProps {
   movie: TrendingMovie;
   index: number;
 }
+
+type MediaType = "movie" | "tv";
+
+interface FavoriteMediaInput {
+  id: number;
+
+  // Movie uses title, TV uses name
+  title?: string;
+  name?: string;
+
+  poster_path?: string | null;
+  backdrop_path?: string | null;
+
+  // Movie uses release_date, TV uses first_air_date
+  release_date?: string;
+  first_air_date?: string;
+
+  vote_average?: number;
+  vote_count?: number;
+
+  overview?: string | null;
+
+  // Movie uses runtime, TV can use episode_run_time
+  runtime?: number | null;
+  episode_run_time?: number[];
+
+  genres?: {
+    id: number;
+    name: string;
+  }[];
+
+  mediaType?: MediaType;
+}

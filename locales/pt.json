@@ -460,5 +460,27 @@
     "reloginRequiredMessage": "Por segurança, faça login novamente antes de excluir sua conta.",
     "personalInfo": "Informações pessoais",
     "presetImages": "Imagens predefinidas"
+  },
+  "details": {
+    "error": "Erro",
+    "unableToUpdateMyList": "Não foi possível atualizar Minha lista.",
+    "trailerNotAvailable": "Trailer indisponível",
+    "noTrailerAvailable": "Ainda não há trailer disponível para esta série.",
+    "trailer": "Trailer",
+    "unableToLoadShow": "Não foi possível carregar os detalhes da série.",
+    "tvShow": "SÉRIE",
+    "notAvailable": "N/D",
+    "seasons": "Temporadas",
+    "play": "Reproduzir",
+    "saved": "Salvo",
+    "myList": "Minha lista",
+    "overview": "Visão geral",
+    "noOverviewAvailable": "Nenhuma visão geral disponível.",
+    "showInfo": "Informações da série",
+    "status": "Status",
+    "firstAired": "Primeira exibição",
+    "lastAired": "Última exibição",
+    "episodes": "Episódios",
+    "cast": "Elenco"
   }
 }

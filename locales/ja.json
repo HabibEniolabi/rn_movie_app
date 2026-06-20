@@ -460,5 +460,27 @@
     "reloginRequiredMessage": "セキュリティ上の理由により、アカウントを削除する前に再度ログインしてください。",
     "personalInfo": "個人情報",
     "presetImages": "プリセット画像"
+  },
+  "details": {
+    "error": "エラー",
+    "unableToUpdateMyList": "マイリストを更新できませんでした。",
+    "trailerNotAvailable": "予告編は利用できません",
+    "noTrailerAvailable": "この番組の予告編はまだ利用できません。",
+    "trailer": "予告編",
+    "unableToLoadShow": "TV番組の詳細を読み込めませんでした。",
+    "tvShow": "TV番組",
+    "notAvailable": "N/A",
+    "seasons": "シーズン",
+    "play": "再生",
+    "saved": "保存済み",
+    "myList": "マイリスト",
+    "overview": "概要",
+    "noOverviewAvailable": "概要はありません。",
+    "showInfo": "番組情報",
+    "status": "ステータス",
+    "firstAired": "初回放送",
+    "lastAired": "最終放送",
+    "episodes": "エピソード",
+    "cast": "キャスト"
   }
 }

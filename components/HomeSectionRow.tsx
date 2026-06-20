@@ -25,7 +25,10 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
       return;
     }
 
-    Alert.alert("TV show details coming soon");
+    router.push({
+      pathname: "/show/[id]" as const,
+      params: { id: String(item.id)}
+    })
   };
 
   const handleSeeAll = () => {

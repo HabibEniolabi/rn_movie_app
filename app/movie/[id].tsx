@@ -78,7 +78,7 @@ const MovieDetails = () => {
         await removeFavorite(movie?.id);
         setIsClicked(false);
       } else {
-        await saveFavorite(movie);
+        await saveFavorite({ ...movie, mediaType: "movie" });
         setIsClicked(true);
       }
     } catch (error) {
@@ -170,11 +170,11 @@ const MovieDetails = () => {
             disabled={!movie}
             className="absolute -bottom-10 right-7 w-[64px] h-[64px] rounded-full bg-white items-center justify-center"
           >
-              <Image
-                source={images.pause}
-                className="w-8 h-8"
-                resizeMode="contain"
-              />
+            <Image
+              source={images.pause}
+              className="w-8 h-8"
+              resizeMode="contain"
+            />
           </TouchableOpacity>
         </View>
         <View className="flex-col item-start justify-center mt-5 px-5">
@@ -314,3 +314,4 @@ const MovieDetails = () => {
 };
 
 export default MovieDetails;
+2

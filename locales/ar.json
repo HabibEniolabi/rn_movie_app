@@ -460,5 +460,27 @@
     "reloginRequiredMessage": "لأسباب أمنية، يرجى تسجيل الدخول مرة أخرى قبل حذف حسابك.",
     "personalInfo": "المعلومات الشخصية",
     "presetImages": "الصور المسبقة"
+  },
+  "details": {
+    "error": "خطأ",
+    "unableToUpdateMyList": "تعذر تحديث قائمتي.",
+    "trailerNotAvailable": "المقطع الدعائي غير متاح",
+    "noTrailerAvailable": "لا يوجد مقطع دعائي متاح لهذا المسلسل حتى الآن.",
+    "trailer": "المقطع الدعائي",
+    "unableToLoadShow": "تعذر تحميل تفاصيل المسلسل.",
+    "tvShow": "مسلسل",
+    "notAvailable": "غير متاح",
+    "seasons": "مواسم",
+    "play": "تشغيل",
+    "saved": "تم الحفظ",
+    "myList": "قائمتي",
+    "overview": "نظرة عامة",
+    "noOverviewAvailable": "لا توجد نظرة عامة متاحة.",
+    "showInfo": "معلومات المسلسل",
+    "status": "الحالة",
+    "firstAired": "أول عرض",
+    "lastAired": "آخر عرض",
+    "episodes": "الحلقات",
+    "cast": "طاقم التمثيل"
   }
 }

@@ -460,5 +460,27 @@
     "reloginRequiredMessage": "Pour des raisons de sécurité, veuillez vous reconnecter avant de supprimer votre compte.",
     "personalInfo": "Informations personnelles",
     "presetImages": "Images prédéfinies"
+  },
+  "details": {
+    "error": "Erreur",
+    "unableToUpdateMyList": "Impossible de mettre à jour Ma liste.",
+    "trailerNotAvailable": "Bande-annonce indisponible",
+    "noTrailerAvailable": "Aucune bande-annonce n'est encore disponible pour cette série.",
+    "trailer": "Bande-annonce",
+    "unableToLoadShow": "Impossible de charger les détails de la série TV.",
+    "tvShow": "SÉRIE TV",
+    "notAvailable": "N/D",
+    "seasons": "Saisons",
+    "play": "Lire",
+    "saved": "Enregistré",
+    "myList": "Ma liste",
+    "overview": "Aperçu",
+    "noOverviewAvailable": "Aucun aperçu disponible.",
+    "showInfo": "Infos de la série",
+    "status": "Statut",
+    "firstAired": "Première diffusion",
+    "lastAired": "Dernière diffusion",
+    "episodes": "Épisodes",
+    "cast": "Distribution"
   }
 }
