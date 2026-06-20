@@ -176,7 +176,17 @@
     "moreLikeThisComingSoon": "Similar movie recommendations are coming soon.",
     "noSimilarMovies": "No similar movies found yet.",
     "starring": "Starring",
-    "director": "Director"
+    "director": "Director",
+    "unableToLoadMovie": "Unable to load movie details.",
+    "unableToUpdateMyList": "Unable to update My List.",
+    "movieInfo": "Movie Info",
+    "runtime": "Runtime",
+    "rating": "Rating",
+    "votes": "Votes",
+    "play": "Play",
+    "saved": "Saved",
+    "myList": "My List",
+    "trailer": "Trailer"
   },
   "auth": {
     "signingIn": "Signing In...",

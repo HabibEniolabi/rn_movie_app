@@ -176,7 +176,17 @@
     "moreLikeThisComingSoon": "اقتراحات الأفلام المشابهة ستتوفر قريبًا.",
     "noSimilarMovies": "لم يتم العثور على أفلام مشابهة بعد.",
     "starring": "بطولة",
-    "director": "المخرج"
+    "director": "المخرج",
+    "unableToLoadMovie": "تعذر تحميل تفاصيل الفيلم.",
+    "unableToUpdateMyList": "تعذر تحديث قائمتي.",
+    "movieInfo": "معلومات الفيلم",
+    "runtime": "مدة العرض",
+    "rating": "التقييم",
+    "votes": "الأصوات",
+    "play": "تشغيل",
+    "saved": "تم الحفظ",
+    "myList": "قائمتي",
+    "trailer": "المقطع الدعائي"
   },
   "auth": {
     "signingIn": "جارٍ تسجيل الدخول...",

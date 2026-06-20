@@ -176,7 +176,17 @@
     "moreLikeThisComingSoon": "Empfehlungen für ähnliche Filme kommen bald.",
     "noSimilarMovies": "Noch keine ähnlichen Filme gefunden.",
     "starring": "Mit",
-    "director": "Regie"
+    "director": "Regie",
+    "unableToLoadMovie": "Filmdetails konnten nicht geladen werden.",
+    "unableToUpdateMyList": "Meine Liste konnte nicht aktualisiert werden.",
+    "movieInfo": "Filminfo",
+    "runtime": "Laufzeit",
+    "rating": "Bewertung",
+    "votes": "Stimmen",
+    "play": "Abspielen",
+    "saved": "Gespeichert",
+    "myList": "Meine Liste",
+    "trailer": "Trailer"
   },
   "auth": {
     "signingIn": "Anmeldung läuft...",

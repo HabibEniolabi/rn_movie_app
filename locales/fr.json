@@ -176,7 +176,17 @@
     "moreLikeThisComingSoon": "Les recommandations de films similaires arrivent bientôt.",
     "noSimilarMovies": "Aucun film similaire trouvé pour le moment.",
     "starring": "Avec",
-    "director": "Réalisateur"
+    "director": "Réalisateur",
+    "unableToLoadMovie": "No se pudieron cargar los detalles de la película.",
+    "unableToUpdateMyList": "No se pudo actualizar Mi lista.",
+    "movieInfo": "Información de la película",
+    "runtime": "Duración",
+    "rating": "Calificación",
+    "votes": "Votos",
+    "play": "Reproducir",
+    "saved": "Guardado",
+    "myList": "Mi lista",
+    "trailer": "Tráiler"
   },
   "auth": {
     "signingIn": "Connexion en cours...",

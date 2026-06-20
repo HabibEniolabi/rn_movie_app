@@ -176,7 +176,17 @@
     "moreLikeThisComingSoon": "似ている映画のおすすめは近日公開予定です。",
     "noSimilarMovies": "似ている映画はまだ見つかっていません。",
     "starring": "出演",
-    "director": "監督"
+    "director": "監督",
+    "unableToLoadMovie": "映画の詳細を読み込めませんでした。",
+    "unableToUpdateMyList": "マイリストを更新できませんでした。",
+    "movieInfo": "映画情報",
+    "runtime": "上映時間",
+    "rating": "評価",
+    "votes": "投票",
+    "play": "再生",
+    "saved": "保存済み",
+    "myList": "マイリスト",
+    "trailer": "予告編"
   },
   "auth": {
     "signingIn": "サインイン中...",

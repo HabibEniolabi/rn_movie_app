@@ -176,7 +176,17 @@
     "moreLikeThisComingSoon": "Recomendações de filmes semelhantes estarão disponíveis em breve.",
     "noSimilarMovies": "Nenhum filme semelhante encontrado ainda.",
     "starring": "Elenco",
-    "director": "Diretor"
+    "director": "Diretor",
+    "unableToLoadMovie": "Não foi possível carregar os detalhes do filme.",
+    "unableToUpdateMyList": "Não foi possível atualizar Minha lista.",
+    "movieInfo": "Informações do filme",
+    "runtime": "Duração",
+    "rating": "Avaliação",
+    "votes": "Votos",
+    "play": "Reproduzir",
+    "saved": "Salvo",
+    "myList": "Minha lista",
+    "trailer": "Trailer"
   },
   "auth": {
     "signingIn": "Entrando...",
