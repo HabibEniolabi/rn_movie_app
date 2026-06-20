@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { I18nManager } from "react-native";
 
 const TrendingCard = ({
-  movie: { movie_id, title, poster_url },
+  movie: { movie_id, title, poster_url, mediaType = "movie" },
   index,
 }: TrendingCardProps) => {
   const { i18n } = useTranslation();
@@ -17,7 +17,10 @@ const TrendingCard = ({
   const isDoubleDigit = index + 1 >= 10;
 
   return (
-    <Link href={`/movie/${movie_id}`} asChild>
+    <Link
+      href={mediaType === "tv" ? `/show/${movie_id}` : `/movie/${movie_id}`}
+      asChild
+    >
       <TouchableOpacity activeOpacity={0.85} className="mr-3">
         <View className="relative w-[175px] h-[235px]">
           {/* Big outline rank behind poster */}

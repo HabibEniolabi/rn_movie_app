@@ -70,6 +70,7 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
               movie={{
                 movie_id: item.id,
                 title: item.title,
+                mediaType: item.mediaType,
                 poster_url: item.posterPath?.startsWith("http")
                   ? item.posterPath
                   : `https://image.tmdb.org/t/p/w500${item.posterPath}`,

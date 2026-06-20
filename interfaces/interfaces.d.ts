@@ -19,6 +19,7 @@ interface TrendingMovie {
   searchTerm?: string;
   movie_id: number;
   title: string;
+  mediaType?: "movie" | "tv";
   count?: number;
   poster_url: string;
 }
