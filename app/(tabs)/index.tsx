@@ -476,7 +476,7 @@ export default function Index() {
                         elevation: 30,
                       }}
                     >
-                      <Feather name="play" size={28} color="#000" />
+                      <Feather name="play" size={24} color="#000" />
 
                       <Text className="text-black text-lg font-extrabold ml-2">
                         {t("movie.playMovie", { defaultValue: "Play" })}
@@ -487,7 +487,7 @@ export default function Index() {
                       activeOpacity={0.85}
                       onPress={handleToggleHeroMyList}
                       disabled={heroMyListLoading}
-                      className={`h-[46px] px-6 rounded-xl border flex-row items-center justify-center ${
+                      className={`h-[56px]flex-1 px-6 rounded-xl border flex-row items-center justify-center ${
                         isHeroSaved
                           ? "bg-[#AB8BFF] border-[#AB8BFF]"
                           : "bg-white/15 border-white/20"
@@ -495,7 +495,7 @@ export default function Index() {
                     >
                       <Feather
                         name={isHeroSaved ? "check" : "plus"}
-                        size={20}
+                        size={24}
                         color="#fff"
                       />
 

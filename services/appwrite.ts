@@ -124,6 +124,16 @@ export const getExistingFavorite = async (movieId: number | string) => {
   }
 };
 
+const formatReviewCountForAppwrite = (movie: FavoriteMediaInput) => {
+  if (typeof movie.reviewCount === "string") {
+    return movie.reviewCount;
+  }
+
+  const count = movie.reviewCount ?? movie.vote_count ?? 0;
+
+  return `${count} reviews`;
+};
+
 export const saveFavorite = async (movie: FavoriteMediaInput) => {
   try {
     const firebaseUser = FIREBASE_AUTH.currentUser;
@@ -156,7 +166,7 @@ export const saveFavorite = async (movie: FavoriteMediaInput) => {
         releaseDate: movie.release_date || movie.first_air_date || "",
 
         voteAverage: movie.vote_average ?? 0,
-        reviewCount: movie.vote_count ?? 0,
+        reviewCount: formatReviewCountForAppwrite(movie),
 
         overview: movie.overview ?? "",
 
@@ -301,8 +311,7 @@ export const subscribeToMyListChanges = (
   return unsubscribe;
 };
 
-
-//Notification 
+//Notification
 export type ContentNotification = {
   $id: string;
   $createdAt: string;

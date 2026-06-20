@@ -116,4 +116,5 @@ interface FavoriteMediaInput {
   }[];
 
   mediaType?: MediaType;
+  reviewCount: string | number;
 }
