@@ -8,26 +8,34 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
-import MovieCard from "@/components/MovieCard";
 import { getTrendingMovies } from "@/services/appwrite";
-import TrendingCard from "@/components/TrendingCard";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import MyListToast from "@/components/MyListToast";
 import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
 import HomeSectionRow from "@/components/HomeSectionRow";
 import { getMyListMovies } from "@/services/appwrite";
 import { fetchHomeSections, type HomeSection } from "@/services/homeSections";
 import NotificationBell from "@/components/NotificationBell";
-import { getContentNotifications, type ContentNotification } from "@/services/appwrite";
+import {
+  getContentNotifications,
+  type ContentNotification,
+} from "@/services/appwrite";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { subscribeToMyListChanges } from "@/services/appwrite";
+import {
+  saveFavorite,
+  removeFavorite,
+  getExistingFavorite,
+} from "@/services/appwrite";
 
 const getPosterUrl = (posterPath?: string | null) => {
   if (!posterPath) {
@@ -50,6 +58,15 @@ export default function Index() {
   const [authUserId, setAuthUserId] = useState(
     FIREBASE_AUTH.currentUser?.uid || null
   );
+
+  const [heroFavorite, setHeroFavorite] = useState<any | null>(null);
+  const [heroMyListLoading, setHeroMyListLoading] = useState(false);
+
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"added" | "removed">("added");
+
+  const isHeroSaved = !!heroFavorite;
 
   const {
     data: trendingMovies,
@@ -176,6 +193,37 @@ export default function Index() {
     };
   }, [homeSections, movies]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const checkHeroFavorite = async () => {
+      if (!heroMovie?.id) {
+        setHeroFavorite(null);
+        return;
+      }
+
+      try {
+        const favorite = await getExistingFavorite(String(heroMovie.id));
+
+        if (isMounted) {
+          setHeroFavorite(favorite || null);
+        }
+      } catch (error) {
+        console.log("Check hero favorite error:", error);
+
+        if (isMounted) {
+          setHeroFavorite(null);
+        }
+      }
+    };
+
+    checkHeroFavorite();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [heroMovie?.id]);
+
   const finalHomeSections = useMemo(() => {
     const sections: HomeSection[] = [];
 
@@ -196,6 +244,58 @@ export default function Index() {
 
     return sections;
   }, [myListMovies, homeSections]);
+
+  const handleToggleHeroMyList = async () => {
+    if (!heroMovie || heroMyListLoading) return;
+
+    setHeroMyListLoading(true);
+
+    try {
+      if (isHeroSaved && heroFavorite) {
+        await removeFavorite(heroFavorite.$id);
+
+        setHeroFavorite(null);
+        setToastType("removed");
+        setToastMessage("Removed from My List");
+        setToastVisible(true);
+
+        refetchMyList?.();
+
+        return;
+      }
+
+      const savedFavorite = await saveFavorite({
+        id: heroMovie.id,
+        title: heroMovie.title || heroMovie.original_title || "Untitled",
+        poster_path: heroMovie.poster_path,
+        backdrop_path: heroMovie.backdrop_path,
+        release_date: heroMovie.release_date || "",
+        vote_average: heroMovie.vote_average || 0,
+        overview: heroMovie.overview || "",
+        vote_count: heroMovie.vote_count || 0,
+        genres: heroMovie.genres || [],
+        mediaType: "movie",
+      });
+
+      setHeroFavorite(savedFavorite);
+      setToastType("added");
+      setToastMessage("Added to My List");
+      setToastVisible(true);
+
+      refetchMyList?.();
+    } catch (error) {
+      console.log("Toggle hero favorite error:", error);
+
+      Alert.alert(
+        t("movie.error", { defaultValue: "Error" }),
+        t("movie.unableToUpdateMyList", {
+          defaultValue: "Unable to update My List.",
+        })
+      );
+    } finally {
+      setHeroMyListLoading(false);
+    }
+  };
 
   const categoryChips = [
     {
@@ -223,6 +323,12 @@ export default function Index() {
 
   return (
     <View className="flex-1 bg-primary">
+      <MyListToast
+        visible={toastVisible}
+        message={toastMessage}
+        type={toastType}
+        onHide={() => setToastVisible(false)}
+      />
       <Image source={images.bg} className="absolute z-0 w-full" />
 
       <ScrollView
@@ -379,16 +485,21 @@ export default function Index() {
 
                     <TouchableOpacity
                       activeOpacity={0.85}
-                      onPress={() => router.push("/(tabs)/saved")}
-                      className="flex-1 h-[56px] rounded-md bg-white/25 flex-row items-center justify-center"
-                      style={{
-                        zIndex: 30,
-                        elevation: 30,
-                      }}
+                      onPress={handleToggleHeroMyList}
+                      disabled={heroMyListLoading}
+                      className={`h-[46px] px-6 rounded-xl border flex-row items-center justify-center ${
+                        isHeroSaved
+                          ? "bg-[#AB8BFF] border-[#AB8BFF]"
+                          : "bg-white/15 border-white/20"
+                      }`}
                     >
-                      <Feather name="plus" size={30} color="#fff" />
+                      <Feather
+                        name={isHeroSaved ? "check" : "plus"}
+                        size={20}
+                        color="#fff"
+                      />
 
-                      <Text className="text-white text-lg font-extrabold ml-2">
+                      <Text className="text-white font-extrabold text-base ml-2">
                         {t("home.myList", { defaultValue: "My List" })}
                       </Text>
                     </TouchableOpacity>
