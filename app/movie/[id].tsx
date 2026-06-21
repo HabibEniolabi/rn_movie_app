@@ -151,15 +151,17 @@ const MovieDetailsScreen = () => {
   };
 
   const handlePlayMovie = () => {
-    Alert.alert(
-      t("movie.fullMovieComingSoon", {
-        defaultValue: "Full movie playback coming soon",
-      }),
-      t("movie.fullMovieComingSoonMessage", {
-        defaultValue:
-          "We currently do not have a licensed streaming URL for this movie. Trailers and official clips are available below.",
-      })
-    );
+    if (!movie?.id) return;
+
+    router.push({
+      pathname: "/watch/[id]",
+      params: {
+        id: String(movie.id),
+        mediaType: "movie",
+        videoId: trailer?.key || "",
+        title: movie.title || movie.original_title || "Untitled",
+      },
+    });
   };
 
   if (loading) {
@@ -204,7 +206,10 @@ const MovieDetailsScreen = () => {
         <View className="w-full h-[520px]">
           <Image
             source={{
-              uri: getImageUrl(movie.backdrop_path || movie.poster_path, "w780"),
+              uri: getImageUrl(
+                movie.backdrop_path || movie.poster_path,
+                "w780"
+              ),
             }}
             className="w-full h-full"
             resizeMode="cover"

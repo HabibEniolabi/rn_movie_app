@@ -106,15 +106,17 @@ const ShowDetails = () => {
   };
 
   const handlePlayTrailer = () => {
-    if (!trailer?.key) {
-      Alert.alert(
-        t("details.trailerNotAvailable"),
-        t("details.noTrailerAvailable")
-      );
-      return;
-    }
+    if (!show?.id) return;
 
-    Alert.alert(t("details.trailer"), `YouTube trailer key: ${trailer.key}`);
+    router.push({
+      pathname: "/watch/[id]",
+      params: {
+        id: String(show.id),
+        mediaType: "tv",
+        videoId: trailer?.key || "",
+        title: show.title || show.original_title || "Untitled",
+      },
+    });
   };
 
   if (loading) {

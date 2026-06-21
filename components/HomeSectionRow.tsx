@@ -32,15 +32,9 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
   };
 
   const handleSeeAll = () => {
-    if (section.id !== "my_list") return;
-
-    // Later you can create /my-list screen.
-    Alert.alert(
-      t("home.myList", { defaultValue: "My List" }),
-      t("home.myListSeeAllComingSoon", {
-        defaultValue: "Full My List screen is coming soon.",
-      })
-    );
+    if (section.id !== "my_list"){
+      router.push("/(tabs)/saved")
+    }
   };
 
   return (
@@ -50,8 +44,8 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
           {section.title || t(section.titleKey, section.titleParams)}
         </Text>
 
-        {section.showSeeAll && (
-          <TouchableOpacity onPress={handleSeeAll}>
+        {section.showSeeAll && section.id === "my_list" && (
+          <TouchableOpacity activeOpacity={0.8} onPress={handleSeeAll}>
             <Text className="text-[#AB8BFF] font-bold">
               {t("home.seeAll", { defaultValue: "See all" })}
             </Text>

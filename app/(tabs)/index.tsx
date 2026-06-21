@@ -2,19 +2,20 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ScrollView,
-  View,
   Text,
   TouchableOpacity,
-  Alert,
+  View,
+  type GestureResponderEvent,
 } from "react-native";
 import { useRouter } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
 import {
-  getTrendingMovies,
   getContentNotifications,
+  getTrendingMovies,
 } from "@/services/appwrite";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
@@ -25,10 +26,10 @@ import Feather from "react-native-vector-icons/Feather";
 import HomeSectionRow from "@/components/HomeSectionRow";
 import {
   fetchHomeSections,
+  type HomeMediaItem,
+  type HomeMediaType,
   type HomeSection,
   type RecommendationSeed,
-  type HomeMediaType,
-  type HomeMediaItem,
 } from "@/services/homeSections";
 import NotificationBell from "@/components/NotificationBell";
 import { useMyList } from "../context/MyListContext";
@@ -73,10 +74,71 @@ export default function Index() {
 
   const [selectedChip, setSelectedChip] = useState("movies");
   const [heroMyListLoading, setHeroMyListLoading] = useState(false);
+  const [heroSlot, setHeroSlot] = useState("");
 
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState<"added" | "removed">("added");
+
+  const getLocalDateKey = () => {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const getHeroShuffleSlot = () => {
+    const now = new Date();
+
+    // 6 hero changes per day = every 4 hours
+    const slot = Math.floor(now.getHours() / 4);
+
+    return `${getLocalDateKey()}-${slot}`;
+  };
+
+  const getSeedNumber = (value: string) => {
+    let hash = 0;
+
+    for (let i = 0; i < value.length; i++) {
+      hash = (hash << 5) - hash + value.charCodeAt(i);
+      hash |= 0;
+    }
+
+    return Math.abs(hash);
+  };
+
+  const stableShuffle = <T,>(items: T[], seed: string) => {
+    const copied = [...items];
+    let currentIndex = copied.length;
+    let seedNumber = getSeedNumber(seed);
+
+    while (currentIndex !== 0) {
+      seedNumber = (seedNumber * 9301 + 49297) % 233280;
+
+      const randomIndex = Math.floor((seedNumber / 233280) * currentIndex);
+
+      currentIndex -= 1;
+
+      const temporaryValue = copied[currentIndex];
+      copied[currentIndex] = copied[randomIndex];
+      copied[randomIndex] = temporaryValue;
+    }
+
+    return copied;
+  };
+
+  useEffect(() => {
+    setHeroSlot(getHeroShuffleSlot());
+
+    const interval = setInterval(() => {
+      setHeroSlot(getHeroShuffleSlot());
+    }, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const recommendationSeed = useMemo<RecommendationSeed | undefined>(() => {
     const firstSaved = savedMovies[0];
@@ -124,34 +186,13 @@ export default function Index() {
     refetchNotifications();
   }, [i18n.language, recommendationSeed?.id, recommendationSeed?.mediaType]);
 
-  const getHeroShuffleSlot = () => {
-    const now = new Date();
-    const day = now.toISOString().split("T")[0];
-
-    // 6 changes per day = every 4 hours
-    const slot = Math.floor(now.getHours() / 4);
-
-    return `${day}-${slot}`;
-  };
-
-  const getSeedNumber = (value: string) => {
-    let hash = 0;
-
-    for (let i = 0; i < value.length; i++) {
-      hash = (hash << 5) - hash + value.charCodeAt(i);
-      hash |= 0;
-    }
-
-    return Math.abs(hash);
-  };
-
   const heroMovie = useMemo<HeroMediaItem | null>(() => {
     const allSectionItems =
       homeSections?.flatMap((section) => section.items) || [];
 
-    const validItems = allSectionItems.filter(
-      (item: any) => item.posterPath && item.backdropPath
-    );
+    const validItems = allSectionItems.filter((item: HomeMediaItem) => {
+      return item.posterPath && item.backdropPath;
+    });
 
     if (!validItems.length) {
       if (!movies?.length) return null;
@@ -177,29 +218,30 @@ export default function Index() {
       };
     }
 
-    const slot = getHeroShuffleSlot();
-    const seed = getSeedNumber(slot);
-    const index = seed % validItems.length;
+    const shuffledItems = stableShuffle(
+      validItems,
+      heroSlot || getHeroShuffleSlot()
+    );
 
-    const selected: any = validItems[index];
+    const selected = shuffledItems[0];
     const mediaType: MediaType = selected.mediaType === "tv" ? "tv" : "movie";
 
     return {
       id: selected.id,
       mediaType,
-      title: selected.title || selected.name || "Untitled",
-      original_title: selected.title || selected.name || "Untitled",
-      name: selected.name || selected.title || "Untitled",
+      title: selected.title || "Untitled",
+      original_title: selected.title || "Untitled",
+      name: selected.title || "Untitled",
       poster_path: selected.posterPath,
       backdrop_path: selected.backdropPath,
       overview: selected.overview || "",
       release_date: selected.releaseDate || "",
       first_air_date: selected.releaseDate || "",
       vote_average: selected.voteAverage || 0,
-      vote_count: selected.voteCount || 0,
-      genres: selected.genres || [],
+      vote_count: 0,
+      genres: [],
     };
-  }, [homeSections, movies]);
+  }, [homeSections, movies, heroSlot]);
 
   const isHeroSaved = heroMovie?.id
     ? isInMyList(heroMovie.id, heroMovie.mediaType)
@@ -302,10 +344,35 @@ export default function Index() {
   const handleOpenHero = () => {
     if (!heroMovie) return;
 
+    if (heroMovie.mediaType === "tv") {
+      router.push({
+        pathname: "/show/[id]",
+        params: {
+          id: String(heroMovie.id),
+          title: heroMovie.title || heroMovie.name || heroMovie.original_title,
+        },
+      });
+
+      return;
+    }
+
     router.push({
-      pathname: heroMovie.mediaType === "tv" ? "/show/[id]" : "/movie/[id]",
+      pathname: "/movie/[id]",
       params: {
         id: String(heroMovie.id),
+        title: heroMovie.title || heroMovie.original_title,
+      },
+    });
+  };
+
+  const handleWatchHero = () => {
+    if (!heroMovie) return;
+
+    router.push({
+      pathname: "/watch/[id]",
+      params: {
+        id: String(heroMovie.id),
+        mediaType: heroMovie.mediaType,
         title: heroMovie.title || heroMovie.name || heroMovie.original_title,
       },
     });
@@ -333,7 +400,7 @@ export default function Index() {
   const hasHomeData =
     !!heroMovie ||
     !!homeSections?.length ||
-    !!myListMovies?.length ||
+    !!myListMovies.length ||
     !!movies?.length;
 
   const isInitialHomeLoading =
@@ -429,7 +496,11 @@ export default function Index() {
         ) : (
           <View className="flex-1 mt-6">
             {heroMovie && (
-              <View className="w-full h-[520px] rounded-[26px] overflow-hidden bg-dark-100 border border-white/15">
+              <TouchableOpacity
+                activeOpacity={0.92}
+                onPress={handleOpenHero}
+                className="w-full h-[520px] rounded-[26px] overflow-hidden bg-dark-100 border border-white/15"
+              >
                 <Image
                   source={{
                     uri: getPosterUrl(heroMovie.poster_path),
@@ -484,7 +555,10 @@ export default function Index() {
                   <View className="flex-row gap-4 mt-6">
                     <TouchableOpacity
                       activeOpacity={0.85}
-                      onPress={handleOpenHero}
+                      onPress={(event: GestureResponderEvent) => {
+                        event.stopPropagation();
+                        handleWatchHero();
+                      }}
                       className="basis-0 flex-1 h-[56px] px-4 rounded-md bg-white flex-row items-center justify-center"
                       style={{
                         zIndex: 30,
@@ -503,7 +577,10 @@ export default function Index() {
 
                     <TouchableOpacity
                       activeOpacity={0.85}
-                      onPress={handleToggleHeroMyList}
+                      onPress={(event: GestureResponderEvent) => {
+                        event.stopPropagation();
+                        handleToggleHeroMyList();
+                      }}
                       disabled={heroMyListLoading}
                       className={`basis-0 flex-1 h-[56px] px-4 rounded-md border flex-row items-center justify-center ${
                         isHeroSaved
@@ -526,7 +603,7 @@ export default function Index() {
                     </TouchableOpacity>
                   </View>
                 </LinearGradient>
-              </View>
+              </TouchableOpacity>
             )}
 
             {finalHomeSections.map((section) => (
