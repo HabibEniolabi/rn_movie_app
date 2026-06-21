@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import MyListToast from "@/components/MyListToast";
 import { router, useLocalSearchParams } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
@@ -16,11 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import useFetch from "@/services/useFetch";
 import { fetchTVDetails } from "@/services/api";
-import {
-  saveFavorite,
-  removeFavorite,
-  getExistingFavorite,
-} from "@/services/appwrite";
+import { useMyList } from "../context/MyListContext";
 
 const getImageUrl = (path?: string | null, size = "w500") => {
   if (!path) return "https://placehold.co/500x750/1a1a1a/ffffff.png";
@@ -32,7 +28,8 @@ const ShowDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
 
-  const [localFavorite, setLocalFavorite] = useState<any | null>(null);
+  const { isInMyList, addToMyList, removeFromMyList } = useMyList();
+
   const [myListLoading, setMyListLoading] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -44,15 +41,7 @@ const ShowDetails = () => {
     error,
   } = useFetch(() => fetchTVDetails(String(id)));
 
-  const { data: existingFavorite, refetch: refetchExistingFavorite } = useFetch(
-    () => getExistingFavorite(String(id))
-  );
-
-  useEffect(() => {
-    setLocalFavorite(existingFavorite || null);
-  }, [existingFavorite]);
-
-  const isSaved = !!localFavorite;
+  const isSaved = show?.id ? isInMyList(show.id, "tv") : false;
 
   const trailer = useMemo(() => {
     return show?.videos?.results?.find(
@@ -70,38 +59,38 @@ const ShowDetails = () => {
     setMyListLoading(true);
 
     try {
-      if (isSaved && localFavorite) {
-        await removeFavorite(localFavorite.$id);
+      if (isSaved) {
+        await removeFromMyList(show.id, "tv");
 
-        setLocalFavorite(null);
         setToastType("removed");
         setToastMessage("Removed from My List");
         setToastVisible(true);
 
-        await refetchExistingFavorite();
         return;
       }
 
-      const savedFavorite = await saveFavorite({
-        id: show.id,
-        title: show.name,
-        poster_path: show.poster_path,
-        backdrop_path: show.backdrop_path,
-        release_date: show.first_air_date,
-        vote_average: show.vote_average,
-        overview: show.overview,
-        runtime: show.episode_run_time?.[0] || 0,
-        vote_count: show.vote_count || 0,
-        genres: show.genres || [],
-        mediaType: "tv",
-      });
+      await addToMyList(
+        {
+          id: show.id,
+          title: show.name,
+          name: show.name,
+          poster_path: show.poster_path,
+          backdrop_path: show.backdrop_path,
+          release_date: show.first_air_date,
+          first_air_date: show.first_air_date,
+          vote_average: show.vote_average,
+          overview: show.overview,
+          runtime: show.episode_run_time?.[0] || 0,
+          vote_count: show.vote_count || 0,
+          genres: show.genres || [],
+          mediaType: "tv",
+        },
+        "tv"
+      );
 
-      setLocalFavorite(savedFavorite);
       setToastType("added");
       setToastMessage("Added to My List");
       setToastVisible(true);
-
-      await refetchExistingFavorite();
     } catch (error) {
       console.log("Toggle show favorite error:", error);
 
@@ -163,6 +152,7 @@ const ShowDetails = () => {
         type={toastType}
         onHide={() => setToastVisible(false)}
       />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full h-[520px]">
           <Image

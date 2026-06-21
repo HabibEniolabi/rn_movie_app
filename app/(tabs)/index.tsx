@@ -6,36 +6,41 @@ import {
   ScrollView,
   View,
   Text,
-  FlatList,
   TouchableOpacity,
   Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
-import { getTrendingMovies } from "@/services/appwrite";
+import { getTrendingMovies, getContentNotifications } from "@/services/appwrite";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MyListToast from "@/components/MyListToast";
 import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
 import HomeSectionRow from "@/components/HomeSectionRow";
-import { getMyListMovies } from "@/services/appwrite";
 import { fetchHomeSections, type HomeSection } from "@/services/homeSections";
 import NotificationBell from "@/components/NotificationBell";
-import {
-  getContentNotifications,
-  type ContentNotification,
-} from "@/services/appwrite";
-import { onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { subscribeToMyListChanges } from "@/services/appwrite";
-import {
-  saveFavorite,
-  removeFavorite,
-  getExistingFavorite,
-} from "@/services/appwrite";
+import { useMyList } from "../context/MyListContext";
+
+type MediaType = "movie" | "tv";
+
+type HeroMediaItem = {
+  id: number;
+  mediaType: MediaType;
+  title: string;
+  original_title?: string;
+  name?: string;
+  poster_path?: string | null;
+  backdrop_path?: string | null;
+  overview?: string;
+  release_date?: string;
+  first_air_date?: string;
+  vote_average?: number;
+  vote_count?: number;
+  genres?: any[];
+};
 
 const getPosterUrl = (posterPath?: string | null) => {
   if (!posterPath) {
@@ -54,19 +59,19 @@ export default function Index() {
   const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
 
-  const [selectedChip, setSelectedChip] = useState("movies");
-  const [authUserId, setAuthUserId] = useState(
-    FIREBASE_AUTH.currentUser?.uid || null
-  );
+  const {
+    savedMovies,
+    isInMyList,
+    addToMyList,
+    removeFromMyList,
+  } = useMyList();
 
-  const [heroFavorite, setHeroFavorite] = useState<any | null>(null);
+  const [selectedChip, setSelectedChip] = useState("movies");
   const [heroMyListLoading, setHeroMyListLoading] = useState(false);
 
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState<"added" | "removed">("added");
-
-  const isHeroSaved = !!heroFavorite;
 
   const {
     data: trendingMovies,
@@ -81,13 +86,6 @@ export default function Index() {
     error: sectionsError,
     refetch: refetchHomeSections,
   } = useFetch(fetchHomeSections);
-
-  const {
-    data: myListMovies,
-    loading: myListLoading,
-    error: myListError,
-    refetch: refetchMyList,
-  } = useFetch(getMyListMovies);
 
   const { data: notifications, refetch: refetchNotifications } = useFetch(
     getContentNotifications
@@ -104,44 +102,12 @@ export default function Index() {
     refetchTrendingMovies();
     refetchMovies();
     refetchHomeSections();
-    refetchMyList();
     refetchNotifications();
   }, [i18n.language]);
 
-  /**
-   * heroMovie comes from your fetched movies list.
-   * It selects one movie with a poster/backdrop and displays it as the big top card.
-   */
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      setAuthUserId(user?.uid || null);
-    });
-
-    return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    if (!authUserId) return;
-
-    console.log("✅ Subscribing to My List realtime:", authUserId);
-
-    const unsubscribe = subscribeToMyListChanges(authUserId, () => {
-      refetchMyList();
-    });
-
-    return () => {
-      console.log("🛑 Unsubscribing from My List realtime");
-      unsubscribe();
-    };
-  }, [authUserId]);
-
   const getHeroShuffleSlot = () => {
     const now = new Date();
-
     const day = now.toISOString().split("T")[0];
-
-    // 6 changes per day = every 4 hours
     const slot = Math.floor(now.getHours() / 4);
 
     return `${day}-${slot}`;
@@ -158,71 +124,80 @@ export default function Index() {
     return Math.abs(hash);
   };
 
-  const heroMovie = useMemo(() => {
+  const heroMovie = useMemo<HeroMediaItem | null>(() => {
     const allSectionItems =
       homeSections?.flatMap((section) => section.items) || [];
 
     const validItems = allSectionItems.filter(
-      (item) =>
-        item.posterPath && item.backdropPath && item.mediaType === "movie"
+      (item: any) => item.posterPath && item.backdropPath
     );
 
     if (!validItems.length) {
       if (!movies?.length) return null;
 
-      return (
+      const fallbackMovie =
         movies.find((movie: any) => movie.poster_path && movie.backdrop_path) ||
         movies.find((movie: any) => movie.poster_path) ||
-        movies[0]
-      );
+        movies[0];
+
+      return {
+        id: fallbackMovie.id,
+        mediaType: "movie",
+        title: fallbackMovie.title || fallbackMovie.original_title || "Untitled",
+        original_title: fallbackMovie.original_title,
+        poster_path: fallbackMovie.poster_path,
+        backdrop_path: fallbackMovie.backdrop_path,
+        overview: fallbackMovie.overview || "",
+        release_date: fallbackMovie.release_date || "",
+        vote_average: fallbackMovie.vote_average || 0,
+        vote_count: fallbackMovie.vote_count || 0,
+        genres: fallbackMovie.genres || [],
+      };
     }
 
     const slot = getHeroShuffleSlot();
     const seed = getSeedNumber(slot);
     const index = seed % validItems.length;
 
-    const selected = validItems[index];
+    const selected: any = validItems[index];
+    const mediaType: MediaType = selected.mediaType === "tv" ? "tv" : "movie";
 
     return {
       id: selected.id,
-      title: selected.title,
-      original_title: selected.title,
+      mediaType,
+      title: selected.title || selected.name || "Untitled",
+      original_title: selected.title || selected.name || "Untitled",
+      name: selected.name || selected.title || "Untitled",
       poster_path: selected.posterPath,
       backdrop_path: selected.backdropPath,
-      overview: selected.overview,
+      overview: selected.overview || "",
+      release_date: selected.releaseDate || "",
+      first_air_date: selected.releaseDate || "",
+      vote_average: selected.voteAverage || 0,
+      vote_count: selected.voteCount || 0,
+      genres: selected.genres || [],
     };
   }, [homeSections, movies]);
 
-  useEffect(() => {
-    let isMounted = true;
+  const isHeroSaved = heroMovie?.id
+    ? isInMyList(heroMovie.id, heroMovie.mediaType)
+    : false;
 
-    const checkHeroFavorite = async () => {
-      if (!heroMovie?.id) {
-        setHeroFavorite(null);
-        return;
-      }
-
-      try {
-        const favorite = await getExistingFavorite(String(heroMovie.id));
-
-        if (isMounted) {
-          setHeroFavorite(favorite || null);
-        }
-      } catch (error) {
-        console.log("Check hero favorite error:", error);
-
-        if (isMounted) {
-          setHeroFavorite(null);
-        }
-      }
-    };
-
-    checkHeroFavorite();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [heroMovie?.id]);
+  const myListMovies = useMemo(() => {
+    return savedMovies.map((movie: any) => ({
+      id: Number(movie.movieId),
+      mediaType: movie.mediaType || "movie",
+      title: movie.title || "Untitled",
+      posterPath: movie.posterPath || null,
+      backdropPath: movie.backdropPath || null,
+      overview: movie.overview || "",
+      releaseDate: movie.releaseDate || "",
+      voteAverage: movie.voteAverage || 0,
+      runtime: movie.runtime || "",
+      reviewCount: movie.reviewCount || "",
+      genres: movie.genres || "",
+    }));
+  }, [savedMovies]);
 
   const finalHomeSections = useMemo(() => {
     const sections: HomeSection[] = [];
@@ -250,39 +225,40 @@ export default function Index() {
 
     setHeroMyListLoading(true);
 
-    try {
-      if (isHeroSaved && heroFavorite) {
-        await removeFavorite(heroFavorite.$id);
+    const mediaType = heroMovie.mediaType || "movie";
 
-        setHeroFavorite(null);
+    try {
+      if (isHeroSaved) {
+        await removeFromMyList(heroMovie.id, mediaType);
+
         setToastType("removed");
         setToastMessage("Removed from My List");
         setToastVisible(true);
 
-        refetchMyList?.();
-
         return;
       }
 
-      const savedFavorite = await saveFavorite({
-        id: heroMovie.id,
-        title: heroMovie.title || heroMovie.original_title || "Untitled",
-        poster_path: heroMovie.poster_path,
-        backdrop_path: heroMovie.backdrop_path,
-        release_date: heroMovie.release_date || "",
-        vote_average: heroMovie.vote_average || 0,
-        overview: heroMovie.overview || "",
-        vote_count: heroMovie.vote_count || 0,
-        genres: heroMovie.genres || [],
-        mediaType: "movie",
-      });
+      await addToMyList(
+        {
+          id: heroMovie.id,
+          title: heroMovie.title || heroMovie.name || "Untitled",
+          name: heroMovie.name || heroMovie.title || "Untitled",
+          poster_path: heroMovie.poster_path,
+          backdrop_path: heroMovie.backdrop_path,
+          release_date: heroMovie.release_date || heroMovie.first_air_date || "",
+          first_air_date: heroMovie.first_air_date || heroMovie.release_date || "",
+          vote_average: heroMovie.vote_average || 0,
+          vote_count: heroMovie.vote_count || 0,
+          overview: heroMovie.overview || "",
+          genres: heroMovie.genres || [],
+          mediaType,
+        },
+        mediaType
+      );
 
-      setHeroFavorite(savedFavorite);
       setToastType("added");
       setToastMessage("Added to My List");
       setToastVisible(true);
-
-      refetchMyList?.();
     } catch (error) {
       console.log("Toggle hero favorite error:", error);
 
@@ -295,6 +271,19 @@ export default function Index() {
     } finally {
       setHeroMyListLoading(false);
     }
+  };
+
+  const handleOpenHero = () => {
+    if (!heroMovie) return;
+
+    router.push({
+      pathname: "/media/[id]" as const,
+      params: {
+        id: String(heroMovie.id),
+        mediaType: heroMovie.mediaType,
+        title: heroMovie.title || heroMovie.name || heroMovie.original_title,
+      },
+    });
   };
 
   const categoryChips = [
@@ -316,10 +305,9 @@ export default function Index() {
     },
   ];
 
-  const isLoading =
-    moviesLoading || trendingLoading || sectionsLoading || myListLoading;
+  const isLoading = moviesLoading || trendingLoading || sectionsLoading;
 
-  const hasError = moviesError || trendingError || sectionsError || myListError;
+  const hasError = moviesError || trendingError || sectionsError;
 
   return (
     <View className="flex-1 bg-primary">
@@ -329,6 +317,7 @@ export default function Index() {
         type={toastType}
         onHide={() => setToastVisible(false)}
       />
+
       <Image source={images.bg} className="absolute z-0 w-full" />
 
       <ScrollView
@@ -340,7 +329,6 @@ export default function Index() {
           paddingBottom: tabBarHeight + 40,
         }}
       >
-        {/* Header */}
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
             <Image source={icons.logo} className="w-12 h-10" />
@@ -351,7 +339,6 @@ export default function Index() {
           </View>
 
           <View className="flex-row items-center gap-3">
-            {/* Search button */}
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => router.push("/search")}
@@ -360,12 +347,10 @@ export default function Index() {
               <Feather name="search" size={24} color="#fff" />
             </TouchableOpacity>
 
-            {/* Notification button */}
             <NotificationBell count={notifications?.length || 0} />
           </View>
         </View>
 
-        {/* Category chips */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -421,6 +406,7 @@ export default function Index() {
                   className="w-full h-full"
                   resizeMode="cover"
                 />
+
                 <LinearGradient
                   colors={[
                     "rgba(0,0,0,0)",
@@ -446,31 +432,27 @@ export default function Index() {
                     className="text-white text-[38px] font-extrabold text-center"
                     numberOfLines={2}
                   >
-                    {heroMovie.title || heroMovie.original_title}
+                    {heroMovie.title || heroMovie.name || heroMovie.original_title}
                   </Text>
 
                   <Text
                     className="text-light-200 text-sm text-center mt-3"
                     numberOfLines={1}
                   >
-                    {t("home.heroTags", {
-                      defaultValue: "Trending • Popular • New on MovieFlix",
-                    })}
+                    {heroMovie.mediaType === "tv"
+                      ? t("home.heroShowTags", {
+                          defaultValue: "Popular • Series • New on MovieFlix",
+                        })
+                      : t("home.heroTags", {
+                          defaultValue: "Trending • Popular • New on MovieFlix",
+                        })}
                   </Text>
 
                   <View className="flex-row gap-4 mt-6">
                     <TouchableOpacity
                       activeOpacity={0.85}
-                      onPress={() =>
-                        router.push({
-                          pathname: "/media/[id]" as const,
-                          params: {
-                            id: String(heroMovie.id),
-                            title: heroMovie.title || heroMovie.original_title,
-                          },
-                        })
-                      }
-                      className="flex-1 h-[56px] rounded-md bg-white flex-row items-center justify-center"
+                      onPress={handleOpenHero}
+                      className="flex-1 basis-0 h-[56px] px-4 rounded-md bg-white flex-row items-center justify-center"
                       style={{
                         zIndex: 30,
                         elevation: 30,
@@ -487,7 +469,7 @@ export default function Index() {
                       activeOpacity={0.85}
                       onPress={handleToggleHeroMyList}
                       disabled={heroMyListLoading}
-                      className={`h-[56px]flex-1 px-6 rounded-xl border flex-row items-center justify-center ${
+                      className={`basis-0 h-[56px] px-4 flex-1 px-6 rounded-md border flex-row items-center justify-center ${
                         isHeroSaved
                           ? "bg-[#AB8BFF] border-[#AB8BFF]"
                           : "bg-white/15 border-white/20"
@@ -507,6 +489,7 @@ export default function Index() {
                 </LinearGradient>
               </View>
             )}
+
             {finalHomeSections.map((section) => (
               <HomeSectionRow key={section.id} section={section} />
             ))}

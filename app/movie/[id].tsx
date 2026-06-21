@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,11 +16,7 @@ import { useTranslation } from "react-i18next";
 import MyListToast from "@/components/MyListToast";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
-import {
-  saveFavorite,
-  removeFavorite,
-  getExistingFavorite,
-} from "@/services/appwrite";
+import { useMyList } from "../context/MyListContext";
 
 const getImageUrl = (path?: string | null, size = "w500") => {
   if (!path) return "https://placehold.co/500x750/1a1a1a/ffffff.png";
@@ -53,7 +49,8 @@ const MovieDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
 
-  const [localFavorite, setLocalFavorite] = useState<any | null>(null);
+  const { isInMyList, addToMyList, removeFromMyList } = useMyList();
+
   const [myListLoading, setMyListLoading] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -65,15 +62,7 @@ const MovieDetailsScreen = () => {
     error,
   } = useFetch(() => fetchMovieDetails(String(id)));
 
-  const { data: existingFavorite, refetch: refetchExistingFavorite } = useFetch(
-    () => getExistingFavorite(String(id))
-  );
-
-  useEffect(() => {
-    setLocalFavorite(existingFavorite || null);
-  }, [existingFavorite]);
-
-  const isSaved = !!localFavorite;
+  const isSaved = movie?.id ? isInMyList(movie.id, "movie") : false;
 
   const trailer = useMemo(() => {
     const videos = (movie as any)?.videos?.results || [];
@@ -109,29 +98,27 @@ const MovieDetailsScreen = () => {
     setMyListLoading(true);
 
     try {
-      if (isSaved && localFavorite) {
-        await removeFavorite(localFavorite.$id);
+      if (isSaved) {
+        await removeFromMyList(movie.id, "movie");
 
-        setLocalFavorite(null);
         setToastType("removed");
         setToastMessage("Removed from My List");
         setToastVisible(true);
 
-        await refetchExistingFavorite();
         return;
       }
 
-      const savedFavorite = await saveFavorite({
-        ...movie,
-        mediaType: "movie",
-      });
+      await addToMyList(
+        {
+          ...movie,
+          mediaType: "movie",
+        },
+        "movie"
+      );
 
-      setLocalFavorite(savedFavorite);
       setToastType("added");
       setToastMessage("Added to My List");
       setToastVisible(true);
-
-      await refetchExistingFavorite();
     } catch (error) {
       console.log("Toggle movie favorite error:", error);
 
@@ -212,14 +199,12 @@ const MovieDetailsScreen = () => {
         type={toastType}
         onHide={() => setToastVisible(false)}
       />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full h-[520px]">
           <Image
             source={{
-              uri: getImageUrl(
-                movie.backdrop_path || movie.poster_path,
-                "w780"
-              ),
+              uri: getImageUrl(movie.backdrop_path || movie.poster_path, "w780"),
             }}
             className="w-full h-full"
             resizeMode="cover"

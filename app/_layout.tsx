@@ -4,6 +4,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
+import { MyListProvider } from "./context/MyListContext";
 
 import AppLoadingScreen from "@/components/SplashLoadingScreen";
 import { loadSavedLanguage } from "../interfaces/i18n";
@@ -37,45 +38,47 @@ export default function RootLayout() {
   }
 
   return (
-    <View className="flex-1 bg-primary">
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          animation: "none",
-          contentStyle: {
-            backgroundColor: "#030014",
-          },
-          orientation: "portrait",
-        }}
-      >
-        <Stack.Screen name="index" />
-
-        <Stack.Screen name="(auth)/login" />
-
-        <Stack.Screen name="(auth)/signup" />
-
-        <Stack.Screen name="onboarding" />
-
-        <Stack.Screen name="(auth)/forgot-password" />
-
-        <Stack.Screen name="forgot-password" />
-
-        <Stack.Screen name="(tabs)" />
-
-        <Stack.Screen name="movie/[id]" />
-
-        <Stack.Screen name="trailers/[id]" />
-
-        <Stack.Screen
-          name="watch/[id]"
-          options={{
-            orientation: "landscape",
+    <MyListProvider>
+      <View className="flex-1 bg-primary">
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: "none",
+            contentStyle: {
+              backgroundColor: "#030014",
+            },
+            orientation: "portrait",
           }}
-        />
+        >
+          <Stack.Screen name="index" />
 
-        <Stack.Screen name="account" />
-        <Stack.Screen name="notifications" />
-      </Stack>
-    </View>
+          <Stack.Screen name="(auth)/login" />
+
+          <Stack.Screen name="(auth)/signup" />
+
+          <Stack.Screen name="onboarding" />
+
+          <Stack.Screen name="(auth)/forgot-password" />
+
+          <Stack.Screen name="forgot-password" />
+
+          <Stack.Screen name="(tabs)" />
+
+          <Stack.Screen name="movie/[id]" />
+
+          <Stack.Screen name="trailers/[id]" />
+
+          <Stack.Screen
+            name="watch/[id]"
+            options={{
+              orientation: "landscape",
+            }}
+          />
+
+          <Stack.Screen name="account" />
+          <Stack.Screen name="notifications" />
+        </Stack>
+      </View>
+    </MyListProvider>
   );
 }

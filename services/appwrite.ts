@@ -86,38 +86,69 @@ export const getTrendingMovies = async (): Promise<TrendingMovie[]> => {
   }
 };
 
+export type MediaType = "movie" | "tv";
+
 export type SavedMovie = {
   $id: string;
   $createdAt: string;
   userId: string;
   movieId: string;
+  mediaType?: MediaType;
   title: string;
   posterPath?: string;
+  backdropPath?: string;
   releaseDate?: string;
   voteAverage?: number;
   overview?: string;
-  runtime?: string;
+  runtime?: number | string;
   reviewCount?: string;
   genres?: string;
 };
 
-export const getExistingFavorite = async (movieId: number | string) => {
+const getCurrentFirebaseUser = () => {
+  return FIREBASE_AUTH.currentUser;
+};
+
+const listFavoriteDocuments = async (
+  movieId: number | string,
+  mediaType?: MediaType
+): Promise<SavedMovie[]> => {
+  const firebaseUser = getCurrentFirebaseUser();
+
+  if (!firebaseUser) return [];
+
+  const result = await database.listDocuments(
+    DATABASE_ID,
+    FAVORITES_COLLECTION_ID,
+    [
+      Query.equal("userId", firebaseUser.uid),
+      Query.equal("movieId", String(movieId)),
+      Query.limit(100),
+    ]
+  );
+
+  const documents = result.documents as unknown as SavedMovie[];
+
+  /**
+   * Important:
+   * Older saved rows may not have mediaType yet.
+   * Keep them valid so they can still be removed.
+   */
+  if (!mediaType) return documents;
+
+  return documents.filter((doc) => {
+    return !doc.mediaType || doc.mediaType === mediaType;
+  });
+};
+
+export const getExistingFavorite = async (
+  movieId: number | string,
+  mediaType?: MediaType
+) => {
   try {
-    const firebaseUser = FIREBASE_AUTH.currentUser;
+    const favorites = await listFavoriteDocuments(movieId, mediaType);
 
-    if (!firebaseUser) return undefined;
-
-    const result = await database.listDocuments(
-      DATABASE_ID,
-      FAVORITES_COLLECTION_ID,
-      [
-        Query.equal("userId", firebaseUser.uid),
-        Query.equal("movieId", String(movieId)),
-        Query.limit(1),
-      ]
-    );
-
-    return result.documents[0] as unknown as SavedMovie | undefined;
+    return favorites[0] || undefined;
   } catch (error) {
     console.log("Error checking favorite", error);
     return undefined;
@@ -136,18 +167,38 @@ const formatReviewCountForAppwrite = (movie: FavoriteMediaInput) => {
 
 export const saveFavorite = async (movie: FavoriteMediaInput) => {
   try {
-    const firebaseUser = FIREBASE_AUTH.currentUser;
+    const firebaseUser = getCurrentFirebaseUser();
 
     if (!firebaseUser) {
       console.log("❌ No Firebase user found");
       throw new Error("User not authenticated");
     }
 
-    const existingFavorite = await getExistingFavorite(movie.id);
+    const mediaType = (movie.mediaType || "movie") as MediaType;
 
-    if (existingFavorite) {
+    const existingFavorites = await listFavoriteDocuments(movie.id, mediaType);
+
+    /**
+     * If duplicates already exist, return the first one and clean the rest.
+     * This prevents the “remove then it comes back again” issue.
+     */
+    if (existingFavorites.length > 0) {
+      const [mainFavorite, ...duplicates] = existingFavorites;
+
+      if (duplicates.length > 0) {
+        await Promise.all(
+          duplicates.map((duplicate) =>
+            database.deleteDocument(
+              DATABASE_ID,
+              FAVORITES_COLLECTION_ID,
+              duplicate.$id
+            )
+          )
+        );
+      }
+
       console.log("✅ Already favorited");
-      return existingFavorite;
+      return mainFavorite;
     }
 
     const result = await database.createDocument(
@@ -157,6 +208,7 @@ export const saveFavorite = async (movie: FavoriteMediaInput) => {
       {
         userId: firebaseUser.uid,
         movieId: String(movie.id),
+        mediaType,
 
         title: movie.title || movie.name || "Untitled",
 
@@ -175,8 +227,6 @@ export const saveFavorite = async (movie: FavoriteMediaInput) => {
         genres: Array.isArray(movie.genres)
           ? movie.genres.map((genre) => genre.name).join(", ")
           : "",
-
-        mediaType: movie.mediaType || "movie",
       }
     );
 
@@ -187,17 +237,30 @@ export const saveFavorite = async (movie: FavoriteMediaInput) => {
   }
 };
 
-export const removeFavorite = async (movieId: number | string) => {
+export const removeFavorite = async (
+  movieId: number | string,
+  mediaType?: MediaType
+) => {
   try {
-    const existingFavorite = await getExistingFavorite(movieId);
+    const favorites = await listFavoriteDocuments(movieId, mediaType);
 
-    if (!existingFavorite) return;
+    if (!favorites.length) return false;
 
-    await database.deleteDocument(
-      DATABASE_ID,
-      FAVORITES_COLLECTION_ID,
-      existingFavorite.$id
+    /**
+     * Delete every matching document, not only the first one.
+     * This fixes duplicated saved rows.
+     */
+    await Promise.all(
+      favorites.map((favorite) =>
+        database.deleteDocument(
+          DATABASE_ID,
+          FAVORITES_COLLECTION_ID,
+          favorite.$id
+        )
+      )
     );
+
+    return true;
   } catch (error) {
     console.log("Error removing favorite", error);
     throw error;
@@ -206,7 +269,7 @@ export const removeFavorite = async (movieId: number | string) => {
 
 export const getSavedMovies = async (): Promise<SavedMovie[]> => {
   try {
-    const firebaseUser = FIREBASE_AUTH.currentUser;
+    const firebaseUser = getCurrentFirebaseUser();
 
     if (!firebaseUser) return [];
 
@@ -231,7 +294,7 @@ export const getMyListMovies = async (): Promise<HomeMediaItem[]> => {
   try {
     const savedMovies = await getSavedMovies();
 
-    return savedMovies.map((movie: any) => ({
+    return savedMovies.map((movie) => ({
       id: Number(movie.movieId),
       mediaType: movie.mediaType || "movie",
       title: movie.title || "Untitled",
@@ -240,6 +303,10 @@ export const getMyListMovies = async (): Promise<HomeMediaItem[]> => {
       overview: movie.overview || "",
       releaseDate: movie.releaseDate || "",
       voteAverage: movie.voteAverage || 0,
+
+      runtime: movie.runtime || "",
+      reviewCount: movie.reviewCount || "",
+      genres: movie.genres || "",
     }));
   } catch (error) {
     console.log("Get my list movies error:", error);
