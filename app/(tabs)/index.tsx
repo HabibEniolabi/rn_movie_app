@@ -12,7 +12,10 @@ import {
 import { useRouter } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
-import { getTrendingMovies, getContentNotifications } from "@/services/appwrite";
+import {
+  getTrendingMovies,
+  getContentNotifications,
+} from "@/services/appwrite";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useMemo, useState } from "react";
@@ -20,7 +23,13 @@ import MyListToast from "@/components/MyListToast";
 import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
 import HomeSectionRow from "@/components/HomeSectionRow";
-import { fetchHomeSections, type HomeSection } from "@/services/homeSections";
+import {
+  fetchHomeSections,
+  type HomeSection,
+  type RecommendationSeed,
+  type HomeMediaType,
+  type HomeMediaItem,
+} from "@/services/homeSections";
 import NotificationBell from "@/components/NotificationBell";
 import { useMyList } from "../context/MyListContext";
 
@@ -59,12 +68,8 @@ export default function Index() {
   const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
 
-  const {
-    savedMovies,
-    isInMyList,
-    addToMyList,
-    removeFromMyList,
-  } = useMyList();
+  const { savedMovies, isInMyList, addToMyList, removeFromMyList } =
+    useMyList();
 
   const [selectedChip, setSelectedChip] = useState("movies");
   const [heroMyListLoading, setHeroMyListLoading] = useState(false);
@@ -73,8 +78,22 @@ export default function Index() {
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState<"added" | "removed">("added");
 
+  const recommendationSeed = useMemo<RecommendationSeed | undefined>(() => {
+    const firstSaved = savedMovies[0];
+
+    if (!firstSaved) return undefined;
+
+    const mediaType: HomeMediaType =
+      firstSaved.mediaType === "tv" ? "tv" : "movie";
+
+    return {
+      id: Number(firstSaved.movieId),
+      mediaType,
+      title: firstSaved.title,
+    };
+  }, [savedMovies]);
+
   const {
-    data: trendingMovies,
     loading: trendingLoading,
     error: trendingError,
     refetch: refetchTrendingMovies,
@@ -85,7 +104,7 @@ export default function Index() {
     loading: sectionsLoading,
     error: sectionsError,
     refetch: refetchHomeSections,
-  } = useFetch(fetchHomeSections);
+  } = useFetch(() => fetchHomeSections(recommendationSeed));
 
   const { data: notifications, refetch: refetchNotifications } = useFetch(
     getContentNotifications
@@ -103,11 +122,13 @@ export default function Index() {
     refetchMovies();
     refetchHomeSections();
     refetchNotifications();
-  }, [i18n.language]);
+  }, [i18n.language, recommendationSeed?.id, recommendationSeed?.mediaType]);
 
   const getHeroShuffleSlot = () => {
     const now = new Date();
     const day = now.toISOString().split("T")[0];
+
+    // 6 changes per day = every 4 hours
     const slot = Math.floor(now.getHours() / 4);
 
     return `${day}-${slot}`;
@@ -143,7 +164,8 @@ export default function Index() {
       return {
         id: fallbackMovie.id,
         mediaType: "movie",
-        title: fallbackMovie.title || fallbackMovie.original_title || "Untitled",
+        title:
+          fallbackMovie.title || fallbackMovie.original_title || "Untitled",
         original_title: fallbackMovie.original_title,
         poster_path: fallbackMovie.poster_path,
         backdrop_path: fallbackMovie.backdrop_path,
@@ -183,30 +205,32 @@ export default function Index() {
     ? isInMyList(heroMovie.id, heroMovie.mediaType)
     : false;
 
-  const myListMovies = useMemo(() => {
-    return savedMovies.map((movie: any) => ({
-      id: Number(movie.movieId),
-      mediaType: movie.mediaType || "movie",
-      title: movie.title || "Untitled",
-      posterPath: movie.posterPath || null,
-      backdropPath: movie.backdropPath || null,
-      overview: movie.overview || "",
-      releaseDate: movie.releaseDate || "",
-      voteAverage: movie.voteAverage || 0,
-      runtime: movie.runtime || "",
-      reviewCount: movie.reviewCount || "",
-      genres: movie.genres || "",
-    }));
+  const myListMovies = useMemo<HomeMediaItem[]>(() => {
+    return savedMovies.map((movie: any): HomeMediaItem => {
+      const mediaType: HomeMediaType =
+        movie.mediaType === "tv" ? "tv" : "movie";
+
+      return {
+        id: Number(movie.movieId),
+        mediaType,
+        title: movie.title || "Untitled",
+        posterPath: movie.posterPath || null,
+        backdropPath: movie.backdropPath || null,
+        overview: movie.overview || "",
+        releaseDate: movie.releaseDate || "",
+        voteAverage: movie.voteAverage || 0,
+      };
+    });
   }, [savedMovies]);
 
   const finalHomeSections = useMemo(() => {
     const sections: HomeSection[] = [];
 
-    if (myListMovies?.length) {
+    if (myListMovies.length) {
       sections.push({
         id: "my_list",
         titleKey: "home.myList",
-        type: "movie",
+        type: "mixed",
         items: myListMovies,
         variant: "normal",
         showSeeAll: true,
@@ -245,8 +269,10 @@ export default function Index() {
           name: heroMovie.name || heroMovie.title || "Untitled",
           poster_path: heroMovie.poster_path,
           backdrop_path: heroMovie.backdrop_path,
-          release_date: heroMovie.release_date || heroMovie.first_air_date || "",
-          first_air_date: heroMovie.first_air_date || heroMovie.release_date || "",
+          release_date:
+            heroMovie.release_date || heroMovie.first_air_date || "",
+          first_air_date:
+            heroMovie.first_air_date || heroMovie.release_date || "",
           vote_average: heroMovie.vote_average || 0,
           vote_count: heroMovie.vote_count || 0,
           overview: heroMovie.overview || "",
@@ -277,10 +303,9 @@ export default function Index() {
     if (!heroMovie) return;
 
     router.push({
-      pathname: "/media/[id]" as const,
+      pathname: heroMovie.mediaType === "tv" ? "/show/[id]" : "/movie/[id]",
       params: {
         id: String(heroMovie.id),
-        mediaType: heroMovie.mediaType,
         title: heroMovie.title || heroMovie.name || heroMovie.original_title,
       },
     });
@@ -305,7 +330,14 @@ export default function Index() {
     },
   ];
 
-  const isLoading = moviesLoading || trendingLoading || sectionsLoading;
+  const hasHomeData =
+    !!heroMovie ||
+    !!homeSections?.length ||
+    !!myListMovies?.length ||
+    !!movies?.length;
+
+  const isInitialHomeLoading =
+    moviesLoading || trendingLoading || sectionsLoading || !hasHomeData;
 
   const hasError = moviesError || trendingError || sectionsError;
 
@@ -382,18 +414,17 @@ export default function Index() {
           })}
         </ScrollView>
 
-        {isLoading ? (
-          <ActivityIndicator
-            size="large"
-            color="#AB8BFF"
-            className="mt-20 self-center"
-          />
+        {isInitialHomeLoading ? (
+          <HomeLoader />
         ) : hasError ? (
           <Text className="text-dark-500 mt-10">
-            {t("common.error")}:{" "}
+            {t("common.error", { defaultValue: "Error" })}:{" "}
             {moviesError?.message ||
               trendingError?.message ||
-              t("errors.failedToLoadMovies")}
+              sectionsError?.message ||
+              t("errors.failedToLoadMovies", {
+                defaultValue: "Failed to load movies",
+              })}
           </Text>
         ) : (
           <View className="flex-1 mt-6">
@@ -432,7 +463,9 @@ export default function Index() {
                     className="text-white text-[38px] font-extrabold text-center"
                     numberOfLines={2}
                   >
-                    {heroMovie.title || heroMovie.name || heroMovie.original_title}
+                    {heroMovie.title ||
+                      heroMovie.name ||
+                      heroMovie.original_title}
                   </Text>
 
                   <Text
@@ -452,7 +485,7 @@ export default function Index() {
                     <TouchableOpacity
                       activeOpacity={0.85}
                       onPress={handleOpenHero}
-                      className="flex-1 basis-0 h-[56px] px-4 rounded-md bg-white flex-row items-center justify-center"
+                      className="basis-0 flex-1 h-[56px] px-4 rounded-md bg-white flex-row items-center justify-center"
                       style={{
                         zIndex: 30,
                         elevation: 30,
@@ -460,7 +493,10 @@ export default function Index() {
                     >
                       <Feather name="play" size={24} color="#000" />
 
-                      <Text className="text-black text-lg font-extrabold ml-2">
+                      <Text
+                        className="text-black text-base font-extrabold ml-2"
+                        numberOfLines={1}
+                      >
                         {t("movie.playMovie", { defaultValue: "Play" })}
                       </Text>
                     </TouchableOpacity>
@@ -469,7 +505,7 @@ export default function Index() {
                       activeOpacity={0.85}
                       onPress={handleToggleHeroMyList}
                       disabled={heroMyListLoading}
-                      className={`basis-0 h-[56px] px-4 flex-1 px-6 rounded-md border flex-row items-center justify-center ${
+                      className={`basis-0 flex-1 h-[56px] px-4 rounded-md border flex-row items-center justify-center ${
                         isHeroSaved
                           ? "bg-[#AB8BFF] border-[#AB8BFF]"
                           : "bg-white/15 border-white/20"
@@ -481,7 +517,10 @@ export default function Index() {
                         color="#fff"
                       />
 
-                      <Text className="text-white font-extrabold text-base ml-2">
+                      <Text
+                        className="text-white text-base font-extrabold ml-2"
+                        numberOfLines={1}
+                      >
                         {t("home.myList", { defaultValue: "My List" })}
                       </Text>
                     </TouchableOpacity>
@@ -499,3 +538,15 @@ export default function Index() {
     </View>
   );
 }
+
+const HomeLoader = () => {
+  return (
+    <View className="flex-1 items-center justify-center mt-32">
+      <ActivityIndicator size="large" color="#AB8BFF" />
+
+      <Text className="text-light-200 text-sm font-semibold mt-4">
+        Loading your home...
+      </Text>
+    </View>
+  );
+};

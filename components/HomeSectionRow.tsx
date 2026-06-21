@@ -47,7 +47,7 @@ const HomeSectionRow = ({ section }: HomeSectionRowProps) => {
     <View className="mt-8">
       <View className="flex-row items-center justify-between mb-3">
         <Text className="text-white text-[20px] font-extrabold">
-          {t(section.titleKey)}
+          {section.title || t(section.titleKey, section.titleParams)}
         </Text>
 
         {section.showSeeAll && (

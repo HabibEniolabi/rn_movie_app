@@ -378,7 +378,7 @@ export const subscribeToMyListChanges = (
   return unsubscribe;
 };
 
-//Notification
+// Notification
 export type ContentNotification = {
   $id: string;
   $createdAt: string;
@@ -408,6 +408,14 @@ export const getContentNotifications = async (): Promise<
   ContentNotification[]
 > => {
   try {
+    if (!NOTIFICATIONS_COLLECTION_ID) {
+      if (__DEV__) {
+        console.log("Missing Appwrite notifications collection ID");
+      }
+
+      return [];
+    }
+
     const response = await database.listDocuments(
       DATABASE_ID,
       NOTIFICATIONS_COLLECTION_ID,
@@ -419,7 +427,29 @@ export const getContentNotifications = async (): Promise<
     );
 
     return response.documents as unknown as ContentNotification[];
-  } catch (error) {
+  } catch (error: any) {
+    const errorCode = Number(error?.code);
+    const errorMessage = String(error?.message || "").toLowerCase();
+
+    const isUnauthorized =
+      errorCode === 401 ||
+      errorCode === 403 ||
+      errorMessage.includes("not authorized") ||
+      errorMessage.includes("unauthorized");
+
+    if (isUnauthorized) {
+      /**
+       * Notifications should not break or spam the Home screen.
+       * If Appwrite collection permissions are not open to this client,
+       * just show zero notifications.
+       */
+      if (__DEV__) {
+        console.log("Content notifications unavailable for current user.");
+      }
+
+      return [];
+    }
+
     console.log("Get content notifications error:", error);
     return [];
   }

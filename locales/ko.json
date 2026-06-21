@@ -47,7 +47,16 @@
     "excitingJapaneseTVShows": "흥미진진한 일본 TV 프로그램",
     "usTVActionAdventure": "미국 액션 & 어드벤처 TV 프로그램",
     "usTVDramas": "미국 TV 드라마",
-    "getInOnAction": "액션 속으로"
+    "getInOnAction": "액션 속으로",
+    "topSearches": "인기 검색어",
+    "tvSciFiFantasy": "TV SF & 판타지",
+    "teenTVShows": "틴 TV 쇼",
+    "adventureFantasyTwist": "판타지 감성의 모험",
+    "boredomBusters": "지루할 때 보기 좋은 콘텐츠",
+    "becauseYouLikedSpecific": "{{title}}을(를) 좋아했다면",
+    "mindBendingMovies": "생각을 뒤흔드는 영화",
+    "koreanDramas": "한국 드라마",
+    "kidsFamilyMovies": "키즈 & 가족 영화"
   },
   "notifications": {
     "title": "알림",

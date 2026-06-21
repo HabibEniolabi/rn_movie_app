@@ -47,7 +47,16 @@
     "excitingJapaneseTVShows": "Séries japonesas emocionantes",
     "usTVActionAdventure": "Séries de ação e aventura dos EUA",
     "usTVDramas": "Dramas de TV dos EUA",
-    "getInOnAction": "Entre na ação"
+    "getInOnAction": "Entre na ação",
+    "topSearches": "Mais pesquisados",
+    "tvSciFiFantasy": "Séries de ficção científica e fantasia",
+    "teenTVShows": "Séries teen",
+    "adventureFantasyTwist": "Aventura com toque de fantasia",
+    "boredomBusters": "Para acabar com o tédio",
+    "becauseYouLikedSpecific": "Porque você gostou de {{title}}",
+    "mindBendingMovies": "Filmes de tirar o fôlego",
+    "koreanDramas": "Dramas coreanos",
+    "kidsFamilyMovies": "Filmes infantis e familiares"
   },
   "notifications": {
     "title": "Notificações",

@@ -47,7 +47,16 @@
     "excitingJapaneseTVShows": "مسلسلات يابانية مشوقة",
     "usTVActionAdventure": "مسلسلات أمريكية أكشن ومغامرات",
     "usTVDramas": "دراما تلفزيونية أمريكية",
-    "getInOnAction": "انضم إلى الأكشن"
+    "getInOnAction": "انضم إلى الأكشن",
+    "topSearches": "الأكثر بحثًا",
+    "tvSciFiFantasy": "مسلسلات خيال علمي وفانتازيا",
+    "teenTVShows": "مسلسلات المراهقين",
+    "adventureFantasyTwist": "مغامرات بلمسة فانتازيا",
+    "boredomBusters": "للقضاء على الملل",
+    "becauseYouLikedSpecific": "لأنك أحببت {{title}}",
+    "mindBendingMovies": "أفلام تحفّز العقل",
+    "koreanDramas": "دراما كورية",
+    "kidsFamilyMovies": "أفلام للأطفال والعائلة"
   },
   "notifications": {
     "title": "الإشعارات",

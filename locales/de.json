@@ -47,7 +47,16 @@
     "excitingJapaneseTVShows": "Spannende japanische TV-Serien",
     "usTVActionAdventure": "US-Action- & Abenteuer-Serien",
     "usTVDramas": "US-TV-Dramen",
-    "getInOnAction": "Rein in die Action"
+    "getInOnAction": "Rein in die Action",
+    "topSearches": "Top-Suchen",
+    "tvSciFiFantasy": "Sci-Fi- und Fantasy-Serien",
+    "teenTVShows": "Teen-Serien",
+    "adventureFantasyTwist": "Abenteuer mit Fantasy-Twist",
+    "boredomBusters": "Gegen Langeweile",
+    "becauseYouLikedSpecific": "Weil dir {{title}} gefallen hat",
+    "mindBendingMovies": "Mind-Bending-Filme",
+    "koreanDramas": "Koreanische Dramen",
+    "kidsFamilyMovies": "Kinder- und Familienfilme"
   },
   "notifications": {
     "title": "Benachrichtigungen",
